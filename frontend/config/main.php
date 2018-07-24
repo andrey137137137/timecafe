@@ -6,11 +6,12 @@ $params = array_merge(
     require __DIR__ . '/params-local.php'
 );
 
-return [
+$config=  [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'language' => defined('LANGUAGE') ? LANGUAGE : 'en-EN',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -29,6 +30,10 @@ return [
           // Use pretty URLs
             'enablePrettyUrl' => true,
             'rules' => [
+                'site/<action>' => '404',
+                [ // обработка локализации сайта
+                    'class' => 'frontend\components\LoginPage',
+                ],
                 '<alias:\w+>' => 'site/<alias>',
             ],
             'normalizer' => [
@@ -62,3 +67,19 @@ return [
     ],
     'params' => $params,
 ];
+
+if (YII_DEBUG) {
+  if(!isset($config['modules']['gii']['generators'])){
+    $config['modules']['gii']['generators']=[];
+  }
+
+  $config['modules']['gii']['generators']['ajaxcrud']=[
+      'class' => 'frontend\myTemplates\crud\Generator', // generator class
+      'templates' => [ //setting for out templates
+          'default' => '@frontend/myTemplates/crud/default', // template name => path to template
+      ]
+  ];
+
+}
+
+return $config;
