@@ -17,6 +17,9 @@ class LoginPage implements UrlRuleInterface
    */
   public function parseRequest($manager, $request)
   {
+    if(!Yii::$app->user->isGuest)  return false;
+
+    return ["site/login",[]];
     return false;
   }
 
