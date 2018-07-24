@@ -16,12 +16,27 @@ return [
             'csrfParam' => '_csrf-frontend',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'frontend\modules\users\models\Users',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
+          /*'on afterLogin' => function ($event) {
+            frontend\modules\users\models\Users::afterLogin($event->identity->id);
+          },*/
+        ],
+        'urlManager' => [
+            'class' => 'yii\web\UrlManager',
+          // Hide index.php
+            'showScriptName' => false,
+          // Use pretty URLs
+            'enablePrettyUrl' => true,
+            'rules' => [
+                '<alias:\w+>' => 'site/<alias>',
+            ],
+            'normalizer' => [
+                'class' => 'yii\web\UrlNormalizer',
+            ],
         ],
         'session' => [
-            // this is the name of the session cookie used for login on the frontend
+          // this is the name of the session cookie used for login on the frontend
             'name' => 'advanced-frontend',
         ],
         'log' => [
@@ -36,14 +51,14 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
+    ],
+    'modules' => [
+        'users' => [
+            'class' => 'frontend\modules\users\Module',
         ],
-        */
+        'gridview' =>  [
+            'class' => '\kartik\grid\Module'
+        ]
     ],
     'params' => $params,
 ];
