@@ -85,7 +85,7 @@ class Generator extends \yii\gii\Generator
         [['controllerClass', 'searchModelClass'], 'validateNewClass'],
         [['indexWidgetType'], 'in', 'range' => ['grid', 'list']],
         [['modelClass'], 'validateModelClass'],
-        [['enableI18N', 'enablePjax'], 'boolean'],
+        [['enableI18N', 'enablePjax','enableRBAC'], 'boolean'],
         [['messageCategory'], 'validateMessageCategory', 'skipOnEmpty' => false],
         ['viewPath', 'safe'],
     ]);

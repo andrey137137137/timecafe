@@ -22,6 +22,7 @@ echo $form->field($generator, 'messageCategory');
 // Autocomplete remaining fields, if modelClass was specified
 $script = <<<EOL
 (function(\$){\$(document).ready(function(){
+  
 	\$('#generator-modelclass').on('change', function(){
 		var modelClass = $(this).val();
 		if ( ! modelClass)

@@ -89,14 +89,14 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     {
 <?php if ($generator->enableRBAC){?>
         if (Yii::$app->user->isGuest || !Yii::$app->user->can('<?=$generator->rbacName;?>View')) {
-          throw new \yii\web\ForbiddenHttpException('Просмотр данной страницы запрещен.');
+          throw new \yii\web\ForbiddenHttpException(<?=$generator->generateString("Page does not exist");?>);
           return false;
         }
 
         $canCreate = Yii::$app->user->can('<?=$generator->rbacName;?>Create');
-        $actions = ""
-        $actions. = Yii::$app->user->can('<?=$generator->rbacName;?>Update')?"update":"";
-        $actions. = Yii::$app->user->can('<?=$generator->rbacName;?>Delete')?"delete":"";
+        $actions = "";
+        $actions.= Yii::$app->user->can('<?=$generator->rbacName;?>Update')?"update":"";
+        $actions.= Yii::$app->user->can('<?=$generator->rbacName;?>Delete')?"delete":"";
 <?php }else{?>
         $canCreate=true;
         $actions = "{update}{delete}";
@@ -151,7 +151,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
   {
 <?php if ($generator->enableRBAC){?>
     if (Yii::$app->user->isGuest || !Yii::$app->user->can('<?=$generator->rbacName;?>View')) {
-      throw new \yii\web\ForbiddenHttpException('Просмотр данной страницы запрещен.');
+      throw new \yii\web\ForbiddenHttpException(<?=$generator->generateString("Page does not exist");?>);
       return false;
     }
 <?php };?>
@@ -159,7 +159,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     $request = Yii::$app->request;
 
     if(!$request->isAjax){
-      throw new \yii\web\ForbiddenHttpException('Viewing this page is prohibited..');
+      throw new \yii\web\ForbiddenHttpException(<?=$generator->generateString("Page does not exist");?>);
       return false;
     }
 
@@ -183,7 +183,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
        'content'=>"<script>$('.modal-header .close').click()</script>"
       ];
     }
-
+    $actions="";
     $columns = include(__DIR__.'<?=$generator->getViewPathFromController('_columns');?>');
     if(Yii::$app->user->isGuest){
       $sel_column=Yii::$app->session->get("columns_<?= $modelClass ?>",false);
@@ -226,7 +226,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     {
 <?php if ($generator->enableRBAC){?>
       if (Yii::$app->user->isGuest || !Yii::$app->user->can('<?=$generator->rbacName;?>Create')) {
-        throw new \yii\web\ForbiddenHttpException('Просмотр данной страницы запрещен.');
+        throw new \yii\web\ForbiddenHttpException(<?=$generator->generateString("Page does not exist");?>);
         return false;
       }
 <?php };?>
@@ -293,7 +293,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     {
 <?php if ($generator->enableRBAC){?>
       if (Yii::$app->user->isGuest || !Yii::$app->user->can('<?=$generator->rbacName;?>Update')) {
-        throw new \yii\web\ForbiddenHttpException('Просмотр данной страницы запрещен.');
+        throw new \yii\web\ForbiddenHttpException(<?=$generator->generateString("Page does not exist");?>);
         return false;
       }
 <?php };?>
@@ -358,7 +358,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     {
 <?php if ($generator->enableRBAC){?>
       if (Yii::$app->user->isGuest || !Yii::$app->user->can('<?=$generator->rbacName;?>Delete')) {
-        throw new \yii\web\ForbiddenHttpException('Просмотр данной страницы запрещен.');
+        throw new \yii\web\ForbiddenHttpException(<?=$generator->generateString("Page does not exist");?>);
         return false;
       }
 <?php };?>
@@ -390,7 +390,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     {
 <?php if ($generator->enableRBAC){?>
       if (Yii::$app->user->isGuest || !Yii::$app->user->can('<?=$generator->rbacName;?>Delete')) {
-        throw new \yii\web\ForbiddenHttpException('Просмотр данной страницы запрещен.');
+        throw new \yii\web\ForbiddenHttpException(<?=$generator->generateString("Page does not exist");?>);
         return false;
       }
 <?php };?>
@@ -439,7 +439,7 @@ if (count($pks) === 1) {
         if (($model = <?= $modelClass ?>::findOne(<?= $condition ?>)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException(<?=$generator->generateString("Page does not exist");?>);
         }
     }
 }
