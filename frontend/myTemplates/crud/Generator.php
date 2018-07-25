@@ -37,11 +37,21 @@ class Generator extends \yii\gii\Generator
   public $baseControllerClass = 'yii\web\Controller';
   public $indexWidgetType = 'grid';
   public $searchModelClass = '';
+
+
+  public $migrationPath = '@console/migrations';
+  public $migrationName;
+  public $migrationTime;
+  public $isSafeUpDown=false;
+
   /**
    * @var boolean whether to wrap the `GridView` or `ListView` widget with the `yii\widgets\Pjax` widget
    * @since 2.0.5
    */
   public $enablePjax = false;
+
+  //Генерировать блок RBAC доступа
+  public $enableRBAC = true;
   /**
    * @inheritdoc
    */
@@ -92,6 +102,7 @@ class Generator extends \yii\gii\Generator
         'indexWidgetType' => 'Widget Used in Index Page',
         'searchModelClass' => 'Search Model Class',
         'enablePjax' => 'Enable Pjax',
+        'enableRBAC' => 'Enable RBAC',
     ]);
   }
   /**
@@ -118,6 +129,7 @@ class Generator extends \yii\gii\Generator
         'enablePjax' => 'This indicates whether the generator should wrap the <code>GridView</code> or <code>ListView</code>
                 widget on the index page with <code>yii\widgets\Pjax</code> widget. Set this to <code>true</code> if you want to get
                 sorting, filtering and pagination without page refreshing.',
+      'enableRBAC'=>"Создает 4 правила для доступа по CRUD (просмотр таблицы, создание,редактирование,удаление)"
     ]);
   }
 
@@ -183,6 +195,21 @@ class Generator extends \yii\gii\Generator
         }
       }
     }
+
+    if($this->enableRBAC){
+      $migrationName=explode('\\',$this->modelClass);
+      $rbacName=$migrationName[count($migrationName)-1];
+      $migrationName = 'm' . time() . '_' . strtolower($rbacName).'_RBAC';
+
+      $file = rtrim(Yii::getAlias($this->migrationPath), '/') . "/{$migrationName}.php";
+      $files[] = new CodeFile($file, $this->render('migration.php', [
+          //'tables' => $this->reorderTables($tables, $relations),
+          'migrationName' => $migrationName,
+          'rbacName'=>$rbacName,
+
+      ]));
+    }
+    ddd($files);
     return $files;
   }
 

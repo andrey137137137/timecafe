@@ -63,7 +63,14 @@ $config=  [
         ],
         'gridview' =>  [
             'class' => '\kartik\grid\Module'
-        ]
+        ],
+        'permit' => [
+          'class' => 'developeruz\db_rbac\Yii2DbRbac',
+          'params' => [
+            'userClass' => 'frontend\modules\users\models\Users',
+            'accessRoles' => ['admin']
+          ]
+        ],
     ],
     'params' => $params,
 ];
