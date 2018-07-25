@@ -203,16 +203,18 @@ class Generator extends \yii\gii\Generator
     }
 
     if($this->enableRBAC){
-      $migrationName = 'm' . time() . '_' . strtolower($rbacName).'_RBAC';
+      $migrationName = 'm' . date('ymd_His') . '_' . strtolower($rbacName).'_RBAC';
       $file = rtrim(Yii::getAlias($this->migrationPath), '/') . "/{$migrationName}.php";
-      $files[] = new CodeFile($file, $this->render('migration.php', [
+      $files_m= new CodeFile($file, $this->render('migration.php', [
           //'tables' => $this->reorderTables($tables, $relations),
           'migrationName' => $migrationName,
           'rbacName'=>$rbacName,
 
       ]));
+      if(isset($_POST['generate']))
+        $files_m->save();
+      $files[]=$files_m;
     }
-    //ddd($files);
     return $files;
   }
 
