@@ -29,10 +29,11 @@ use yii\widgets\ActiveForm;
         'pluginOptions' => \Yii::$app->params["colorPluginOptions"],
     ]); ?>
 
-    <div class="form-group">
+    <?php if(!$isAjax){?>
+      <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
-
+      </div>
+    <?php }?>
     <?php ActiveForm::end(); ?>
 
 </div>

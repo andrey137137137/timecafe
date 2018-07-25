@@ -1,8 +1,8 @@
 <?php
-$config= [
+$config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
@@ -22,7 +22,7 @@ $config= [
             'class' => 'common\components\TwigString',
             'params' => [
                 'cachePath' => '@runtime/Twig/cache',
-                //'functions' => $twigFunction,
+              //'functions' => $twigFunction,
             ],
         ],
         'view' => [
@@ -46,7 +46,7 @@ $config= [
                         'MultipleInput' => 'unclead\multipleinput\MultipleInput',
                         'MaskedInput' => 'yii\widgets\MaskedInput',
                     ],
-                    //'functions' => $twigFunction,
+                  //'functions' => $twigFunction,
                     'uses' => ['yii\bootstrap'],
                     'extensions' => YII_DEBUG ? [
                         '\Twig_Extension_Debug',
@@ -60,6 +60,7 @@ $config= [
                 'app*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@common/language',
+                    'on missingTranslation' => ['common\components\TranslationEventHandler', 'handleMissingTranslation']
                 ],
             ],
         ],

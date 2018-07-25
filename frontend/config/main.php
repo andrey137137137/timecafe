@@ -12,6 +12,7 @@ $config=  [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'language' => defined('LANGUAGE') ? LANGUAGE : 'en-EN',
+    'sourceLanguage' => 'dev',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',

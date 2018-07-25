@@ -42,10 +42,11 @@ use yii\widgets\ActiveForm;
         echo " ?>\n\n";
     }
 } ?>
-    <div class="form-group">
+    <?= '<?php if(!$isAjax){';?>?>
+      <div class="form-group">
         <?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Save') ?>, ['class' => 'btn btn-success']) ?>
-    </div>
-
+      </div>
+    <?= '<?php }';?>?>
     <?= "<?php " ?>ActiveForm::end(); ?>
 
 </div>

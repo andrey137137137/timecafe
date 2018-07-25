@@ -55,8 +55,8 @@ class AdminController extends Controller
 
         $canCreate = Yii::$app->user->can('UsersCreate');
         $actions = "";
-        $actions.= Yii::$app->user->can('UsersUpdate')?"update":"";
-        $actions.= Yii::$app->user->can('UsersDelete')?"delete":"";
+        $actions.= Yii::$app->user->can('UsersUpdate')?"{update}":"";
+        $actions.= Yii::$app->user->can('UsersDelete')?"{delete}":"";
         $columns = include(__DIR__.'/../views/admin/_columns.php');
         if(Yii::$app->user->isGuest){
           $sel_column=Yii::$app->session->get("columns_Users",false);
@@ -148,9 +148,10 @@ class AdminController extends Controller
     return [
       'title'=> "Change visible columns in Users table",
       'content'=>$this->renderAjax('columns', [
-          'sel_column' => $sel_column,
-          'columns' => $columns,
-          'model' => $model,
+        'sel_column' => $sel_column,
+        'columns' => $columns,
+        'model' => $model,
+        'isAjax' => true
       ]),
       'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
       Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -183,6 +184,7 @@ class AdminController extends Controller
             'title'=> "Create new Users",
             'content'=>$this->renderAjax('create', [
               'model' => $model,
+              'isAjax' => true
             ]),
             'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
               Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -200,7 +202,8 @@ class AdminController extends Controller
           return [
             'title'=> "Create new Users",
             'content'=>$this->renderAjax('create', [
-                'model' => $model,
+              'model' => $model,
+              'isAjax' => true,
             ]),
             'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -249,6 +252,7 @@ class AdminController extends Controller
               'title'=> "Update Users #".$id,
               'content'=>$this->renderAjax('update', [
                 'model' => $model,
+                'isAjax' => true,
               ]),
               'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -266,6 +270,7 @@ class AdminController extends Controller
               'title'=> "Update Users #".$id,
               'content'=>$this->renderAjax('update', [
                 'model' => $model,
+                'isAjax' => true,
               ]),
               'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])

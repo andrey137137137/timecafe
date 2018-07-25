@@ -211,12 +211,46 @@ class Generator extends \yii\gii\Generator
           'rbacName'=>$rbacName,
 
       ]));
+      //$files_m->operation = CodeFile::OP_CREATE;
+/*      d($this);
+      d($_POST);
+      d(md5($files_m->path));
+      ddd($files_m);*/
+ //     if(isset($_POST['answers['.$files_m->id.']'])) ddd(0);
       if(isset($_POST['generate']))
         $files_m->save();
       $files[]=$files_m;
     }
+    ///ddd($this);
     return $files;
   }
+
+  /*public function save($files, $answers, &$results)
+  {
+    $lines = ['Generating code using template "' . $this->getTemplatePath() . '"...'];
+    $hasError = false;
+    foreach ($files as $file) {
+      $relativePath = $file->getRelativePath();
+      if (isset($answers[$file->id]) && !empty($answers[$file->id]) && $file->operation !== CodeFile::OP_SKIP) {
+        $error = $file->save();
+        if (is_string($error)) {
+          $hasError = true;
+          $lines[] = "generating $relativePath\n<span class=\"error\">$error</span>";
+        } else {
+          $lines[] = $file->operation === CodeFile::OP_CREATE ? " generated $relativePath" : " overwrote $relativePath";
+        }
+      } else {
+        $lines[] = "   skipped $relativePath";
+        $lines[] = isset($answers[$file->id])?"true":"false";
+        $lines[] = (!empty($answers[$file->id]))?"true":"false";
+        $lines[] = ($file->operation !== CodeFile::OP_SKIP)?"true":"false";
+      }
+    }
+    $lines[] = "done!\n";
+    $results = implode("\n", $lines);
+
+    return !$hasError;
+  }*/
 
   public function getViewPathFromController($view=false){
     $viewPath = explode('views',$this->getViewPath());

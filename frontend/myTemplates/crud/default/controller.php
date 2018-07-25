@@ -95,8 +95,8 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 
         $canCreate = Yii::$app->user->can('<?=$generator->rbacName;?>Create');
         $actions = "";
-        $actions.= Yii::$app->user->can('<?=$generator->rbacName;?>Update')?"update":"";
-        $actions.= Yii::$app->user->can('<?=$generator->rbacName;?>Delete')?"delete":"";
+        $actions.= Yii::$app->user->can('<?=$generator->rbacName;?>Update')?"{update}":"";
+        $actions.= Yii::$app->user->can('<?=$generator->rbacName;?>Delete')?"{delete}":"";
 <?php }else{?>
         $canCreate=true;
         $actions = "{update}{delete}";
@@ -206,9 +206,10 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     return [
       'title'=> "Change visible columns in <?= $modelClass ?> table",
       'content'=>$this->renderAjax('columns', [
-          'sel_column' => $sel_column,
-          'columns' => $columns,
-          'model' => $model,
+        'sel_column' => $sel_column,
+        'columns' => $columns,
+        'model' => $model,
+        'isAjax' => true
       ]),
       'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
       Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -243,6 +244,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             'title'=> "Create new <?= $modelClass ?>",
             'content'=>$this->renderAjax('create', [
               'model' => $model,
+              'isAjax' => true
             ]),
             'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
               Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -260,7 +262,8 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
           return [
             'title'=> "Create new <?= $modelClass ?>",
             'content'=>$this->renderAjax('create', [
-                'model' => $model,
+              'model' => $model,
+              'isAjax' => true,
             ]),
             'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -311,6 +314,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
               'title'=> "Update <?= $modelClass ?> #".<?= $actionParams ?>,
               'content'=>$this->renderAjax('update', [
                 'model' => $model,
+                'isAjax' => true,
               ]),
               'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -328,6 +332,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
               'title'=> "Update <?= $modelClass ?> #".<?= $actionParams ?>,
               'content'=>$this->renderAjax('update', [
                 'model' => $model,
+                'isAjax' => true,
               ]),
               'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
