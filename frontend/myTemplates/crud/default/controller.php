@@ -92,6 +92,14 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
           throw new \yii\web\ForbiddenHttpException('Просмотр данной страницы запрещен.');
           return false;
         }
+
+        $canCreate = Yii::$app->user->can('<?=$generator->rbacName;?>Create');
+        $actions = ""
+        $actions. = Yii::$app->user->can('<?=$generator->rbacName;?>Update')?"update":"";
+        $actions. = Yii::$app->user->can('<?=$generator->rbacName;?>Delete')?"delete":"";
+<?php }else{?>
+        $canCreate=true;
+        $actions = "{update}{delete}";
 <?php };?>
         $columns = include(__DIR__.'<?=$generator->getViewPathFromController('_columns');?>');
         if(Yii::$app->user->isGuest){
@@ -117,6 +125,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'columns' => $columns,
+            'canCreate' => $canCreate,
         ]);
 <?php else: ?>
         $dataProvider = new ActiveDataProvider([
@@ -126,6 +135,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'columns' => $columns,
+            'canCreate' => $canCreate,
         ]);
 <?php endif; ?>
     }
