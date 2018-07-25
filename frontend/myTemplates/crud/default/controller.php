@@ -49,9 +49,10 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 {
 
     private $def_sel_column=[
-      <?php
+<?php
       $count = 0;
       foreach ($generator->getColumnNames() as $name) {
+        if(strpos($name,'pass')!==false || strpos($name,'hash')!==false|| strpos($name,'sess'))continue;
         if ($name=='id'||$name=='created_at'||$name=='updated_at'||strpos($name,'data')!==0){
           echo "          '".$name . "',\n";
         } else if (++$count < 6) {
@@ -62,22 +63,22 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
           echo "          //'".$name . "',\n";
         }
       }
-      ?>
+?>
       ];
     /**
      * @inheritdoc
      */
     public function behaviors()
     {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                    'bulk-delete' => ['post'],
-                ],
-            ],
-        ];
+      return [
+        'verbs' => [
+          'class' => VerbFilter::className(),
+          'actions' => [
+            'delete' => ['post'],
+            'bulk-delete' => ['post'],
+          ],
+        ],
+      ];
     }
 
     /**
@@ -86,6 +87,12 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
      */
     public function actionIndex()
     {
+<?php if ($generator->enableRBAC){?>
+        if (Yii::$app->user->isGuest || !Yii::$app->user->can('<?=$generator->rbacName;?>View')) {
+          throw new \yii\web\ForbiddenHttpException('Просмотр данной страницы запрещен.');
+          return false;
+        }
+<?php };?>
         $columns = include(__DIR__.'<?=$generator->getViewPathFromController('_columns');?>');
         if(Yii::$app->user->isGuest){
           $sel_column=Yii::$app->session->get("columns_<?= $modelClass ?>",false);
@@ -97,7 +104,8 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
           $sel_column=$this->def_sel_column;
         }
         foreach($columns as $k=>$column){
-          if(isset($column['attribute']) && !in_array($column['attribute'],$sel_column)){
+          $column_name=!is_array($column)?$column:(isset($column['attribute'])?$column['attribute']:false);
+          if($column_name && !in_array($column_name,$sel_column)){
             unset($columns[$k]);
           }
         }
@@ -131,6 +139,12 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
    */
   public function actionColumns()
   {
+<?php if ($generator->enableRBAC){?>
+    if (Yii::$app->user->isGuest || !Yii::$app->user->can('<?=$generator->rbacName;?>View')) {
+      throw new \yii\web\ForbiddenHttpException('Просмотр данной страницы запрещен.');
+      return false;
+    }
+<?php };?>
     $model = new <?= $modelClass ?>();
     $request = Yii::$app->request;
 
@@ -171,10 +185,11 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
       $sel_column=$this->def_sel_column;
     }
     foreach($columns as $k=>$column){
-      if(!isset($column['attribute'])){
+      $column_name=!is_array($column)?$column:(isset($column['attribute'])?$column['attribute']:false);
+      if(!$column_name){
         unset($columns[$k]);
       }else{
-        $columns[$k]=$column['attribute'];
+        $columns[$k]=$column_name;
       }
     }
 
@@ -199,57 +214,62 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
      */
     public function actionCreate()
     {
-        $request = Yii::$app->request;
-        $model = new <?= $modelClass ?>();  
+<?php if ($generator->enableRBAC){?>
+      if (Yii::$app->user->isGuest || !Yii::$app->user->can('<?=$generator->rbacName;?>Create')) {
+        throw new \yii\web\ForbiddenHttpException('Просмотр данной страницы запрещен.');
+        return false;
+      }
+<?php };?>
+      $request = Yii::$app->request;
+      $model = new <?= $modelClass ?>();
 
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
-                return [
-                    'title'=> "Create new <?= $modelClass ?>",
-                    'content'=>$this->renderAjax('create', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
-            }else if($model->load($request->post()) && $model->save()){
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new <?= $modelClass ?>",
-                    'content'=>'<span class="text-success">Create <?= $modelClass ?> success</span>',
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-        
-                ];         
-            }else{           
-                return [
-                    'title'=> "Create new <?= $modelClass ?>",
-                    'content'=>$this->renderAjax('create', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
-            }
+      if($request->isAjax){
+        /*
+        *   Process for ajax request
+        */
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if($request->isGet){
+          return [
+            'title'=> "Create new <?= $modelClass ?>",
+            'content'=>$this->renderAjax('create', [
+              'model' => $model,
+            ]),
+            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+              Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+          ];
+        }else if($model->load($request->post()) && $model->save()){
+          return [
+            'forceReload'=>'#crud-datatable-pjax',
+            'title'=> "Create new <?= $modelClass ?>",
+            'content'=>'<span class="text-success">Create <?= $modelClass ?> success</span>',
+            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+              Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+
+          ];
         }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', <?= $urlParams ?>]);
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-            }
+          return [
+            'title'=> "Create new <?= $modelClass ?>",
+            'content'=>$this->renderAjax('create', [
+                'model' => $model,
+            ]),
+            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+
+          ];
         }
-       
+      }else{
+        /*
+        *   Process for non-ajax request
+        */
+        if ($model->load($request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+        } else {
+          return $this->render('create', [
+            'model' => $model,
+          ]);
+        }
+      }
+
     }
 
     /**
@@ -261,54 +281,59 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
      */
     public function actionUpdate(<?= $actionParams ?>)
     {
+<?php if ($generator->enableRBAC){?>
+      if (Yii::$app->user->isGuest || !Yii::$app->user->can('<?=$generator->rbacName;?>Update')) {
+        throw new \yii\web\ForbiddenHttpException('Просмотр данной страницы запрещен.');
+        return false;
+      }
+<?php };?>
+
         $request = Yii::$app->request;
         $model = $this->findModel(<?= $actionParams ?>);       
 
         if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
-                return [
-                    'title'=> "Update <?= $modelClass ?> #".<?= $actionParams ?>,
-                    'content'=>$this->renderAjax('update', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-                ];         
-            }else if($model->load($request->post()) && $model->save()){
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "<?= $modelClass ?> #".<?= $actionParams ?>,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','<?= substr($actionParams,1) ?>'=><?= $actionParams ?>],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-            }else{
-                 return [
-                    'title'=> "Update <?= $modelClass ?> #".<?= $actionParams ?>,
-                    'content'=>$this->renderAjax('update', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-                ];        
-            }
+          /*
+          *   Process for ajax request
+          */
+          Yii::$app->response->format = Response::FORMAT_JSON;
+          if($request->isGet){
+            return [
+              'title'=> "Update <?= $modelClass ?> #".<?= $actionParams ?>,
+              'content'=>$this->renderAjax('update', [
+                'model' => $model,
+              ]),
+              'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+            ];
+          }else if($model->load($request->post()) && $model->save()){
+            return [
+              'forceReload'=>'#crud-datatable-pjax',
+              'title'=> "<?= $modelClass ?> #".<?= $actionParams ?>,
+              'content'=>"<script>$('.modal-header .close').click()</script>",
+              'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                Html::a('Edit',['update','<?= substr($actionParams,1) ?>'=><?= $actionParams ?>],['class'=>'btn btn-primary','role'=>'modal-remote'])
+            ];
+          }else{
+            return [
+              'title'=> "Update <?= $modelClass ?> #".<?= $actionParams ?>,
+              'content'=>$this->renderAjax('update', [
+                'model' => $model,
+              ]),
+              'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+            ];
+          }
         }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', <?= $urlParams ?>]);
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
+          /*
+          *   Process for non-ajax request
+          */
+          if ($model->load($request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+          } else {
+            return $this->render('update', [
+              'model' => $model,
+            ]);
+          }
         }
     }
 
@@ -321,23 +346,27 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
      */
     public function actionDelete(<?= $actionParams ?>)
     {
-        $request = Yii::$app->request;
-        $this->findModel(<?= $actionParams ?>)->delete();
+<?php if ($generator->enableRBAC){?>
+      if (Yii::$app->user->isGuest || !Yii::$app->user->can('<?=$generator->rbacName;?>Delete')) {
+        throw new \yii\web\ForbiddenHttpException('Просмотр данной страницы запрещен.');
+        return false;
+      }
+<?php };?>
+      $request = Yii::$app->request;
+      $this->findModel(<?= $actionParams ?>)->delete();
 
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            return $this->redirect(['index']);
-        }
-
-
+      if($request->isAjax){
+        /*
+        *   Process for ajax request
+        */
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+      }else{
+        /*
+        *   Process for non-ajax request
+        */
+        return $this->redirect(['index']);
+      }
     }
 
      /**
@@ -348,26 +377,32 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
      * @return mixed
      */
     public function actionBulkDelete()
-    {        
-        $request = Yii::$app->request;
-        $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
-        foreach ( $pks as $pk ) {
-            $model = $this->findModel($pk);
-            $model->delete();
-        }
+    {
+<?php if ($generator->enableRBAC){?>
+      if (Yii::$app->user->isGuest || !Yii::$app->user->can('<?=$generator->rbacName;?>Delete')) {
+        throw new \yii\web\ForbiddenHttpException('Просмотр данной страницы запрещен.');
+        return false;
+      }
+<?php };?>
+      $request = Yii::$app->request;
+      $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
+      foreach ( $pks as $pk ) {
+        $model = $this->findModel($pk);
+        $model->delete();
+      }
 
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            return $this->redirect(['index']);
-        }
+      if($request->isAjax){
+        /*
+        *   Process for ajax request
+        */
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+      }else{
+        /*
+        *   Process for non-ajax request
+        */
+        return $this->redirect(['index']);
+      }
        
     }
 

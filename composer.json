@@ -21,7 +21,8 @@
         "johnitvn/yii2-ajaxcrud": "*",
         "yiisoft/yii2-twig": "~2.0.0",
         "twig/twig": "~1.0",
-        "developeruz/yii2-db-rbac": "*"
+        "developeruz/yii2-db-rbac": "*",
+        "kartik-v/yii2-widgets": "^3.4"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

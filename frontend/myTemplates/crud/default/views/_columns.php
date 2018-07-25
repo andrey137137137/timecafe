@@ -6,7 +6,6 @@ use yii\bootstrap\Modal;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
 
-
 /* @var $this yii\web\View */
 /* @var $generator yii\gii\generators\crud\Generator */
 
@@ -19,42 +18,31 @@ echo "<?php\n";
 
 ?>
 use yii\helpers\Url;
+use kartik\grid\GridView;
 
 return [
     [
-        'class' => 'kartik\grid\CheckboxColumn',
-        'width' => '20px',
+      'class' => 'kartik\grid\CheckboxColumn',
+      'width' => '20px',
     ],
     [
-        'class' => 'kartik\grid\SerialColumn',
-        'width' => '30px',
+      'class' => 'kartik\grid\SerialColumn',
+      'width' => '30px',
     ],
-    <?php
+<?php
     $count = 0;
     foreach ($generator->getColumnNames() as $name) {
-      if ($name=='id'||$name=='created_at'||$name=='updated_at'||strpos($name,'data')!==0){
-        echo "     [\n";
-        echo "         'class'=>'\kartik\grid\DataColumn',\n";
-        echo "         'attribute'=>'" . $name . "',\n";
-        echo "     ],\n";
-      } else if (++$count < 8) {
-        echo "    [\n";
-        echo "        'class'=>'\kartik\grid\DataColumn',\n";
-        echo "        'attribute'=>'" . $name . "',\n";
-        echo "    ],\n";
-      } else if (strpos($name,'time')!==0) {
-        echo "    [\n";
-        echo "        'class'=>'\kartik\grid\DataColumn',\n";
-        echo "        'attribute'=>'" . $name . "',\n";
-        echo "    ],\n";
+      $params='    '.getColumnParams($name);
+      if(strpos($name,'pass')!==false || strpos($name,'hash')!==false|| strpos($name,'sess')!==false)continue;
+      if ($name=='id'||$name=='created_at'||$name=='updated_at'||strpos($name,'data')!==false){
+        echo $params."\n";
+      } else if (++$count < 80) {
+        echo $params."\n";
       } else {
-        echo "    // [\n";
-        echo "        // 'class'=>'\kartik\grid\DataColumn',\n";
-        echo "        // 'attribute'=>'" . $name . "',\n";
-        echo "    // ],\n";
+        echo '/*'.$params.'*/'."\n";
       }
     }
-    ?>
+?>
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
@@ -72,4 +60,28 @@ return [
                           'data-confirm-message'=>'Are you sure want to delete this item'], 
     ],
 
-];   
+];
+
+<?php
+
+function getColumnParams($name){
+  if(strpos($name,'color')!==false){
+    return '[
+      \'attribute\' => \''.$name.'\',
+      \'value\' => function ($model, $key, $index, $widget) {
+        return "<span class=\'badge\' style=\'background-color: {$model->'.$name.'}\'> </span>  <code>" . $model->'.$name.' . \'</code>\';
+      },
+      \'width\' => \'120px\',
+      \'filterType\' => GridView::FILTER_COLOR,
+      \'filterWidgetOptions\' => [
+        \'showDefaultPalette\' => false,
+        \'pluginOptions\' => \Yii::$app->params["colorPluginOptions"],
+      ],
+      \'vAlign\' => \'middle\',
+      \'format\' => \'raw\',
+      \'noWrap\' => true
+    ],';
+  }
+
+  return '\''.$name.'\',';
+}

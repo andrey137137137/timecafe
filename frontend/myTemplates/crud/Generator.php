@@ -48,10 +48,11 @@ class Generator extends \yii\gii\Generator
    * @var boolean whether to wrap the `GridView` or `ListView` widget with the `yii\widgets\Pjax` widget
    * @since 2.0.5
    */
-  public $enablePjax = false;
+  public $enablePjax;
 
   //Генерировать блок RBAC доступа
-  public $enableRBAC = true;
+  public $enableRBAC;
+  public $rbacName="";
   /**
    * @inheritdoc
    */
@@ -164,6 +165,10 @@ class Generator extends \yii\gii\Generator
    */
   public function generate()
   {
+    $migrationName=explode('\\',$this->modelClass);
+    $rbacName=$migrationName[count($migrationName)-1];
+    $this->rbacName=$rbacName;
+
     $controllerFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->controllerClass, '\\')) . '.php');
     $files = [
         new CodeFile($controllerFile, $this->render('controller.php')),
@@ -182,6 +187,7 @@ class Generator extends \yii\gii\Generator
         $files[] = new CodeFile("$viewPath/$file", $this->render("views/$file"));
       }
     }
+
     // Search in subdirectory
     $templatePath = $templatePath.'/index';
     $viewPath = $viewPath.'/index';
@@ -197,10 +203,7 @@ class Generator extends \yii\gii\Generator
     }
 
     if($this->enableRBAC){
-      $migrationName=explode('\\',$this->modelClass);
-      $rbacName=$migrationName[count($migrationName)-1];
       $migrationName = 'm' . time() . '_' . strtolower($rbacName).'_RBAC';
-
       $file = rtrim(Yii::getAlias($this->migrationPath), '/') . "/{$migrationName}.php";
       $files[] = new CodeFile($file, $this->render('migration.php', [
           //'tables' => $this->reorderTables($tables, $relations),
@@ -209,7 +212,7 @@ class Generator extends \yii\gii\Generator
 
       ]));
     }
-    ddd($files);
+    //ddd($files);
     return $files;
   }
 

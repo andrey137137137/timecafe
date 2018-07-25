@@ -19,7 +19,7 @@ class LoginPage implements UrlRuleInterface
   {
     if(!Yii::$app->user->isGuest)  return false;
 
-    return ["site/login",[]];
+    //return ["site/login",[]];
     return false;
   }
 

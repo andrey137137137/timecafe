@@ -33,7 +33,7 @@ class <?= $migrationName ?> extends \yii\db\Migration
     );
 
     $this->createPermission(
-      '<?=$rbacName;?>Edit',
+      '<?=$rbacName;?>Update',
       '<?=$rbacName;?>  - редактирование',
       [$role]
     );
