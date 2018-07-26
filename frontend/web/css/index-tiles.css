@@ -1,0 +1,56 @@
+.vertical-layout {
+    position: fixed;
+    top: 200px;
+    left: 80px;
+    z-index: 1000;
+}
+
+.vertical-layout-sm {
+    position: fixed;
+    top: 3px;
+    left: 5px;
+    z-index: 1000;
+}
+
+.buy-now {
+    position: fixed;
+    top: 200px;
+    right: 80px;
+    z-index: 1000;
+}
+
+.buy-now-sm {
+    position: fixed;
+    top: 3px;
+    right: 5px;
+    z-index: 1000;
+}
+
+ /*.start-screen {
+   background: url(../../img/canada.jpg) no-repeat;
+ background-size: cover;
+-webkit-background-size: cover;
+-o-background-size: cover;
+-moz-background-size: cover; 
+    background-attachment: fixed;
+	height: 100%;
+    background-repeat: no-repeat;
+	background-image: -moz-linear-gradient(rgb(5, 56, 159), rgb(0, 166, 193));
+    background-image: -webkit-linear-gradient(rgb(5, 56, 159), rgb(0, 166, 193));
+    background-image: -o-linear-gradient(rgb(5, 56, 159), rgb(0, 166, 193));
+    background-image: -ms-linear-gradient(rgb(5, 56, 159), rgb(0, 166, 193));
+    background-image: linear-gradient((rgb(5, 56, 159), rgb(0, 166, 193));
+}*/
+/*@media all and (-webkit-min-device-pixel-ratio: 1.5) {
+    .start-screen {
+    background: -moz-linear-gradient(rgb(5, 56, 159), rgb(0, 166, 193));
+    background: -webkit-linear-gradient(rgb(5, 56, 159), rgb(0, 166, 193));
+    background: -o-linear-gradient(rgb(5, 56, 159), rgb(0, 166, 193));
+    background: -ms-linear-gradient(rgb(5, 56, 159), rgb(0, 166, 193));
+    background: linear-gradient((rgb(5, 56, 159), rgb(0, 166, 193));
+    }
+}*/
+
+.start-screen-container {
+    height: 100%;
+}

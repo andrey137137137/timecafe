@@ -1,4 +1,7 @@
 <?php
+$twigFunction = require(dirname(dirname(__DIR__)) . '/common/components/twigFunctionList.php');
+$twigFunction['translate'] = '\Yii::t';
+
 $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -46,7 +49,7 @@ $config = [
                         'MultipleInput' => 'unclead\multipleinput\MultipleInput',
                         'MaskedInput' => 'yii\widgets\MaskedInput',
                     ],
-                  //'functions' => $twigFunction,
+                    'functions' => $twigFunction,
                     'uses' => ['yii\bootstrap'],
                     'extensions' => YII_DEBUG ? [
                         '\Twig_Extension_Debug',

@@ -3,6 +3,9 @@
 namespace frontend\modules\users\models;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
+
 
 /**
  * This is the model class for table "user".
@@ -20,50 +23,51 @@ use Yii;
  * @property Polls[] $polls
  * @property UserTimetable[] $userTimetables
  */
-class Users extends \yii\db\ActiveRecord
+class Users extends ActiveRecord implements IdentityInterface
 {
 
   public $new_password;
+  private $auth_key;
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
-    {
-        return 'user';
-    }
+  /**
+   * {@inheritdoc}
+   */
+  public static function tableName()
+  {
+    return 'user';
+  }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['name', 'pass', 'last_sess', 'cafe_id', 'email', 'color'], 'string'],
-            [['role', 'state'], 'integer'],
-            ['new_password', 'trim'],
-            [['new_password'], 'string', 'max' => 60],
-            [['new_password'], 'string', 'min' => 8],
-        ];
-    }
+  /**
+   * {@inheritdoc}
+   */
+  public function rules()
+  {
+    return [
+      [['name', 'pass', 'last_sess', 'cafe_id', 'email', 'color'], 'string'],
+      [['role', 'state'], 'integer'],
+      ['new_password', 'trim'],
+      [['new_password'], 'string', 'max' => 60],
+      [['new_password'], 'string', 'min' => 8],
+    ];
+  }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('app', 'ID'),
-            'user' => Yii::t('app', 'User'),
-            'pass' => Yii::t('app', 'Pass'),
-            'last_sess' => Yii::t('app', 'Last Sess'),
-            'role' => Yii::t('app', 'Role'),
-            'state' => Yii::t('app', 'State'),
-            'cafe' => Yii::t('app', 'Cafe'),
-            'email' => Yii::t('app', 'Email'),
-            'color' => Yii::t('app', 'Color'),
-        ];
-    }
+  /**
+   * {@inheritdoc}
+   */
+  public function attributeLabels()
+  {
+    return [
+      'id' => Yii::t('app', 'ID'),
+      'user' => Yii::t('app', 'User'),
+      'pass' => Yii::t('app', 'Pass'),
+      'last_sess' => Yii::t('app', 'Last Sess'),
+      'role' => Yii::t('app', 'Role'),
+      'state' => Yii::t('app', 'State'),
+      'cafe' => Yii::t('app', 'Cafe'),
+      'email' => Yii::t('app', 'Email'),
+      'color' => Yii::t('app', 'Color'),
+    ];
+  }
 
   public function beforeValidate()
   {
@@ -78,10 +82,10 @@ class Users extends \yii\db\ActiveRecord
       }
       /*$this->reg_ip = $_SERVER["REMOTE_ADDR"];
       $this->referrer_id = (int)Yii::$app->session->get('referrer_id');
-      $this->added = date('Y-m-d H:i:s');
+      $this->added = date('Y-m-d H:i:s');*/
       if (!isset($this->auth_key)) {
         $this->auth_key = '';
-      }*/
+      }
     }
     if ($this->new_password) {
       $this->setPassword($this->new_password);
@@ -122,19 +126,83 @@ class Users extends \yii\db\ActiveRecord
     }*/
   }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPolls()
-    {
-        return $this->hasMany(Polls::className(), ['user_id' => 'id']);
-    }
+  /**
+   * @return \yii\db\ActiveQuery
+   */
+  public function getPolls()
+  {
+    return $this->hasMany(Polls::className(), ['user_id' => 'id']);
+  }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUserTimetables()
-    {
-        return $this->hasMany(UserTimetable::className(), ['user_id' => 'id']);
-    }
+  /**
+   * @return \yii\db\ActiveQuery
+   */
+  public function getUserTimetables()
+  {
+    return $this->hasMany(UserTimetable::className(), ['user_id' => 'id']);
+  }
+
+  /**
+   * Finds an identity by the given ID.
+   *
+   * @param string|integer $id the ID to be looked for
+   * @return IdentityInterface|null the identity object that matches the given ID.
+   */
+  public static function findIdentity($id)
+  {
+    return static::findOne($id);
+  }
+
+  /**
+   * Finds an identity by the given token.
+   *
+   * @param string $token the token to be looked for
+   * @return IdentityInterface|null the identity object that matches the given token.
+   */
+  public static function findIdentityByAccessToken($token, $type = null)
+  {
+    return static::findOne(['access_token' => $token]);
+  }
+
+  /**
+   * @return int|string current user ID
+   */
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  /**
+   * @return string current user auth key
+   */
+  public function getAuthKey()
+  {
+    return $this->auth_key;
+  }
+
+  /**
+   * @param string $authKey
+   * @return boolean if auth key is valid for current user
+   */
+  public function validateAuthKey($authKey)
+  {
+    return $this->getAuthKey() === $authKey;
+  }
+
+  public static function findByuser($user){
+    return static::findOne(['name' => $user]);
+  }
+
+
+  /**
+   * Validates password
+   *
+   * @param string $password password to validate
+   * @return bool if password provided is valid for current user
+   */
+  public function validatePassword($password)
+  {
+    return Yii::$app->security->validatePassword($password, $this->pass);
+  }
 }
+

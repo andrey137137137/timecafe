@@ -16,5 +16,6 @@
   'Email' => 'Email',
   'Color' => 'Color',
   'Page does not exist' => 'Page does not exist',
+  'login' => 'login',
 );
 ?>

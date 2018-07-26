@@ -14,6 +14,23 @@ $config=  [
     'language' => defined('LANGUAGE') ? LANGUAGE : 'en-EN',
     'sourceLanguage' => 'dev',
     'components' => [
+        'assetManager' => [
+            'bundles' => [
+                'yii\bootstrap\BootstrapAsset' => [
+                    'sourcePath' => null,   // не опубликовывать комплект
+                    'js' => [],
+                    'css' => [],
+                ],
+                'yii\web\JqueryAsset' => [
+                    'sourcePath' => null,   // не опубликовывать комплект
+                    'js' => [
+                        '//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js',
+                    ]
+                ],
+                'bootstrap.js' => false,
+                'bootstrap.css' => false,
+            ]
+        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
