@@ -19,7 +19,7 @@ class UsersSearch extends Users
     {
         return [
             [['id', 'role', 'state'], 'integer'],
-            [['name', 'pass', 'last_sess', 'cafe_id', 'email', 'color'], 'safe'],
+            [['name', 'pass', 'last_sess', 'email', 'color'], 'safe'],
         ];
     }
 
@@ -67,7 +67,6 @@ class UsersSearch extends Users
         $query->andFilterWhere(['like', '.name', $this->name])
             ->andFilterWhere(['like', '.pass', $this->pass])
             ->andFilterWhere(['like', '.last_sess', $this->last_sess])
-            ->andFilterWhere(['like', '.cafe_id', $this->cafe_id])
             ->andFilterWhere(['like', '.email', $this->email])
             ->andFilterWhere(['like', '.color', $this->color]);
 

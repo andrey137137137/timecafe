@@ -5,7 +5,7 @@ namespace frontend\modules\users\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-
+use frontend\modules\users\models\UserTablseColumn;
 
 /**
  * This is the model class for table "user".
@@ -43,6 +43,8 @@ class Users extends ActiveRecord implements IdentityInterface
   {
     return [
       [['name', 'pass', 'last_sess', 'email', 'color'], 'string'],
+      [['email'], 'trim'],
+      [['email'], 'email'],
       [['role', 'state'], 'integer'],
       ['new_password', 'trim'],
       [['new_password'], 'string', 'max' => 60],
@@ -64,6 +66,7 @@ class Users extends ActiveRecord implements IdentityInterface
       'state' => Yii::t('app', 'State'),
       'email' => Yii::t('app', 'Email'),
       'color' => Yii::t('app', 'Color'),
+      'new_password' => Yii::t('app', 'New Password'),
     ];
   }
 
@@ -85,7 +88,7 @@ class Users extends ActiveRecord implements IdentityInterface
         $this->auth_key = '';
       }
     }
-    if ($this->new_password) {
+    if ($this->new_password && strlen($this->new_password)>0) {
       $this->setPassword($this->new_password);
     }
     return true;
@@ -201,6 +204,14 @@ class Users extends ActiveRecord implements IdentityInterface
   public function validatePassword($password)
   {
     return Yii::$app->security->validatePassword($password, $this->pass);
+  }
+
+  public function getActiveColumn($table){
+    return UserTablseColumn::getActiveColumn($table);
+  }
+
+  public function setActiveColumn($table,$cols){
+    return UserTablseColumn::setActiveColumn($table,$cols);
   }
 }
 

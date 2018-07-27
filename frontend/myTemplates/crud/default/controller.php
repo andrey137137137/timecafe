@@ -41,6 +41,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
+use johnitvn\ajaxcrud\BulkButtonWidget;
 
 /**
  * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
@@ -97,6 +98,22 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         $actions = "";
         $actions.= Yii::$app->user->can('<?=$generator->rbacName;?>Update')?"{update}":"";
         $actions.= Yii::$app->user->can('<?=$generator->rbacName;?>Delete')?"{delete}":"";
+        $afterTable='';
+        if( Yii::$app->user->can('<?=$generator->rbacName;?>Delete')){
+          $afterTable=BulkButtonWidget::widget([
+            'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp; '.<?=$generator->generateString("Delete All");?>,
+            ["bulk-delete"] ,
+            [
+              "class"=>"btn btn-danger btn-xs",
+              'role'=>'modal-remote-bulk',
+              'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
+              'data-request-method'=>'post',
+              'data-confirm-title'=><?=$generator->generateString("Are you sure?");?>,
+              'data-confirm-message'=><?=$generator->generateString("Are you sure want to delete this item");?>
+            ]),
+            ]).
+            '<div class="clearfix"></div>';
+        };
 <?php }else{?>
         $canCreate=true;
         $actions = "{update}{delete}";
@@ -105,8 +122,8 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         if(Yii::$app->user->isGuest){
           $sel_column=Yii::$app->session->get("columns_<?= $modelClass ?>",false);
         }else{
-          $user=Yii::$app->getUser();
-          $sel_column=$user->getActiveColumn?$user->getActiveColumn("columns_<?= $modelClass ?>"):Yii::$app->session->get("columns_<?= $modelClass ?>",false);
+          $user=Yii::$app->getUser()->getIdentity();
+          $sel_column=$user->getActiveColumn("columns_<?= $modelClass ?>");
         }
         if(!$sel_column){
           $sel_column=$this->def_sel_column;
@@ -126,6 +143,9 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             'dataProvider' => $dataProvider,
             'columns' => $columns,
             'canCreate' => $canCreate,
+            'afterTable'=>$afterTable,
+            'title'=>"Users",
+            'forAllCafe'=>true,
         ]);
 <?php else: ?>
         $dataProvider = new ActiveDataProvider([
@@ -136,6 +156,9 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             'dataProvider' => $dataProvider,
             'columns' => $columns,
             'canCreate' => $canCreate,
+            'afterTable'=>$afterTable,
+            'title'=>"<?= $modelClass ?>",
+            'forAllCafe'=>true,
         ]);
 <?php endif; ?>
     }
@@ -169,13 +192,10 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
       $col=$request->post('column');
 
       if(Yii::$app->user->isGuest){
-       Yii::$app->session->set("columns_<?= $modelClass ?>",$col);
+        Yii::$app->session->set("columns_<?= $modelClass ?>",$col);
       }else{
-      $user=Yii::$app->getUser();
-        if($user->setActiveColumn)
-          $user->setActiveColumn("columns_<?= $modelClass ?>",$col);
-        else
-          Yii::$app->session->set("columns_<?= $modelClass ?>",$col);
+        $user=Yii::$app->getUser()->getIdentity();
+        $user->setActiveColumn("columns_<?= $modelClass ?>",$col);
       }
 
       return [
@@ -188,8 +208,8 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     if(Yii::$app->user->isGuest){
       $sel_column=Yii::$app->session->get("columns_<?= $modelClass ?>",false);
     }else{
-      $user=Yii::$app->getUser();
-      $sel_column=$user->getActiveColumn?$user->getActiveColumn("columns_<?= $modelClass ?>"):Yii::$app->session->get("columns_<?= $modelClass ?>",false);
+      $user=Yii::$app->getUser()->getIdentity();
+      $sel_column=$user->getActiveColumn("columns_<?= $modelClass ?>");
     }
     if(!$sel_column){
       $sel_column=$this->def_sel_column;
@@ -308,10 +328,15 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
           /*
           *   Process for ajax request
           */
+          $title=<?= strtr($generator->generateString('Update ' .
+              Inflector::camel2words(StringHelper::basename($generator->modelClass)) .
+              ': {nameAttribute}', ['nameAttribute' => '{nameAttribute}']), [
+              '{nameAttribute}\'' => '\' . $model->' . $generator->getNameAttribute()
+          ]) ?>;
           Yii::$app->response->format = Response::FORMAT_JSON;
           if($request->isGet){
             return [
-              'title'=> "Update <?= $modelClass ?> #".<?= $actionParams ?>,
+              'title'=> $title,
               'content'=>$this->renderAjax('update', [
                 'model' => $model,
                 'isAjax' => true,
@@ -322,14 +347,14 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
           }else if($model->load($request->post()) && $model->save()){
             return [
               'forceReload'=>'#crud-datatable-pjax',
-              'title'=> "<?= $modelClass ?> #".<?= $actionParams ?>,
+              'title'=> $title,
               'content'=>"<script>$('.modal-header .close').click()</script>",
               'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                 Html::a('Edit',['update','<?= substr($actionParams,1) ?>'=><?= $actionParams ?>],['class'=>'btn btn-primary','role'=>'modal-remote'])
             ];
           }else{
             return [
-              'title'=> "Update <?= $modelClass ?> #".<?= $actionParams ?>,
+              'title'=> $title,
               'content'=>$this->renderAjax('update', [
                 'model' => $model,
                 'isAjax' => true,

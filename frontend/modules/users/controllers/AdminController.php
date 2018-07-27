@@ -2,6 +2,7 @@
 
 namespace frontend\modules\users\controllers;
 
+use johnitvn\ajaxcrud\BulkButtonWidget;
 use Yii;
 use frontend\modules\users\models\Users;
 use frontend\modules\users\models\UsersSearch;
@@ -48,21 +49,51 @@ class AdminController extends Controller
      */
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest || !Yii::$app->user->can('UsersView')) {
-          throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
-          return false;
-        }
+      if (Yii::$app->user->isGuest || !Yii::$app->user->can('UsersView')) {
+        throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
+        return false;
+      }
 
-        $canCreate = Yii::$app->user->can('UsersCreate');
-        $actions = "";
-        $actions.= Yii::$app->user->can('UsersUpdate')?"{update}":"";
-        $actions.= Yii::$app->user->can('UsersDelete')?"{delete}":"";
+      $searchModel = new UsersSearch();
+      $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+      $canCreate = Yii::$app->user->can('UsersCreate');
+      $actions = "";
+      $actions.= Yii::$app->user->can('UsersDelete')?"{blocked}":"";
+      $actions.= Yii::$app->user->can('UsersUpdate')?"{update}":"";
+      $afterTable='';
+      if( Yii::$app->user->can('UsersDelete')){
+          $afterTable=BulkButtonWidget::widget([
+                  'buttons'=>
+              Html::a('<i class="fa fa-stop"></i>&nbsp; '.Yii::t('app','Blocked All'),
+                      ["bulk-blocked"] ,
+                      [
+                          "class"=>"btn btn-warning btn-xs",
+                          'role'=>'modal-remote-bulk',
+                          'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
+                          'data-request-method'=>'post',
+                          'data-confirm-title'=>Yii::t('app', 'Are you sure?'),
+                          'data-confirm-message'=>Yii::t('app', 'Are you sure want to Blocked this users')                                ]),
+              ])
+              .Html::a('<i class="fa fa-play"></i>&nbsp; '.Yii::t('app','Restore All'),
+                  ["bulk-restore"] ,
+                  [
+                      "class"=>"btn btn-science-blue btn-xs",
+                      'role'=>'modal-remote-bulk',
+                      'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
+                      'data-request-method'=>'post',
+                      'data-confirm-title'=>Yii::t('app', 'Are you sure?'),
+                      'data-confirm-message'=>Yii::t('app', 'Are you sure want to restore this users')
+                  ])
+              .'<div class="clearfix"></div>';
+        };
+
         $columns = include(__DIR__.'/../views/admin/_columns.php');
         if(Yii::$app->user->isGuest){
           $sel_column=Yii::$app->session->get("columns_Users",false);
         }else{
-          $user=Yii::$app->getUser();
-          $sel_column=$user->getActiveColumn?$user->getActiveColumn("columns_Users"):Yii::$app->session->get("columns_Users",false);
+          $user=Yii::$app->getUser()->getIdentity();
+          $sel_column=$user->getActiveColumn("columns_Users");
         }
         if(!$sel_column){
           $sel_column=$this->def_sel_column;
@@ -73,14 +104,15 @@ class AdminController extends Controller
             unset($columns[$k]);
           }
         }
-        $searchModel = new UsersSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'columns' => $columns,
             'canCreate' => $canCreate,
+            'afterTable'=>$afterTable,
+            'title'=>"Users",
+            'forAllCafe'=>true,
         ]);
     }
 
@@ -113,11 +145,8 @@ class AdminController extends Controller
       if(Yii::$app->user->isGuest){
        Yii::$app->session->set("columns_Users",$col);
       }else{
-      $user=Yii::$app->getUser();
-        if($user->setActiveColumn)
-          $user->setActiveColumn("columns_Users",$col);
-        else
-          Yii::$app->session->set("columns_Users",$col);
+      $user=Yii::$app->getUser()->getIdentity();
+        $user->setActiveColumn("columns_Users",$col);
       }
 
       return [
@@ -125,13 +154,14 @@ class AdminController extends Controller
        'content'=>"<script>$('.modal-header .close').click()</script>"
       ];
     }
+
     $actions="";
     $columns = include(__DIR__.'/../views/admin/_columns.php');
     if(Yii::$app->user->isGuest){
       $sel_column=Yii::$app->session->get("columns_Users",false);
     }else{
-      $user=Yii::$app->getUser();
-      $sel_column=$user->getActiveColumn?$user->getActiveColumn("columns_Users"):Yii::$app->session->get("columns_Users",false);
+      $user=Yii::$app->getUser()->getIdentity();
+      $sel_column=$user->getActiveColumn("columns_Users");
     }
     if(!$sel_column){
       $sel_column=$this->def_sel_column;
@@ -246,10 +276,13 @@ class AdminController extends Controller
           /*
           *   Process for ajax request
           */
+          $title=Yii::t('app', 'Update Users: ' . $model->name, [
+              'nameAttribute' => '' . $model->name,
+          ]);
           Yii::$app->response->format = Response::FORMAT_JSON;
           if($request->isGet){
             return [
-              'title'=> "Update Users #".$id,
+              'title'=> $title,
               'content'=>$this->renderAjax('update', [
                 'model' => $model,
                 'isAjax' => true,
@@ -260,14 +293,14 @@ class AdminController extends Controller
           }else if($model->load($request->post()) && $model->save()){
             return [
               'forceReload'=>'#crud-datatable-pjax',
-              'title'=> "Users #".$id,
+              'title'=> $title,
               'content'=>"<script>$('.modal-header .close').click()</script>",
               'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                 Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
             ];
           }else{
             return [
-              'title'=> "Update Users #".$id,
+              'title'=> $title,
               'content'=>$this->renderAjax('update', [
                 'model' => $model,
                 'isAjax' => true,
@@ -297,14 +330,16 @@ class AdminController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionBlocked($id)
     {
       if (Yii::$app->user->isGuest || !Yii::$app->user->can('UsersDelete')) {
         throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
         return false;
       }
       $request = Yii::$app->request;
-      $this->findModel($id)->delete();
+      $user=$this->findModel($id);
+      $user->state=1;
+      $user->save();
 
       if($request->isAjax){
         /*
@@ -320,6 +355,31 @@ class AdminController extends Controller
       }
     }
 
+  public function actionRestore($id)
+  {
+    if (Yii::$app->user->isGuest || !Yii::$app->user->can('UsersDelete')) {
+      throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
+      return false;
+    }
+    $request = Yii::$app->request;
+    $user=$this->findModel($id);
+    $user->state=0;
+    $user->save();
+
+    if($request->isAjax){
+      /*
+      *   Process for ajax request
+      */
+      Yii::$app->response->format = Response::FORMAT_JSON;
+      return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+    }else{
+      /*
+      *   Process for non-ajax request
+      */
+      return $this->redirect(['index']);
+    }
+  }
+
      /**
      * Delete multiple existing Users model.
      * For ajax request will return json object
@@ -327,7 +387,7 @@ class AdminController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionBulkDelete()
+    public function actionBulkBlocked()
     {
       if (Yii::$app->user->isGuest || !Yii::$app->user->can('UsersDelete')) {
         throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
@@ -337,7 +397,8 @@ class AdminController extends Controller
       $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
       foreach ( $pks as $pk ) {
         $model = $this->findModel($pk);
-        $model->delete();
+        $model->state=1;
+        $model->save();
       }
 
       if($request->isAjax){
@@ -355,6 +416,34 @@ class AdminController extends Controller
        
     }
 
+  public function actionBulkRestore()
+  {
+    if (Yii::$app->user->isGuest || !Yii::$app->user->can('UsersDelete')) {
+      throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
+      return false;
+    }
+    $request = Yii::$app->request;
+    $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
+    foreach ( $pks as $pk ) {
+      $model = $this->findModel($pk);
+      $model->state=0;
+      $model->save();
+    }
+
+    if($request->isAjax){
+      /*
+      *   Process for ajax request
+      */
+      Yii::$app->response->format = Response::FORMAT_JSON;
+      return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+    }else{
+      /*
+      *   Process for non-ajax request
+      */
+      return $this->redirect(['index']);
+    }
+
+  }
     /**
      * Finds the Users model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

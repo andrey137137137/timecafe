@@ -17,8 +17,8 @@
 </div>
 
 
-{% if(_can('AdminView')) %}
-  {{ macro.tile('user','bg-science-blue','Administrators',{icon:'fa fa-user-secret'}) }}
+{% if(_can('UsersView')) %}
+  {{ macro.tile('users/admin','bg-science-blue','Administrators',{icon:'fa fa-user-secret'}) }}
 {% endif %}
 
 {{ macro.tile('logout','bg-scarlet','LOGOUT',{icon:'icon-metro-exit'}) }}

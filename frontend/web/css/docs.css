@@ -446,3 +446,7 @@ footer.footer-index {
     max-width:1400px;
 
 }
+
+.modal{
+    z-index:99999;
+}

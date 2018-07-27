@@ -51,13 +51,18 @@ return [
         'urlCreator' => function($action, $model, $key, $index) { 
                 return Url::to([$action,'<?=substr($actionParams,1)?>'=>$key]);
         },
-        'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],
-        'deleteOptions'=>['role'=>'modal-remote','title'=>'Delete', 
+        'updateOptions'=>[
+            'role'=>'modal-remote',
+            'title'=>'',
+            'label'=>"<div class=\"btn btn-info btn-xs admin\"><i class=\"fa fa-pencil\"></i> ".<?= $generator->generateString('Edit data');?>."</div>",
+        ],
+        'deleteOptions'=>['role'=>'modal-remote','title'=>'',
+                          'label'=>"<div class=\"btn btn-warning btn-xs admin\"><i class=\"fa fa-stop\"></i> ".<?= $generator->generateString('Delete');?>."</div>",
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                           'data-request-method'=>'post',
                           'data-toggle'=>'tooltip',
-                          'data-confirm-title'=>'Are you sure?',
-                          'data-confirm-message'=>'Are you sure want to delete this item'], 
+                          'data-confirm-title'=><?= $generator->generateString('Are you sure?');?>,
+                          'data-confirm-message'=><?= $generator->generateString('Are you sure want to delete this item');?>,]
     ],
 
 ];

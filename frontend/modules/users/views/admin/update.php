@@ -14,7 +14,9 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="users-update">
 
-  <h1><?= Html::encode($this->title) ?></h1>
+  <?php if(!$isAjax){?>
+    <h1><?= Html::encode($this->title) ?></h1>
+  <?php }?>
 
   <?= $this->render('_form', [
     'model' => $model,

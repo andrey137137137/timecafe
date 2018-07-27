@@ -13,15 +13,18 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'name')->textInput() ?>
+
+    <?= $form->field($model, 'new_password')->textInput() ?>
 
     <?= $form->field($model, 'role')->textInput() ?>
 
-    <?= $form->field($model, 'state')->textInput() ?>
+    <?= $form->field($model, 'state')->dropDownList([
+        0=>Yii::t('app', 'Active'),
+        1=>Yii::t('app', 'Blocked'),
+    ]) ?>
 
-    <?= $form->field($model, 'cafe_id')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'email')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'email')->textInput() ?>
 
     <?= $form->field($model, 'color')->widget(ColorInput::classname(), [
         'options' => ['placeholder' => 'Select color ...'],

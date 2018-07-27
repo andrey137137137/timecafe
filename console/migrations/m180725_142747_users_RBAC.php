@@ -26,7 +26,7 @@ class m180725_142747_users_RBAC extends \yii\db\Migration
 
     $this->createPermission(
       'UsersDelete',
-      'Users - удаление',
+      'Users - блокировка',
       [$role]
     );
 

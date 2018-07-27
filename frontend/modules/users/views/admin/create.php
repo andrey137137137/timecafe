@@ -11,8 +11,10 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="users-create">
+  <?php if(!$isAjax){?>
+    <h1><?= Html::encode($this->title) ?></h1>
+  <?php }?>
 
-  <h1><?= Html::encode($this->title) ?></h1>
 
   <?= $this->render('_form', [
     'model' => $model,
