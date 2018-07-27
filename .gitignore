@@ -37,3 +37,6 @@ phpunit.phar
 
 start_param.php
 *-local.php
+
+.composer
+composer.lock
