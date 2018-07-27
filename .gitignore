@@ -40,3 +40,5 @@ start_param.php
 
 .composer
 composer.lock
+
+public_html
