@@ -25,7 +25,7 @@ $config = [
             'class' => 'common\components\TwigString',
             'params' => [
                 'cachePath' => '@runtime/Twig/cache',
-              //'functions' => $twigFunction,
+                'functions' => $twigFunction,
             ],
         ],
         'view' => [
@@ -60,7 +60,7 @@ $config = [
         ],
         'i18n' => [
             'translations' => [
-                'app*' => [
+                '*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@common/language',
                     'on missingTranslation' => ['common\components\TranslationEventHandler', 'handleMissingTranslation']

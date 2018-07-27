@@ -41,6 +41,16 @@ $config=  [
             frontend\modules\users\models\Users::afterLogin($event->identity->id);
           },*/
         ],
+        'view' => [
+            'class' => 'frontend\components\ViewBASE',
+            'renderers' => [
+                'twig' => [
+                    'globals' => [
+                        'AppAsset' => 'frontend\assets\AppAsset',
+                    ]
+                ]
+            ]
+        ],
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
           // Hide index.php
@@ -49,7 +59,7 @@ $config=  [
             'enablePrettyUrl' => true,
             'rules' => [
                 'site/<action>' => '404',
-                [ // обработка локализации сайта
+                [
                     'class' => 'frontend\components\LoginPage',
                 ],
                 '<alias:\w+>' => 'site/<alias>',

@@ -16,7 +16,9 @@
 }
 
 .navbar-docs-push-down {
-    margin-top: 98px;
+    /* margin-top: 98px; */
+    margin: 98px auto 0 auto;
+    float: none;
 }
 
 .navbar-header .hover-underline-none {
@@ -245,12 +247,12 @@ footer.footer-index {
 }
 /*use styles below to disable ugly selection*/
 .customNavigation a{
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 #owl-one-slide .item img{
@@ -329,7 +331,7 @@ footer.footer-index {
 
 /*To move navigation buttons outside use these settings:*/
 #owl-random.owl-theme .owl-controls .owl-buttons div {
-  position: absolute;
+    position: absolute;
 }
 #owl-random.owl-theme .owl-controls .owl-buttons .owl-prev {
     right: 34px;
@@ -433,4 +435,14 @@ footer.footer-index {
 
 .yamm .dropdown-menu {
     width: 400px;
+}
+
+.start-screen-container{
+    display:block;
+    color:#fff;
+    width:100%;
+    margin:auto;
+    position:relative;
+    max-width:1400px;
+
 }

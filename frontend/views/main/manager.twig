@@ -1,0 +1,25 @@
+<div class="tile triple-width bg-blue" id='clock'>
+  <div class="tile-content">
+    <div class="text-right padding-10 padding-off-top">
+      <h3 class="margin-off font-weight-200">_</h3>
+      <h5 class="margin-off font-weight-200"></h5>
+      <h5 class="">{{ t("main",'Administrator') }}: {{ this.user.name }}</h5>
+      <!--<h6 class="margin-off">Number of people now : <font style="font-size:34px;" class='tot_visitor'></font></h6>-->
+    </div>
+  </div>
+  <div class="brand">
+    <div class="tile-label">
+      <h4 class="margin-off">
+        <i class="fa fa-clock-o"> </i>
+      </h4>
+    </div>
+  </div>
+</div>
+
+
+{% if(_can('AdminView')) %}
+  {{ macro.tile('user','bg-science-blue','Administrators',{icon:'fa fa-user-secret'}) }}
+{% endif %}
+
+{{ macro.tile('logout','bg-scarlet','LOGOUT',{icon:'icon-metro-exit'}) }}
+

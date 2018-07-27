@@ -16,7 +16,6 @@ use yii\web\IdentityInterface;
  * @property string $last_sess
  * @property int $role
  * @property int $state
- * @property string $cafe
  * @property string $email
  * @property string $color
  *
@@ -43,7 +42,7 @@ class Users extends ActiveRecord implements IdentityInterface
   public function rules()
   {
     return [
-      [['name', 'pass', 'last_sess', 'cafe_id', 'email', 'color'], 'string'],
+      [['name', 'pass', 'last_sess', 'email', 'color'], 'string'],
       [['role', 'state'], 'integer'],
       ['new_password', 'trim'],
       [['new_password'], 'string', 'max' => 60],
@@ -63,7 +62,6 @@ class Users extends ActiveRecord implements IdentityInterface
       'last_sess' => Yii::t('app', 'Last Sess'),
       'role' => Yii::t('app', 'Role'),
       'state' => Yii::t('app', 'State'),
-      'cafe' => Yii::t('app', 'Cafe'),
       'email' => Yii::t('app', 'Email'),
       'color' => Yii::t('app', 'Color'),
     ];

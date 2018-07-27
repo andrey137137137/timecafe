@@ -1,0 +1,12 @@
+{% macro tile(href, color,title, data) %}
+  <a href="{{ href }}" class="tile {{ color }}" data-click="transform">
+    {% if(data.icon) %}
+      <span class="tile-content icon">
+        <span class="{{ data.icon }}"></span>
+      </span>
+    {% endif %}
+    <span class="brand">
+      <span class="tile-label text-center">{{ t(main,title) }}</span>
+    </span>
+  </a>
+{% endmacro %}

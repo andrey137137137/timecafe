@@ -8,16 +8,15 @@
       xmlns:og="http://ogp.me/ns#"
       lang="{{ app.language }}">
 
-
+{% import "macro.twig" as macro %}
 {% include 'base/head.twig' %}
 
-<body class="start-screen modernui-dark-bg">
-
-<div class="container">
-  {{ content|raw }}
-</div>
-
-
+<body class="{{ this.all_params.screen_class }} modernui-dark-bg">
+  {% if(this.all_params.page_wrap) %}
+    {% include 'page_wrap/'~this.all_params.page_wrap~'.twig' %}
+  {% else  %}
+    {% include 'page_wrap/cafe.twig' %}
+  {% endif %}
 {{   void(this.endBody()) }}
 </body>
 </html>
