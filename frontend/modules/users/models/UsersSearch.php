@@ -12,6 +12,7 @@ use frontend\modules\users\models\Users;
  */
 class UsersSearch extends Users
 {
+
     /**
      * {@inheritdoc}
      */
@@ -19,6 +20,7 @@ class UsersSearch extends Users
     {
         return [
             [['id', 'role', 'state'], 'integer'],
+            ['lg','string'],
             [['name', 'pass', 'last_sess', 'email', 'color'], 'safe'],
         ];
     }
@@ -60,9 +62,18 @@ class UsersSearch extends Users
         // grid filtering conditions
         $query->andFilterWhere([
              'id' => $this->id,
-             'role' => $this->role,
+             'lg' => $this->lg,
              'state' => $this->state,
         ]);
+
+      if($this->role && strlen(trim($this->role))>0) {
+        $query->leftJoin('auth_assignment', 'user.id= auth_assignment.user_id');
+        if($this->role==-1){
+          $query->andWhere('auth_assignment.item_name  IS NULL');
+        }else {
+          $query->andWhere('auth_assignment.item_name=\'' . $this->role . '\'');
+        }
+      }
 
         $query->andFilterWhere(['like', '.name', $this->name])
             ->andFilterWhere(['like', '.pass', $this->pass])

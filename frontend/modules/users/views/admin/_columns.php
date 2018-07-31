@@ -3,6 +3,7 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use johnitvn\ajaxcrud\BulkButtonWidget;
 use yii\helpers\Html;
+use frontend\modules\users\models\Users;
 
 return [
     [
@@ -15,7 +16,29 @@ return [
     ],
     'id',
     'name',
-    'role',
+    [
+        'attribute'=>'role',
+        'filterType' => GridView::FILTER_SELECT2,
+        'format' => 'raw',
+        'filter'=> Users::getRoleList(),
+        'value' => function ($model, $key, $index, $column) {
+          return implode(',',$model->getRoleOfUserArray());
+        },
+    ],[
+        'attribute'=>'lg',
+        'filterType' => GridView::FILTER_SELECT2,
+        'format' => 'raw',
+        'filter'=> array_merge(
+            [
+                ''=>Yii::t('app',"ALL")
+            ],
+            Yii::$app->params['lg_list']
+        ),
+        'value' => function ($model, $key, $index, $column) {
+          $lg= Yii::$app->params['lg_list'];
+          return $lg[isset($lg[$model->lg])?$model->lg:Yii::$app->params['defaultLang']];
+        },
+    ],
     [
         'attribute' => 'state',
         'filterType' => GridView::FILTER_SELECT2,

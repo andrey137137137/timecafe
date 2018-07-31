@@ -218,55 +218,6 @@ $functionsList = [
       return ($else ? $else : '');
     }
   },
-  '_date' => function ($date, $format_time = "%H:%M:%S", $locate_month = true) use ($month) {
-    if (!$date) {
-      return false;
-    };
-    $d = explode(" ", $date)[0];
-    $m = explode("-", $d);
-    if ($locate_month) {
-      $month = $month[0];
-      $currMonth = (isset($month[$m[1]])) ? $month[$m[1]] : strftime('%B', strtotime($date));
-      $sep = ' ';
-    } else {
-      $currMonth = $m[1];
-      $sep = '/';
-    }
-    if ($format_time) {
-      return strftime("%e " . $currMonth . " %G в " . $format_time, strtotime($date));
-    } else {
-      return strftime("%e " . $currMonth . " %G", strtotime($date));
-    }
-  },
-  '_local_date' => function ($date = '', $format = "%G %B %e %H:%I:%S", $nominative = false) use ($month) {
-    $month = $nominative ? $month[1] : $month[0];
-    $date = $date == '' ? date('Y-m-d H:i:s', time()) : $date;
-    $monthRus = strpos($format, '%BRUS');
-    $date = strtotime($date);
-    if ($monthRus === false) {
-      return strftime($format, $date);
-    }
-    $m = date('m', $date);
-    $currMonth = (isset($month[$m])) ? $month[$m] : strftime('%B', $date);
-    return strftime(substr($format, 0, $monthRus), $date) . $currMonth . strftime(substr($format, $monthRus + 5), $date);
-  },
-  'date' => function ($date, $format_time = false, $locate_month = true) use ($month) {
-    if ($date == 0) {
-      return '';
-    }
-    $d = date('d', $date);
-    $m = date('m', $date);
-
-    if ($locate_month) {
-      $month = $month[0];
-      $currMonth = (isset($month[$m])) ? $month[$m] : date('F', $date);
-      $sep = ' ';
-    } else {
-      $currMonth = $m;
-      $sep = '/';
-    }
-    return $d . $sep . $currMonth . $sep . date('Y', $date) . ($format_time ? ' ' . date($format_time, $date) : '');
-  },
   '_can' => function ($do) {
     return !Yii::$app->user->isGuest && Yii::$app->user->can($do);
   },

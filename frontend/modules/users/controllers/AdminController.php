@@ -276,7 +276,7 @@ class AdminController extends Controller
           /*
           *   Process for ajax request
           */
-          $title=Yii::t('app', 'Update Users: ' . $model->name, [
+          $title=Yii::t('app', 'Update Users: {nameAttribute}', [
               'nameAttribute' => '' . $model->name,
           ]);
           Yii::$app->response->format = Response::FORMAT_JSON;

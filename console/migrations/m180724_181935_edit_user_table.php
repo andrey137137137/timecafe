@@ -13,8 +13,9 @@ class m180724_181935_edit_user_table extends Migration
      */
     public function safeUp()
     {
-      //$this->renameColumn('user', 'user', 'name');
-      //$this->renameColumn('user', 'cafe', 'cafe_id');
+      $this->renameColumn('user', 'user', 'name');
+      $this->renameColumn('user', 'cafe', 'cafe_id');
+      $this->addColumn('user',"lg",$this->string(10)->defaultValue('en-En'));
 
       $users=Users::find()->all();
       foreach ($users as $user){

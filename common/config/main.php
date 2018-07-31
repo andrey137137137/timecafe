@@ -65,6 +65,21 @@ $config = [
                     'basePath' => '@common/language',
                     'on missingTranslation' => ['common\components\TranslationEventHandler', 'handleMissingTranslation']
                 ],
+                'app' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@common/language',
+                    'on missingTranslation' => ['common\components\TranslationEventHandler', 'handleMissingTranslation']
+                ],
+                'main' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@common/language',
+                    'on missingTranslation' => ['common\components\TranslationEventHandler', 'handleMissingTranslation']
+                ],
+                'kvbase' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@common/language',
+                    'on missingTranslation' => ['common\components\TranslationEventHandler', 'handleMissingTranslation']
+                ],
             ],
         ],
     ],

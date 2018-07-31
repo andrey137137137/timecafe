@@ -56,6 +56,7 @@ class m180727_105151_addTableUserCafe extends Migration
       }
 
       $this->dropColumn('user', 'cafe_id');
+      $this->dropColumn('user', 'role');
     }
 
     /**
