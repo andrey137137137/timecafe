@@ -22,6 +22,10 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'lg')->dropDownList(Yii::$app->params['lg_list']) ?>
 
+        <?php if(Yii::$app->user->can('AllFranchisee')) {
+          echo $form->field($model, 'franchisee')->dropDownList(Yii::$app->params['franchisee']);
+        }?>
+
         <?= $form->field($model, 'state')->dropDownList([
             0 => Yii::t('app', 'Active'),
             1 => Yii::t('app', 'Blocked'),
@@ -29,11 +33,21 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'email')->textInput() ?>
 
-  <?php if(isset($cafes)){
+  <?php if(isset($cafes) && count($cafes)>0){
+    $user_cafes=$model->getCafes()->all();
+    $cafe_s=[];
+    foreach($user_cafes as $cafe){
+      $cafe_s[]=$cafe->cafe_id;
+    };
+    echo "<div class=\"cafe_list\">";
     foreach($cafes as $k=>$cafe){?>
-
+        <div>
+          <input name="cafe[]" type="checkbox" <?=(in_array($cafe['id'],$cafe_s)?'checked=checked':'');?> value="<?=$cafe['id'];?>" id="cafe_<?=$k;?>">
+          <label for="cafe_<?=$k;?>"><?=$cafe['name'];?></label>
+        </div>
 
   <?php }
+    echo "</div>";
   }?>
 
         <?= $form->field($model, 'color')->widget(ColorInput::classname(), [

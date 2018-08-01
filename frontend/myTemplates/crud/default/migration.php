@@ -24,7 +24,7 @@ class <?= $migrationName ?> extends \yii\db\Migration
   {
     //применить миграцию
     $this->auth = \Yii::$app->authManager;
-    $role = $this->auth->getRole('admin');
+    $role = $this->auth->getRole('root');
 
     $this->createPermission(
       '<?=$rbacName;?>View',

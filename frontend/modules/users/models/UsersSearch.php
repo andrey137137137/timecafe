@@ -13,13 +13,14 @@ use frontend\modules\users\models\Users;
 class UsersSearch extends Users
 {
 
+  public $cafe;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'role', 'state'], 'integer'],
+            [['id', 'role', 'state','franchisee','cafe'], 'integer'],
             ['lg','string'],
             [['name', 'pass', 'last_sess', 'email', 'color'], 'safe'],
         ];
@@ -64,6 +65,7 @@ class UsersSearch extends Users
              'id' => $this->id,
              'lg' => $this->lg,
              'state' => $this->state,
+             'franchisee' => $this->franchisee,
         ]);
 
       if($this->role && strlen(trim($this->role))>0) {
@@ -75,9 +77,12 @@ class UsersSearch extends Users
         }
       }
 
+      if($this->cafe && strlen(trim($this->cafe))>0) {
+        $query->leftJoin('user_cafe', 'user.id= user_cafe.user_id');
+        $query->andWhere('user_cafe.cafe_id=\'' . $this->cafe . '\'');
+      }
+
         $query->andFilterWhere(['like', '.name', $this->name])
-            ->andFilterWhere(['like', '.pass', $this->pass])
-            ->andFilterWhere(['like', '.last_sess', $this->last_sess])
             ->andFilterWhere(['like', '.email', $this->email])
             ->andFilterWhere(['like', '.color', $this->color]);
 

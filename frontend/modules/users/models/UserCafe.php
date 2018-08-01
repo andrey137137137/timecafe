@@ -2,6 +2,7 @@
 
 namespace frontend\modules\users\models;
 
+use frontend\modules\cafe\models\Cafe;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -43,6 +44,16 @@ class UserCafe extends ActiveRecord
         'user_id' => Yii::t('app', 'User'),
         'cafe_id' => Yii::t('app', 'Cafe'),
     ];
+  }
+
+  public function getCafe()
+  {
+    return $this->hasOne(Cafe::className(), ['id' => 'cafe_id']);
+  }
+
+  public function getUser()
+  {
+    return $this->hasOne(Users::className(), ['id' => 'user_id']);
   }
 
 }

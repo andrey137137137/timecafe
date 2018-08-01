@@ -3,5 +3,6 @@
   'Visitors in Anticafe' => 'Visitors in Anticafe',
   'LOGOUT' => 'LOGOUT',
   'Administrators' => 'Administrators',
+  'Administrator' => 'Administrator',
 );
 ?>

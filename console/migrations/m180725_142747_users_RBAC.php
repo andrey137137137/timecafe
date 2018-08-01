@@ -10,7 +10,7 @@ class m180725_142747_users_RBAC extends \yii\db\Migration
   {
     //применить миграцию
     $this->auth = \Yii::$app->authManager;
-    $role = $this->auth->getRole('admin');
+    $role = $this->auth->getRole('root');
 
     $this->createPermission(
       'UsersView',
@@ -34,6 +34,18 @@ class m180725_142747_users_RBAC extends \yii\db\Migration
       'UsersCreate',
       'Users - создание',
       [$role]
+    );
+
+    $this->createPermission(
+        'AllFranchisee',
+        'Users - блокировка',
+        [$role]
+    );
+
+    $this->createPermission(
+        'CanChangeCafe',
+        'Users - может менять кафе пользователю и в системе',
+        [$role]
     );
   }
 

@@ -29,5 +29,14 @@
   'Update Users: David' => 'Update Users: David',
   'Update Users: Artur' => 'Update Users: Artur',
   'Update Users: Federica' => 'Update Users: Federica',
+  'Are you sure want to Blocked this users' => 'Are you sure want to Blocked this users',
+  'Are you sure?' => 'Are you sure?',
+  'Blocked All' => 'Blocked All',
+  'Update Users: leo' => 'Update Users: leo',
+  'Update Users: Filipp' => 'Update Users: Filipp',
+  'Update Users: Jan' => 'Update Users: Jan',
+  'Update Users: Philippe' => 'Update Users: Philippe',
+  'Update Users: laurencev' => 'Update Users: laurencev',
+  'Are you sure want to restore this user' => 'Are you sure want to restore this user',
 );
 ?>

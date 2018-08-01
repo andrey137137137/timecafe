@@ -16,7 +16,7 @@ class m180727_105151_addTableUserCafe extends Migration
       $this->execute('SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE=\'TRADITIONAL,ALLOW_INVALID_DATES\';');
       $this->execute('SET SQL_MODE=\'ALLOW_INVALID_DATES\';');
 
-      $userRole = Yii::$app->authManager->getRole('admin');
+      $userRole = Yii::$app->authManager->getRole('root');
       Yii::$app->authManager->assign($userRole, 2);
       Yii::$app->authManager->assign($userRole, 1);
 

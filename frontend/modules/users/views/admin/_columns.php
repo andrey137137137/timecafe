@@ -38,6 +38,38 @@ return [
           $lg= Yii::$app->params['lg_list'];
           return $lg[isset($lg[$model->lg])?$model->lg:Yii::$app->params['defaultLang']];
         },
+    ],[
+        'attribute'=>'franchisee',
+        'filterType' => GridView::FILTER_SELECT2,
+        'format' => 'raw',
+        'filter'=> array_merge(
+            [
+                ''=>Yii::t('app',"ALL")
+            ],
+            Yii::$app->params['franchisee']
+        ),
+        'value' => function ($model, $key, $index, $column) {
+          $param= Yii::$app->params['franchisee'];
+          return isset($param[$model->franchisee])?$param[$model->franchisee]:"-";
+        },
+    ],[
+        'attribute'=>'cafe',
+        'filterType' => GridView::FILTER_SELECT2,
+        'format' => 'raw',
+        'filter'=> array_merge(
+            [
+                '0'=>Yii::t('app',"ALL")
+            ],
+            \yii\helpers\ArrayHelper::map((array)Users::getCafesList(), 'id', 'name')
+        ),
+        'value' => function ($model, $key, $index, $column) {
+          $cafes=$model->cafes;
+          $out=[];
+          foreach($cafes as $cafe){
+            $out[]=$cafe->cafe->name;
+          };
+          return count($out)>0?implode(", <br>\n",$out):"-";
+        },
     ],
     [
         'attribute' => 'state',

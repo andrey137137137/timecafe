@@ -128,8 +128,8 @@ class m180725_101831_add_rbac extends Migration
       }
 
       //Создаем роль
-      $role = Yii::$app->authManager->createRole('admin');
-      $role->description = 'Админ';
+      $role = Yii::$app->authManager->createRole('root');
+      $role->description = 'Super admin';
       Yii::$app->authManager->add($role);
     }
 
