@@ -181,7 +181,7 @@ class Users extends ActiveRecord implements IdentityInterface
   {
     if(Yii::$app->user->can('AllFranchisee')){
       if($franchisee){
-        Cafe::find()->select(['id','franchisee','name'])
+        return Cafe::find()->select(['id','franchisee','name'])
             ->where(['franchisee'=>$franchisee])
             ->asArray()
             ->all();

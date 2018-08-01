@@ -38,5 +38,7 @@
   'Update Users: Philippe' => 'Update Users: Philippe',
   'Update Users: laurencev' => 'Update Users: laurencev',
   'Are you sure want to restore this user' => 'Are you sure want to restore this user',
+  'login' => 'login',
+  'Enter' => 'Enter',
 );
 ?>

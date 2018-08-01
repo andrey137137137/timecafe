@@ -17,7 +17,12 @@ class LoginPage implements UrlRuleInterface
    */
   public function parseRequest($manager, $request)
   {
-    if(!Yii::$app->user->isGuest)  return false;
+    if(!Yii::$app->user->isGuest) {
+      if(!Yii::$app->session->get('cafe_id',false)){
+        return ["site/change-cafe",[]];
+      }
+      return false;
+    }
 
     return ["site/login",[]];
     return false;

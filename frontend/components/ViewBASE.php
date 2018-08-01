@@ -2,6 +2,7 @@
 namespace frontend\components;
 
 
+use frontend\modules\cafe\models\Cafe;
 use frontend\modules\users\models\Users;
 use Yii;
 use yii\db\Query;
@@ -25,6 +26,8 @@ class ViewBASE extends View
   public $user_id = false;
   public $user = [];
 
+  public $cafe =[];
+
   public function init_param()
   {
     $this->first_init = false;
@@ -37,6 +40,7 @@ class ViewBASE extends View
       $this->all_params['user'] = (array)$user->getIterator();
       $this->all_params['user_id'] = Yii::$app->user->id;
 
+      $this->cafe= Cafe::find()->where(['id'=>Yii::$app->session->get('cafe_id',0)])->one();
     }
 
     $request = Yii::$app->request;
@@ -87,6 +91,10 @@ class ViewBASE extends View
 
   public function afterRender($viewFile, $params, &$output)
   {
+    if ($this->first_init) {
+      $this->init_param();
+    }
+
     if(substr(Yii::$app->request->pathInfo,0,3)=="gii")return;
     $this->all_params = array_merge($this->all_params, $params);
     Yii::$app->params['all_params'] = $this->all_params;

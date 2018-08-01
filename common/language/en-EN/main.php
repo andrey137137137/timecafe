@@ -4,5 +4,6 @@
   'LOGOUT' => 'LOGOUT',
   'Administrators' => 'Administrators',
   'Administrator' => 'Administrator',
+  'System management' => 'System management',
 );
 ?>

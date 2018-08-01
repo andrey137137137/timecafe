@@ -15,66 +15,96 @@ use frontend\modules\users\models\LoginForm;
  */
 class SiteController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
-                'rules' => [
-                    [
-                        'actions' => ['signup'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
+  /**
+   * {@inheritdoc}
+   */
+  public function behaviors()
+  {
+    return [
+        'access' => [
+            'class' => AccessControl::className(),
+            'only' => ['logout', 'signup'],
+            'rules' => [
+                [
+                    'actions' => ['signup'],
+                    'allow' => true,
+                    'roles' => ['?'],
+                ],
+                [
+                    'actions' => ['logout'],
+                    'allow' => true,
+                    'roles' => ['@'],
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['get'],
-                ],
+        ],
+        'verbs' => [
+            'class' => VerbFilter::className(),
+            'actions' => [
+                'logout' => ['get'],
             ],
-        ];
+        ],
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function actions()
+  {
+    return [
+        'error' => [
+            'class' => 'yii\web\ErrorAction',
+        ],
+        'captcha' => [
+            'class' => 'yii\captcha\CaptchaAction',
+            'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+        ],
+    ];
+  }
+
+  /**
+   * Displays homepage.
+   *
+   * @return mixed
+   */
+  public function actionIndex()
+  {
+    return $this->render('index', [
+        'page_wrap' => 'index',
+        'screen_class' => 'start-screen',
+    ]);
+  }
+
+  public function actionChangeCafe()
+  {
+    $cafe_list=Yii::$app->user->identity->cafes;
+
+    if(count($cafe_list)==0){
+      $cafe_list=Yii::$app->user->identity->getCafesList(Yii::$app->user->identity->franchisee);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
+    if(count($cafe_list)==1){
+      $cafe=(array)($cafe_list[0]);
+      Yii::$app->session->set('cafe_id',$cafe['id']);
+      return $this->goBack();
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        return $this->render('index',[
-            'page_wrap'=>'index',
-            'screen_class'=>'start-screen',
-        ]);
+    if(Yii::$app->request->isPost && Yii::$app->request->post('cafe')){
+      $cafe_id=Yii::$app->request->post('cafe');
+       foreach ($cafe_list as $cafe){
+         if($cafe['id']==$cafe_id){
+           Yii::$app->session->set('cafe_id',$cafe_id);
+           return $this->goBack();
+         }
+       }
     }
 
+    Yii::$app->layout="form_page";
+
+    return $this->render('change-cafe', [
+        'cafe_list' => $cafe_list,
+    ]);
+  }
     /**
      * Logs in a user.
      *

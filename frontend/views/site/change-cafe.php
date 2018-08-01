@@ -7,7 +7,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Login';
+$this->title = 'Change cafe';
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -31,24 +31,20 @@ $this->title = 'Login';
     </div>
 
     <div class="form-control-addon-fill pad">
-      <?= $form->field($model, 'username',[
-            'template' => "{beginWrapper}<span class=\"input-group-addon fg-white\"><i class=\"fa fa-user\"></i></span>{input}\n{endWrapper}\n{error}"
-        ])->textInput([
-            'autofocus' => true,
-      ]) ?>
+      <div class="input-group">
+        <span class="input-group-addon fg-white"><i class="fa fa-home"></i></span>
+        <select class="form-control" name="cafe">
+          <?php foreach ($cafe_list as $cafe){ ?>
+            <option value="<?=$cafe['id'];?>"><?=$cafe['name'];?></option>
+          <?php } ?>
+        </select>
+      </div>
     </div>
 
-    <div class="form-control-addon-fill pad">
-        <?= $form->field($model, 'password',[
-            'template' => "{beginWrapper}<span class=\"input-group-addon fg-white\"><i class=\"fa fa-lock\"></i></span></i>{input}\n{endWrapper}\n{error}"
-        ])->passwordInput([
-            'autofocus' => true,
-        ]) ?>
-    </div>
 
 
     <div class="form-group">
-        <?= Html::submitButton(\Yii::t('app', 'login'), ['class' => 'btn btn-science-blue form-control', 'name' => 'login-button']) ?>
+        <?= Html::submitButton(\Yii::t('app', 'Enter'), ['class' => 'btn btn-science-blue form-control', 'name' => 'login-button']) ?>
     </div>
 
 <?php ActiveForm::end(); ?>
