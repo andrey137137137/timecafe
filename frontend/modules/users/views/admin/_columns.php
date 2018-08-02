@@ -4,6 +4,7 @@ use kartik\grid\GridView;
 use johnitvn\ajaxcrud\BulkButtonWidget;
 use yii\helpers\Html;
 use frontend\modules\users\models\Users;
+use yii\helpers\ArrayHelper;
 
 return [
     [
