@@ -1,0 +1,42 @@
+.temp_show{
+  position: absolute;
+  background: #999 !important;
+  padding: 5px 0;
+  display:none;
+  left: -50px;
+  right: -50px;
+}
+
+.temp_show.active{
+  display:block;
+}
+
+.range_filter-input{
+  display:inline-block;
+  width: 50px;
+}
+
+.kv-thead-float{
+  overflow-x: unset !important;
+}
+
+.range_filter-wrap{
+  display:block;
+  white-space: nowrap;
+  position: relative;
+}
+
+.temp_show .ui-slider{
+  width: calc(100% - 20px);
+}
+
+.modal.fade.in {
+  overflow: auto;
+  max-height: 100vh;
+}
+
+/*.required input,
+.required textarea,
+.required select{
+  border-color:#f00;
+}*/

@@ -5,7 +5,7 @@
 
 use yii\helpers\StringHelper;
 use yii\db\ActiveRecordInterface;
-
+use yii\helpers\Inflector;
 
 /* @var $this yii\web\View */
 /* @var $generator yii\gii\generators\crud\Generator */
@@ -94,6 +94,15 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
           return false;
         }
 
+<?php if (!empty($generator->searchModelClass)): ?>
+        $searchModel = new <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass ?>();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+  <?php else: ?>
+        $dataProvider = new ActiveDataProvider([
+            'query' => <?= $modelClass ?>::find(),
+        ]);
+  <?php endif; ?>
+
         $canCreate = Yii::$app->user->can('<?=$generator->rbacName;?>Create');
         $actions = "";
         $actions.= Yii::$app->user->can('<?=$generator->rbacName;?>Update')?"{update}":"";
@@ -135,8 +144,6 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
           }
         }
 <?php if (!empty($generator->searchModelClass)): ?>
-        $searchModel = new <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass ?>();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -144,13 +151,10 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             'columns' => $columns,
             'canCreate' => $canCreate,
             'afterTable'=>$afterTable,
-            'title'=>"Users",
+            'title'=>"<?= $modelClass ?>",
             'forAllCafe'=>true,
         ]);
 <?php else: ?>
-        $dataProvider = new ActiveDataProvider([
-            'query' => <?= $modelClass ?>::find(),
-        ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -179,6 +183,8 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     }
 <?php };?>
     $model = new <?= $modelClass ?>();
+    $searchModel = new CafeSearch();
+
     $request = Yii::$app->request;
 
     if(!$request->isAjax){

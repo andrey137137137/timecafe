@@ -19,7 +19,7 @@ use Yii;
  * @property int $franchisee
  *
  * @property Polls[] $polls
- * @property UserCafe[] $userCaves
+ * @property UserCafe[] $userCafes
  * @property UserTimetable[] $userTimetables
  */
 class Cafe extends \yii\db\ActiveRecord
@@ -64,6 +64,23 @@ class Cafe extends \yii\db\ActiveRecord
         ];
     }
 
+
+  public function beforeValidate()
+  {
+    if (!parent::beforeValidate()) {
+      return false;
+    }
+
+    if ($this->isNewRecord) {
+      if (Yii::$app->user->isGuest) {
+        $this->franchisee = 1;
+      } else if (!Yii::$app->user->can('AllFranchisee')) {
+        $this->franchisee = Yii::$app->user->identity->franchisee;
+      }
+    }
+
+    return true;
+  }
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -75,7 +92,7 @@ class Cafe extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserCaves()
+    public function getUserCafes()
     {
         return $this->hasMany(UserCafe::className(), ['cafe_id' => 'id']);
     }

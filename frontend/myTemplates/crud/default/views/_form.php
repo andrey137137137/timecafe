@@ -29,17 +29,18 @@ use yii\widgets\ActiveForm;
 
     <?= "<?php " ?>$form = ActiveForm::begin(); ?>
 
-<?php foreach ($generator->getColumnNames() as $attribute) {
+<?php foreach ($generator->getColumns() as $attribute=>$type) {
   if(strpos($attribute,'pass')!==false || strpos($attribute,'hash')!==false|| strpos($attribute,'sess'))continue;
     if (in_array($attribute, $safeAttributes)) {
-      $input=getColumnInput($attribute);
-      echo "    <?= ";
+      $input=getColumnInput($attribute,$type,$generator);
       if($input){
         echo $input;
       }else{
+        echo "    <?= ";
         echo $generator->generateActiveField($attribute);
+        echo " ?>";
       }
-        echo " ?>\n\n";
+      echo "\n\n";
     }
 } ?>
     <?= '<?php if(!$isAjax){';?>?>
@@ -53,31 +54,45 @@ use yii\widgets\ActiveForm;
 
 
 <?php
-function getColumnInput($name){
+function getColumnInput($name,$type,$generator){
   if(strpos($name,'color')!==false){
-    return '$form->field($model, \''.$name.'\')->widget(ColorInput::classname(), [
+    return '<?= $form->field($model, \''.$name.'\')->widget(ColorInput::classname(), [
         \'options\' => [\'placeholder\' => \'Select color ...\'],
         \'showDefaultPalette\' => false,
         \'pluginOptions\' => \Yii::$app->params["colorPluginOptions"],
-    ]);';
+    ]);?>';
+  }
+  if(strpos($name,'franchisee')!==false) {
+    return '
+    <?php if(Yii::$app->user->can(\'AllFranchisee\')) {
+      echo $form->field($model, \'franchisee\')->dropDownList(Yii::$app->params[\'franchisee\']);
+    }?>';
+  }
+
+  if($name=='lg'){
+    return '<?= $form->field($model, \''.$name.'\')->dropDownList(Yii::$app->params[\'lg_list\']) ?>';
+  }
+
+  if(strpos($name,'cafe')!==false){
+    return '<?= $form->field($model, \''.$name.'\')->dropDownList(Yii::$app->params[\'lg_list\']) ?>';
   }
 
   return false;
 }
 
 /*
-  - Installing kartik-v/yii2-widget-typeahead (v1.0.1): Downloading (100%)
-  - Installing kartik-v/yii2-widget-touchspin (v1.2.1): Downloading (100%)
-  - Installing kartik-v/yii2-widget-timepicker (v1.0.3): Downloading (100%)
-  - Installing kartik-v/yii2-widget-switchinput (v1.3.1): Downloading (100%)
-  - Installing kartik-v/yii2-widget-spinner (v1.0.0): Downloading (100%)
-  - Installing kartik-v/yii2-widget-sidenav (v1.0.0): Downloading (100%)
-  - Installing kartik-v/yii2-widget-select2 (v2.1.1): Downloading (100%)
-  - Installing kartik-v/bootstrap-star-rating (4.0.3): Downloading (100%)
-  - Installing kartik-v/yii2-widget-rating (v1.0.3): Downloading (100%)
-  - Installing kartik-v/yii2-widget-rangeinput (v1.0.1): Downloading (100%)
+  - Installing kartik-v/yii2-widget-typeahead (v1.0.1): Downloading (100%) Выпадающий поиск
+  - Installing kartik-v/yii2-widget-touchspin (v1.2.1): Downloading (100%) Изменение цифр кнопки по бокам
+  - Installing kartik-v/yii2-widget-timepicker (v1.0.3): Downloading (100%) Время
+  - Installing kartik-v/yii2-widget-switchinput (v1.3.1): Downloading (100%) Пекреключатель (чекбокс как кнопка)
+  - Installing kartik-v/yii2-widget-spinner (v1.0.0): Downloading (100%) Индикатор загрузки
+  - Installing kartik-v/yii2-widget-sidenav (v1.0.0): Downloading (100%) Меню
+  - Installing kartik-v/yii2-widget-select2 (v2.1.1): Downloading (100%) селект
+  - Installing kartik-v/bootstrap-star-rating (4.0.3): Downloading (100%) оценка звездами
+  - Installing kartik-v/yii2-widget-rating (v1.0.3): Downloading (100%) оценка звездами
+  - Installing kartik-v/yii2-widget-rangeinput (v1.0.1): Downloading (100%) ползунок
   - Installing kartik-v/yii2-widget-growl (v1.1.1): Downloading (100%)
-  - Installing kartik-v/bootstrap-fileinput (v4.4.8): Downloading (100%)
+  - Installing ./bootstrap-fileinput (v4.4.8): Downloading (100%) уведомления
   - Installing kartik-v/yii2-widget-fileinput (v1.0.6): Downloading (100%)
   - Installing kartik-v/dependent-dropdown (v1.4.8): Downloading (100%)
   - Installing kartik-v/yii2-widget-depdrop (v1.0.4): Downloading (100%)

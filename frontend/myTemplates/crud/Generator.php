@@ -53,6 +53,12 @@ class Generator extends \yii\gii\Generator
   //Генерировать блок RBAC доступа
   public $enableRBAC;
   public $rbacName="";
+
+  public $SearchVars = [];
+  public $SearchVarsPublic = [];
+  private $rangeConditions = [];
+
+
   /**
    * @inheritdoc
    */
@@ -386,31 +392,65 @@ class Generator extends \yii\gii\Generator
         case Schema::TYPE_SMALLINT:
         case Schema::TYPE_INTEGER:
         case Schema::TYPE_BIGINT:
-          $types['integer'][] = $column->name;
+          $type_this='integer';
           break;
         case Schema::TYPE_BOOLEAN:
-          $types['boolean'][] = $column->name;
+          $type_this='boolean';
           break;
         case Schema::TYPE_FLOAT:
         case Schema::TYPE_DOUBLE:
         case Schema::TYPE_DECIMAL:
         case Schema::TYPE_MONEY:
-          $types['number'][] = $column->name;
+          $type_this='number';
           break;
         case Schema::TYPE_DATE:
         case Schema::TYPE_TIME:
         case Schema::TYPE_DATETIME:
         case Schema::TYPE_TIMESTAMP:
         default:
-          $types['safe'][] = $column->name;
+          $type_this='safe';;
           break;
       }
+
+      $types[$type_this][] = $column->name;
+      $types=$this->getColumnRule($column->name,$column->type,$types,$type_this);
     }
     $rules = [];
     foreach ($types as $type => $columns) {
       $rules[] = "[['" . implode("', '", $columns) . "'], '$type']";
     }
     return $rules;
+  }
+
+  function getColumnRule($name,$type,$arr,$type_this){
+
+    if(strpos($name,'color')!==false) return $arr;
+    if(strpos($name,'franchisee')!==false) return $arr;
+    if(in_array($name,['id','franchisee','last_task']))return $arr;
+
+    switch ($type) {
+      case Schema::TYPE_SMALLINT:
+      case Schema::TYPE_INTEGER:
+      case Schema::TYPE_BIGINT:
+      case Schema::TYPE_BOOLEAN:
+      case Schema::TYPE_FLOAT:
+      case Schema::TYPE_DOUBLE:
+      case Schema::TYPE_DECIMAL:
+      case Schema::TYPE_MONEY:
+        $arr[$type_this][]=$name.'_from';
+        $arr[$type_this][]=$name.'_to';
+        $this->SearchVars['slideParams'][$name]=[
+            'min'=>0,
+            'max'=>100,
+            'step'=>$type_this=="number"?0.1:1
+        ];
+        $this->SearchVarsPublic[$name.'_from']=false;
+        $this->SearchVarsPublic[$name.'_to']=false;
+        $this->rangeConditions[]="->andFilterWhere(['>=', '{$name}', \$this->{$name}_from])";;
+        $this->rangeConditions[]="->andFilterWhere(['<=', '{$name}', \$this->{$name}_to])";;
+        break;
+    };
+    return $arr;
   }
   /**
    * @return array searchable attributes
@@ -452,21 +492,12 @@ class Generator extends \yii\gii\Generator
    */
   public function generateSearchConditions()
   {
-    $columns = [];
-    if (($table = $this->getTableSchema()) === false) {
-      $class = $this->modelClass;
-      /* @var $model \yii\base\Model */
-      $model = new $class();
-      foreach ($model->attributes() as $attribute) {
-        $columns[$attribute] = 'unknown';
-      }
-    } else {
-      foreach ($table->columns as $column) {
-        $columns[$column->name] = $column->type;
-      }
-    }
+    $columns = $this->getColumns();
+
     $likeConditions = [];
     $hashConditions = [];
+
+
     foreach ($columns as $column => $type) {
       switch ($type) {
         case Schema::TYPE_SMALLINT:
@@ -496,6 +527,10 @@ class Generator extends \yii\gii\Generator
     }
     if (!empty($likeConditions)) {
       $conditions[] = "\$query" . implode("\n" . str_repeat(' ', 12), $likeConditions) . ";\n";
+    }
+
+    if (!empty($this->rangeConditions)) {
+      $conditions[] = "\$query" . implode("\n" . str_repeat(' ', 12), $this->rangeConditions) . ";\n";
     }
     return $conditions;
   }
@@ -595,5 +630,26 @@ class Generator extends \yii\gii\Generator
       $model = new $class();
       return $model->attributes();
     }
+  }
+
+  public function getColumns(){
+    $columns = [];
+    if (($table = $this->getTableSchema()) === false) {
+      $class = $this->modelClass;
+      /* @var $model \yii\base\Model */
+      $model = new $class();
+      foreach ($model->attributes() as $attribute) {
+        $columns[$attribute] = 'unknown';
+      }
+    } else {
+      foreach ($table->columns as $column) {
+        $columns[$column->name] = $column->type;
+      }
+    }
+    return $columns;
+  }
+
+  public function getRangeParams(){
+
   }
 }

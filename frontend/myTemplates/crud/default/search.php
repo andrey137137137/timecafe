@@ -18,7 +18,6 @@ $rules = $generator->generateSearchRules();
 $labels = $generator->generateSearchLabels();
 $searchAttributes = $generator->getSearchAttributes();
 $searchConditions = $generator->generateSearchConditions();
-
 echo "<?php\n";
 ?>
 
@@ -35,53 +34,78 @@ use <?= ltrim($generator->modelClass, '\\') . (isset($modelAlias) ? " as $modelA
 class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $modelClass ?>
 
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            <?= implode(",\n            ", $rules) ?>,
-        ];
-    }
+<?php if($generator->SearchVarsPublic && count($generator->SearchVarsPublic)>0){
+  foreach ($generator->SearchVarsPublic as $k=>$var){
+  ?>
+  public $<?=$k;?><?php if($var!==false) {?>=<?php var_export($var);};?>;
+<?php  } ?>
 
-    /**
-     * {@inheritdoc}
-     */
-    public function scenarios()
-    {
-        // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
-    }
+<?php } ?>
+<?php if($generator->SearchVars && count($generator->SearchVars)>0){
+  foreach ($generator->SearchVars as $k=>$var){
+  ?>
+  private $<?=$k;?><?php if($var!==false) {?>=<?php var_export($var);};?>;
+<?php
+  }
+};?>
+  /**
+   * {@inheritdoc}
+   */
+  public function rules()
+  {
+      return [
+      <?= implode(",\n            ", $rules) ?>,
+    ];
+  }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
-    public function search($params)
-    {
-        $query = <?= isset($modelAlias) ? $modelAlias : $modelClass ?>::find();
+  /**
+   * {@inheritdoc}
+   */
+  public function scenarios()
+  {
+    // bypass scenarios() implementation in the parent class
+    return Model::scenarios();
+  }
 
-        // add conditions that should always apply here
+  /**
+   * Creates data provider instance with search query applied
+   *
+   * @param array $params
+   *
+   * @return ActiveDataProvider
+   */
+  public function search($params)
+  {
+    $query = <?= isset($modelAlias) ? $modelAlias : $modelClass ?>::find();
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+    // add conditions that should always apply here
 
-        $this->load($params);
+    $dataProvider = new ActiveDataProvider([
+        'query' => $query,
+    ]);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
+    $this->load($params);
 
-        // grid filtering conditions
-        <?= implode("\n        ", $searchConditions) ?>
-
+    if (!$this->validate()) {
+        // uncomment the following line if you do not want to return any records when validation fails
+        // $query->where('0=1');
         return $dataProvider;
     }
+
+    // grid filtering conditions
+    <?= implode("\n        ", $searchConditions) ?>
+
+    return $dataProvider;
+  }
+<?php if($generator->SearchVars && isset($generator->SearchVars['slideParams'])) { ?>
+
+  public function getSlideParams($name){
+    $base=(isset($this->slideParams[$name])?$this->slideParams[$name]:[]);
+    if(!isset($base['min']))$base['min']=isset($base['max'])?$base['max']-100:0;
+    if(!isset($base['max']))$base['max']=$base['min']+100;
+    if(!isset($base['step']))$base['step']=($base['max']-$base['min'])/100;
+
+    return $base;
+  }
+<?php  }?>
 }

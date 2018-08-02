@@ -28,7 +28,7 @@ return [
         'attribute'=>'lg',
         'filterType' => GridView::FILTER_SELECT2,
         'format' => 'raw',
-        'filter'=> array_merge(
+        'filter'=> ArrayHelper::merge(
             [
                 ''=>Yii::t('app',"ALL")
             ],
@@ -42,7 +42,7 @@ return [
         'attribute'=>'franchisee',
         'filterType' => GridView::FILTER_SELECT2,
         'format' => 'raw',
-        'filter'=> array_merge(
+        'filter'=> ArrayHelper::merge(
             [
                 ''=>Yii::t('app',"ALL")
             ],
@@ -56,7 +56,7 @@ return [
         'attribute'=>'cafe',
         'filterType' => GridView::FILTER_SELECT2,
         'format' => 'raw',
-        'filter'=> array_merge(
+        'filter'=> ArrayHelper::merge(
             [
                 '0'=>Yii::t('app',"ALL")
             ],
