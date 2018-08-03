@@ -1,10 +1,9 @@
 <?php
-use frontend\modules\constants\models\Constants;
 use frontend\components\Action;
 use common\components\Help;
 use common\components\TagsClasses;
 use yii\db\Query;
-
+use johnitvn\ajaxcrud\CrudAsset;
 
 
 function _hyphen_words_wbr(array &$m)
@@ -221,10 +220,16 @@ $functionsList = [
   '_can' => function ($do) {
     return !Yii::$app->user->isGuest && Yii::$app->user->can($do);
   },
+  '_canCafe' => function ($do) {
+    return !Yii::$app->user->isGuest && Yii::$app->cafe->can($do);
+  },
   '_ddd' => function ($params) {
     ddd($params);
   },
   't' => 'Yii::t',
+  'CrudRegister'=>function ($view) {
+      CrudAsset::register($view);
+  },
   'max' => 'max',
   'implode' => 'implode',
   'sin' => 'sin',

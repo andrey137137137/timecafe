@@ -1,3 +1,7 @@
+{{ use('yii\bootstrap\Modal') }}
+
+{{ CrudRegister(this) }}
+
 <div class="text-center fg-white">
   <h1><img src="/img/logo_white.png" alt="logo" style="width:150px;top: 0px !important;"></h1>
   <h4 style="padding-bottom:0px !important;">{{ this.cafe.name }}</h4>
@@ -14,3 +18,10 @@
     </div>
   </div>
 </div>
+
+
+{{ Modal_begin({
+    "id":"ajaxCrudModal",
+    "footer":"",
+}) }}
+{{  Modal_end() }}

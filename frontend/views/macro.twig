@@ -1,5 +1,6 @@
 {% macro tile(href, color,title, data) %}
-  <a href="{{ href }}" class="tile {{ color }}" data-click="transform">
+  {% set tag = href?'a '~'href='~href~'':'div' %}
+  <{{ tag }} class="tile {{ color }} {{ _if(data.width==2,'double-width') }}" data-click="transform" {{ _if(data.modal,'role=modal-remote') }}>
     {% if(data.icon) %}
       <span class="tile-content icon">
         <span class="{{ data.icon }}"></span>
@@ -8,5 +9,5 @@
     <span class="brand">
       <span class="tile-label text-center">{{ t('main',title) }}</span>
     </span>
-  </a>
+  </{{ tag }}>
 {% endmacro %}

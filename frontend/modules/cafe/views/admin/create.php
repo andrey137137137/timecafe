@@ -9,6 +9,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Create Cafe');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Cafes'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$isAjax=isset($isAjax)?$isAjax:false;
 ?>
 <div class="cafe-create">
 

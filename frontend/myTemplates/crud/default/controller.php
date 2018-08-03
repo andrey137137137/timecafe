@@ -260,55 +260,46 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
       $request = Yii::$app->request;
       $model = new <?= $modelClass ?>();
 
-      if($request->isAjax){
-        /*
-        *   Process for ajax request
-        */
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        if($request->isGet){
-          return [
-            'title'=> "Create new <?= $modelClass ?>",
-            'content'=>$this->renderAjax('create', [
-              'model' => $model,
-              'isAjax' => true
-            ]),
-            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-              Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-          ];
-        }else if($model->load($request->post()) && $model->save()){
-          return [
-            'forceReload'=>'#crud-datatable-pjax',
-            'title'=> "Create new <?= $modelClass ?>",
-            'content'=>'<span class="text-success">Create <?= $modelClass ?> success</span>',
-            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-              Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-
-          ];
-        }else{
-          return [
-            'title'=> "Create new <?= $modelClass ?>",
-            'content'=>$this->renderAjax('create', [
-              'model' => $model,
-              'isAjax' => true,
-            ]),
-            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-
-          ];
-        }
-      }else{
-        /*
-        *   Process for non-ajax request
-        */
-        if ($model->load($request->post()) && $model->save()) {
-          return $this->redirect(['index']);
-        } else {
-          return $this->render('create', [
-            'model' => $model,
-          ]);
-        }
+      if(!$request->isAjax){
+        throw new \yii\web\ForbiddenHttpException(<?=$generator->generateString("Page does not exist");?>);
+        return false;
       }
 
+      /*
+      *   Process for ajax request
+      */
+      Yii::$app->response->format = Response::FORMAT_JSON;
+      if($request->isGet){
+        return [
+          'title'=> "Create new <?= $modelClass ?>",
+          'content'=>$this->renderAjax('create', [
+            'model' => $model,
+            'isAjax' => true
+          ]),
+          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+            Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+        ];
+      }else if($model->load($request->post()) && $model->save()){
+        return [
+          'forceReload'=>'#crud-datatable-pjax',
+          'title'=> "Create new <?= $modelClass ?>",
+          'content'=>'<span class="text-success">Create <?= $modelClass ?> success</span>',
+          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+
+        ];
+      }else{
+        return [
+          'title'=> "Create new <?= $modelClass ?>",
+          'content'=>$this->renderAjax('create', [
+            'model' => $model,
+            'isAjax' => true,
+          ]),
+          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+              Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+
+        ];
+      }
     }
 
     /**
@@ -328,58 +319,49 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 <?php };?>
 
         $request = Yii::$app->request;
-        $model = $this->findModel(<?= $actionParams ?>);       
+        $model = $this->findModel(<?= $actionParams ?>);
 
-        if($request->isAjax){
-          /*
-          *   Process for ajax request
-          */
-          $title=<?= strtr($generator->generateString('Update ' .
-              Inflector::camel2words(StringHelper::basename($generator->modelClass)) .
-              ': {nameAttribute}', ['nameAttribute' => '{nameAttribute}']), [
-              '{nameAttribute}\'' => '\' . $model->' . $generator->getNameAttribute()
-          ]) ?>;
-          Yii::$app->response->format = Response::FORMAT_JSON;
-          if($request->isGet){
-            return [
-              'title'=> $title,
-              'content'=>$this->renderAjax('update', [
-                'model' => $model,
-                'isAjax' => true,
-              ]),
-              'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-            ];
-          }else if($model->load($request->post()) && $model->save()){
-            return [
-              'forceReload'=>'#crud-datatable-pjax',
-              'title'=> $title,
-              'content'=>"<script>$('.modal-header .close').click()</script>",
-              'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                Html::a('Edit',['update','<?= substr($actionParams,1) ?>'=><?= $actionParams ?>],['class'=>'btn btn-primary','role'=>'modal-remote'])
-            ];
-          }else{
-            return [
-              'title'=> $title,
-              'content'=>$this->renderAjax('update', [
-                'model' => $model,
-                'isAjax' => true,
-              ]),
-              'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-            ];
-          }
-        }else{
-          /*
-          *   Process for non-ajax request
-          */
-          if ($model->load($request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-          } else {
-            return $this->render('update', [
+        if(!$request->isAjax){
+          throw new \yii\web\ForbiddenHttpException(<?=$generator->generateString("Page does not exist");?>);
+          return false;
+        }
+        /*
+        *   Process for ajax request
+        */
+        $title=<?= strtr($generator->generateString('Update ' .
+            Inflector::camel2words(StringHelper::basename($generator->modelClass)) .
+            ': {nameAttribute}', ['nameAttribute' => '{nameAttribute}']), [
+            '{nameAttribute}\'' => '\' . $model->' . $generator->getNameAttribute()
+        ]) ?>;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if($request->isGet){
+          return [
+            'title'=> $title,
+            'content'=>$this->renderAjax('update', [
               'model' => $model,
-            ]);
-          }
+              'isAjax' => true,
+            ]),
+            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+              Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+          ];
+        }else if($model->load($request->post()) && $model->save()){
+          return [
+            'forceReload'=>'#crud-datatable-pjax',
+            'title'=> $title,
+            'content'=>"<script>$('.modal-header .close').click()</script>",
+            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+              Html::a('Edit',['update','<?= substr($actionParams,1) ?>'=><?= $actionParams ?>],['class'=>'btn btn-primary','role'=>'modal-remote'])
+          ];
+        }else{
+          return [
+            'title'=> $title,
+            'content'=>$this->renderAjax('update', [
+              'model' => $model,
+              'isAjax' => true,
+            ]),
+            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+              Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+          ];
         }
     }
 

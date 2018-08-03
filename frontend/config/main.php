@@ -84,6 +84,9 @@ $config = [
     'errorHandler' => [
       'errorAction' => 'site/error',
     ],
+    'cafe'=>[
+       'class' => 'frontend\modules\cafe\components\Cafe',
+    ]
   ],
   'modules' => [
     'users' => [
@@ -104,6 +107,9 @@ $config = [
     ],
     'franchisee' => [
       'class' => 'frontend\modules\franchisee\Module',
+    ],
+    'tarifs' => [
+      'class' => 'frontend\modules\tarifs\Module',
     ],
   ],
   'params' => $params,

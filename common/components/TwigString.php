@@ -81,8 +81,6 @@ class TwigString extends Component
   }
 
   public function render($string,$data){
-    //ddd($data);
-
     return $this->twig->render(
       $string,
       $data

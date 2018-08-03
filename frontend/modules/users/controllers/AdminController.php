@@ -215,6 +215,11 @@ class AdminController extends Controller
       $cafe = [];
     }
 
+    if (!$request->isAjax) {
+      throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
+      return false;
+    }
+
     if ($request->isAjax) {
       /*
       *   Process for ajax request
@@ -289,6 +294,11 @@ class AdminController extends Controller
       $cafe = Users::getCafesList();
     } else {
       $cafe = [];
+    }
+
+    if (!$request->isAjax) {
+      throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
+      return false;
     }
 
     if ($request->isAjax) {

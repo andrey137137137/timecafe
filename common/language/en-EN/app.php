@@ -62,5 +62,7 @@
   'Update Cafe: Test Anticafe' => 'Update Cafe: Test Anticafe',
   'Update Cafe: Test Anticafeuiu' => 'Update Cafe: Test Anticafeuiu',
   'Update Cafe: Test Anticafefff' => 'Update Cafe: Test Anticafefff',
+  'Create Users' => 'Create Users',
+  'Page does not exist' => 'Page does not exist',
 );
 ?>

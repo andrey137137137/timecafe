@@ -180,6 +180,11 @@ class AdminController extends Controller
       $request = Yii::$app->request;
       $model = new Cafe();
 
+      if (!$request->isAjax) {
+        throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
+        return false;
+      }
+
       if($request->isAjax){
         /*
         *   Process for ajax request
@@ -246,7 +251,12 @@ class AdminController extends Controller
       }
 
         $request = Yii::$app->request;
-        $model = $this->findModel($id);       
+        $model = $this->findModel($id);
+
+      if (!$request->isAjax) {
+        throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
+        return false;
+      }
 
         if($request->isAjax){
           /*

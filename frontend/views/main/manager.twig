@@ -22,3 +22,6 @@
 
 {{ macro.tile('logout','bg-scarlet','LOGOUT',{icon:'icon-metro-exit'}) }}
 
+{% if(_canCafe('startVisit')) %}
+  {{ macro.tile('users/admin/create','bg-dodger-blue','Add customer',{icon:'fa fa-user',width:2,modal:true}) }}
+{% endif %}

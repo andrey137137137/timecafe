@@ -9,6 +9,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Create Users');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$isAjax=isset($isAjax)?$isAjax:false;
 ?>
 <div class="users-create">
   <?php if(!$isAjax){?>
