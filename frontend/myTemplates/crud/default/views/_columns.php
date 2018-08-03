@@ -165,6 +165,20 @@ function getColumnParams($name,$type,$generator){
       ])
     ],";
       break;
+    case Schema::TYPE_TIME:
+    case Schema::TYPE_TIMESTAMP:
+    case Schema::TYPE_DATE:
+    case Schema::TYPE_DATETIME:
+      return "[
+      'attribute' => '$name',
+      'filterType' => GridView::FILTER_DATE_RANGE,
+      'filterWidgetOptions' =>Yii::\$app->params['datetime_option'],
+      'value'=> function (\$model, \$key, \$index, \$column) {
+        \$$type=strtotime(\$model->$name);
+        return date(Yii::\$app->params['lang']['$type'], \$$type);
+      },
+    ],";
+      break;
   };
 
   return $name_standart;

@@ -111,6 +111,9 @@ $config = [
     'tarifs' => [
       'class' => 'frontend\modules\tarifs\Module',
     ],
+    'visitor' => [
+        'class' => 'frontend\modules\visitor\Module',
+    ],
   ],
   'params' => $params,
 ];

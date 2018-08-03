@@ -13,6 +13,12 @@ if (empty($safeAttributes)) {
     $safeAttributes = $model->attributes();
 }
 
+$not_gen=[
+  'create',
+  'pass',
+  'hash',
+  'sess'
+];
 echo "<?php\n";
 ?>
 
@@ -30,18 +36,18 @@ use yii\widgets\ActiveForm;
     <?= "<?php " ?>$form = ActiveForm::begin(); ?>
 
 <?php foreach ($generator->getColumns() as $attribute=>$type) {
-  if(strpos($attribute,'pass')!==false || strpos($attribute,'hash')!==false|| strpos($attribute,'sess'))continue;
-    if (in_array($attribute, $safeAttributes)) {
-      $input=getColumnInput($attribute,$type,$generator);
-      if($input){
-        echo $input;
-      }else{
-        echo "    <?= ";
-        echo $generator->generateActiveField($attribute);
-        echo " ?>";
-      }
-      echo "\n\n";
+  if(!canEdit($attribute,$not_gen ))continue;
+  if (in_array($attribute, $safeAttributes)) {
+    $input=getColumnInput($attribute,$type,$generator);
+    if($input){
+      echo $input;
+    }else{
+      echo "    <?= ";
+      echo $generator->generateActiveField($attribute);
+      echo " ?>";
     }
+    echo "\n\n";
+  }
 } ?>
     <?= '<?php if(!$isAjax){';?>?>
       <div class="form-group">
@@ -80,6 +86,12 @@ function getColumnInput($name,$type,$generator){
   return false;
 }
 
+function canEdit($attribute,$not_gen ){
+  foreach ($not_gen as $txt){
+    if(strpos($attribute,$txt)!==false) return false;
+  }
+  return true;
+}
 /*
   - Installing kartik-v/yii2-widget-typeahead (v1.0.1): Downloading (100%) Выпадающий поиск
   - Installing kartik-v/yii2-widget-touchspin (v1.2.1): Downloading (100%) Изменение цифр кнопки по бокам

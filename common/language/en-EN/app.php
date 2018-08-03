@@ -64,5 +64,18 @@
   'Update Cafe: Test Anticafefff' => 'Update Cafe: Test Anticafefff',
   'Create Users' => 'Create Users',
   'Page does not exist' => 'Page does not exist',
+  'Lang' => 'Lang',
+  'Notice' => 'Notice',
+  'Creat' => 'Creat',
+  'Phone' => 'Phone',
+  'Code' => 'Code',
+  'L Name' => 'L Name',
+  'F Name' => 'F Name',
+  'Visitors listing' => 'Visitors listing',
+  'Visitors' => 'Visitors',
+  'create' => 'create',
+  'Currency' => 'Currency',
+  'Create new Visitors' => 'Create new Visitors',
+  'Update Visitor: 1' => 'Update Visitor: 1',
 );
 ?>

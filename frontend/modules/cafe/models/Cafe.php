@@ -39,7 +39,7 @@ class Cafe extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'tps_value', 'tvq_value'], 'required'],
-            [['name', 'address', 'tps_code', 'tvq_code'], 'string'],
+            [['name', 'address', 'tps_code', 'tvq_code','currency'], 'string'],
             [['max_person', 'last_task', 'franchisee'], 'integer'],
             [['tps_value', 'tvq_value'], 'number'],
         ];
@@ -61,6 +61,7 @@ class Cafe extends \yii\db\ActiveRecord
             'tps_value' => Yii::t('app', 'Tps Value'),
             'tvq_value' => Yii::t('app', 'Tvq Value'),
             'franchisee' => Yii::t('app', 'Franchisee'),
+            'currency' => Yii::t('app', 'Currency'),
         ];
     }
 

@@ -46,7 +46,7 @@ class CafeSearch extends Cafe
   {
       return [
       [['id', 'max_person', 'max_person_from', 'max_person_to', 'last_task', 'franchisee'], 'integer'],
-            [['name', 'address', 'tps_code', 'tvq_code'], 'safe'],
+            [['name', 'address', 'tps_code', 'tvq_code','currency'], 'safe'],
             [['tps_value', 'tps_value_from', 'tps_value_to', 'tvq_value', 'tvq_value_from', 'tvq_value_to'], 'number'],
     ];
   }
@@ -93,6 +93,7 @@ class CafeSearch extends Cafe
              'tps_value' => $this->tps_value,
              'tvq_value' => $this->tvq_value,
              'franchisee' => $this->franchisee,
+             'currency' =>$this->currency?Yii::$app->params['currency'][$this->currency]:$this->currency,
         ]);
 
         $query->andFilterWhere(['like', '.name', $this->name])

@@ -19,6 +19,7 @@ class m180731_182228_cafeEdit extends Migration
       $this->addColumn("cafe",'tps_value',$this->float()->notNull());
       $this->addColumn("cafe",'tvq_value',$this->float()->notNull());
       $this->addColumn("cafe",'franchisee',$this->integer()->defaultValue(1));
+      $this->addColumn("cafe",'currency',$this->string(3)->defaultValue("USD"));
     }
 
     /**
@@ -34,6 +35,7 @@ class m180731_182228_cafeEdit extends Migration
       $this->dropColumn('cafe', 'tps_value');
       $this->dropColumn('cafe', 'tvq_value');
       $this->dropColumn('cafe', 'franchisee');
+      $this->dropColumn('cafe', 'currency');
 
     }
 

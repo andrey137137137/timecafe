@@ -43,6 +43,12 @@ class m180725_142747_users_RBAC extends \yii\db\Migration
     );
 
     $this->createPermission(
+        'AllCurrency',
+        'Смена валюты',
+        [$role]
+    );
+
+    $this->createPermission(
         'CanChangeCafe',
         'Users - может менять кафе пользователю и в системе',
         [$role]
