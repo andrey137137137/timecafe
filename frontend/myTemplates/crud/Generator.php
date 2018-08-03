@@ -58,7 +58,7 @@ class Generator extends \yii\gii\Generator
   public $SearchVarsPublic = [];
   private $rangeConditions = [];
 
-
+  public $behaviors = [];
   /**
    * @inheritdoc
    */
@@ -223,8 +223,14 @@ class Generator extends \yii\gii\Generator
       d(md5($files_m->path));
       ddd($files_m);*/
  //     if(isset($_POST['answers['.$files_m->id.']'])) ddd(0);
-      if(isset($_POST['generate']))
-        $files_m->save();
+      if(isset($_POST['generate'])){
+        $ff=strtolower($rbacName).'_RBAC';
+        $folder = rtrim(Yii::getAlias($this->migrationPath), '/') ;
+        $list = scandir($folder);
+        foreach($list as $item)
+          if(strpos($item,$ff ))break;
+        if(!strpos($item,$ff ))$files_m->save();
+      }
       $files[]=$files_m;
     }
     ///ddd($this);
@@ -408,7 +414,7 @@ class Generator extends \yii\gii\Generator
         case Schema::TYPE_DATETIME:
         case Schema::TYPE_TIMESTAMP:
         default:
-          $type_this='safe';;
+          $type_this='safe';
           break;
       }
 
@@ -417,6 +423,12 @@ class Generator extends \yii\gii\Generator
     }
     $rules = [];
     foreach ($types as $type => $columns) {
+      if($type=="match"){
+        foreach ($columns as $pattern => $name) {
+          $rules[] = "[['" . implode("', '", $name) . "'], '$type', 'pattern'=>'$pattern']";
+        }
+        continue;
+      }
       $rules[] = "[['" . implode("', '", $columns) . "'], '$type']";
     }
     return $rules;
@@ -446,12 +458,30 @@ class Generator extends \yii\gii\Generator
         ];
         $this->SearchVarsPublic[$name.'_from']=false;
         $this->SearchVarsPublic[$name.'_to']=false;
-        $this->rangeConditions[]="->andFilterWhere(['>=', '{$name}', \$this->{$name}_from])";;
-        $this->rangeConditions[]="->andFilterWhere(['<=', '{$name}', \$this->{$name}_to])";;
+        $this->rangeConditions[]="->andFilterWhere(['>=', '{$name}', \$this->{$name}_from])";
+        $this->rangeConditions[]="->andFilterWhere(['<=', '{$name}', \$this->{$name}_to])";
+        break;
+      case Schema::TYPE_DATE:
+      case Schema::TYPE_TIME:
+      case Schema::TYPE_DATETIME:
+      case Schema::TYPE_TIMESTAMP:
+        $this->SearchVarsPublic[$name.'_from']=false;
+        $this->SearchVarsPublic[$name.'_to']=false;
+        $this->behaviors[]=            [
+            'class' => 'DateRangeBehavior::className()',
+            'attribute' => $name,
+            'dateStartAttribute' => $name.'_from',
+            'dateEndAttribute' => $name.'_to',
+        ];
+        $dt=Schema::TYPE_DATE?'+'.(24*60*60):'';
+        $this->rangeConditions[]="->andFilterWhere(['>=', '{$name}', date(\"Y-m-d H:i:s\",\$this->{$name}_from)])";
+        $this->rangeConditions[]="->andFilterWhere(['<=', '{$name}', date(\"Y-m-d H:i:s\",\$this->{$name}_to".$dt.")])";
+        $arr['match']['/^.+\s\-\s.+$/'][]=$name;
         break;
     };
     return $arr;
   }
+
   /**
    * @return array searchable attributes
    */
@@ -508,11 +538,13 @@ class Generator extends \yii\gii\Generator
         case Schema::TYPE_DOUBLE:
         case Schema::TYPE_DECIMAL:
         case Schema::TYPE_MONEY:
+          $hashConditions[] = " '{$column}' => \$this->{$column},";
+          break;
         case Schema::TYPE_DATE:
         case Schema::TYPE_TIME:
         case Schema::TYPE_DATETIME:
         case Schema::TYPE_TIMESTAMP:
-          $hashConditions[] = " '{$column}' => \$this->{$column},";
+
           break;
         default:
           $likeConditions[] = "->andFilterWhere(['like', '.{$column}', \$this->{$column}])";

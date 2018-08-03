@@ -22,6 +22,10 @@
 
 {{ macro.tile('logout','bg-scarlet','LOGOUT',{icon:'icon-metro-exit'}) }}
 
-{% if(_canCafe('startVisit')) %}
+{% if(_can('VisitorView')) %}
+  {{ macro.tile('visitor/admin','bg-taupe','Data visitors',{icon:'icon-metro-drawer-2'}) }}
+{% endif %}
+
+{% if(_canCafe('startVisit_')) %}
   {{ macro.tile('users/admin/create','bg-dodger-blue','Add customer',{icon:'fa fa-user',width:2,modal:true}) }}
 {% endif %}

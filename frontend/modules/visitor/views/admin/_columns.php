@@ -6,63 +6,42 @@ use yii\helpers\ArrayHelper;
 
 return [
     [
+      'class' => 'kartik\grid\CheckboxColumn',
+      'width' => '20px',
+    ],
+    [
       'class' => 'kartik\grid\SerialColumn',
       'width' => '30px',
     ],
     'id',
-    'name',
+    'f_name',
+    'l_name',
+    'code',
+    'email',
+    'phone',
     [
-      'attribute' => 'max_person',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'max_person',
-      ])
-    ],
-    'address',
-    'tps_code',
-    'tvq_code',
-    [
-      'attribute' => 'tps_value',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'tps_value',
-      ])
-    ],
-    [
-      'attribute' => 'tvq_value',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'tvq_value',
-      ])
-    ],
-    [
-      'attribute'=>'franchisee',
-      'filterType' => GridView::FILTER_SELECT2,
-      'format' => 'raw',
-      'filter'=> ArrayHelper::merge(
-        [
-          ''=>Yii::t('app', 'ALL')
-        ],
-        Yii::$app->params['franchisee']
-      ),
-      'value' => function ($model, $key, $index, $column) {
-        $param= Yii::$app->params['franchisee'];
-        return isset($param[$model->franchisee])?$param[$model->franchisee]:"-";
+      'attribute' => 'create',
+      'filterType' => GridView::FILTER_DATE_RANGE,
+      'filterWidgetOptions' =>Yii::$app->params['datetime_option'],
+      'value'=> function ($model, $key, $index, $column) {
+        $datetime=strtotime($model->create);
+        return date(Yii::$app->params['lang']['datetime'], $datetime);
       },
     ],
+    'notice',
     [
-      'attribute'=>'currency',
+      'attribute'=>'lg',
       'filterType' => GridView::FILTER_SELECT2,
       'format' => 'raw',
       'filter'=> ArrayHelper::merge(
-        [
-          ''=>Yii::t('app', 'ALL')
-        ],
-        Yii::$app->params['currency']
+          [
+              ''=>Yii::t('app',"ALL")
+          ],
+          Yii::$app->params['lg_list']
       ),
       'value' => function ($model, $key, $index, $column) {
-        $param= Yii::$app->params['currency'];
-        return in_array($model->currency,$param)?$model->currency:"-";
+        $lg= Yii::$app->params['lg_list'];
+        return $lg[isset($lg[$model->lg])?$model->lg:Yii::$app->params['defaultLang']];
       },
     ],
     [

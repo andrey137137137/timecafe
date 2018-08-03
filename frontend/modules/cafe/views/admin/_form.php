@@ -32,6 +32,10 @@ use yii\widgets\ActiveForm;
       echo $form->field($model, 'franchisee')->dropDownList(Yii::$app->params['franchisee']);
     }?>
 
+    <?php if(Yii::$app->user->can('AllCurrency')) {
+      echo $form->field($model, 'currency')->dropDownList(Yii::$app->params['currency']);
+    }?>
+
     <?php if(!$isAjax){?>
       <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

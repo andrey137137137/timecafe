@@ -27,6 +27,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use <?= ltrim($generator->modelClass, '\\') . (isset($modelAlias) ? " as $modelAlias" : "") ?>;
+use kartik\daterange\DateRangeBehavior;
 
 /**
  * <?= $searchModelClass ?> represents the model behind the search form of `<?= $generator->modelClass ?>`.
@@ -48,13 +49,33 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
 <?php
   }
 };?>
+
+<?php if($generator->behaviors && count($generator->behaviors)>0){
+    ?>
+  public function behaviors()
+  {
+    return [
+<?php
+  foreach ($generator->behaviors as $var){
+      echo "     [\n";
+        foreach ($var as $k=>$v){
+          echo  '       "'.$k.'" => '.($k=="class"?$v:'"'.$v.'"').",\n";
+
+    }
+    echo "      ],\n";
+  }
+?>
+    ];
+  }
+    <?php
+};?>
   /**
    * {@inheritdoc}
    */
   public function rules()
   {
-      return [
-      <?= implode(",\n            ", $rules) ?>,
+    return [
+      <?= implode(",\n      ", $rules) ?>,
     ];
   }
 

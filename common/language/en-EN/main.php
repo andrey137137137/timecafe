@@ -6,5 +6,6 @@
   'Administrator' => 'Administrator',
   'System management' => 'System management',
   'Add customer' => 'Add customer',
+  'Data visitors' => 'Data visitors',
 );
 ?>
