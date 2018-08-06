@@ -9,7 +9,10 @@ $params = array_merge(
 $config = [
   'id' => 'app-frontend',
   'basePath' => dirname(__DIR__),
-  'bootstrap' => ['log'],
+  'bootstrap' => [
+    'log',
+    'cafe',
+  ],
   'controllerNamespace' => 'frontend\controllers',
   'language' => defined('LANGUAGE') ? LANGUAGE : 'en-EN',
   'sourceLanguage' => 'dev',

@@ -223,10 +223,11 @@ $functionsList = [
   '_canCafe' => function ($do) {
     return !Yii::$app->user->isGuest && Yii::$app->cafe->can($do);
   },
-  '_ddd' => function ($params) {
+  '_ddd' => 'ddd'/*function ($params) {
     ddd($params);
-  },
+  }*/,
   't' => 'Yii::t',
+  'date' => 'date',
   'CrudRegister'=>function ($view) {
       CrudAsset::register($view);
   },

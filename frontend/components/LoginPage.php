@@ -18,10 +18,15 @@ class LoginPage implements UrlRuleInterface
   public function parseRequest($manager, $request)
   {
     if(!Yii::$app->user->isGuest) {
+      $lg=Yii::$app->user->identity->lg;
+
+      if(isset(Yii::$app->params['lg_list'][$lg])){
+        Yii::$app->language=$lg;
+      };
       if(!Yii::$app->session->get('cafe_id',false)){
         return ["site/change-cafe",[]];
       }
-      Yii::$app->cafe;
+      //Yii::$app->cafe;
       return false;
     }
     return ["site/login",[]];

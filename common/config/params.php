@@ -6,7 +6,8 @@ return [
   'defaultLang'=>'en-EN',
   "lg_list"=>[
     'en-EN'=>"english",
-    'fr'=>"Français"
+    'fr'=>"Français",
+    'ru-RU'=>"Русский",
   ],
   "franchisee"=>[
     1=>"Our cafes",

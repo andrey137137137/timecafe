@@ -16,7 +16,6 @@ class Cafe extends Component
   public function init()
   {
     parent::init();
-
     $cafe_id = Yii::$app->session->get('cafe_id',false);
     if(!$cafe_id)return;
 
