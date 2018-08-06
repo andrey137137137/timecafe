@@ -62,10 +62,12 @@ $config = [
       'enablePrettyUrl' => true,
       'rules' => [
         'site/<action>' => '404',
+        '/visits/default/<action>' => '404',
         [
           'class' => 'frontend\components\LoginPage',
         ],
         '<alias:\w+>' => 'site/<alias>',
+        '/visits/<alias:\w+>'=>'/visits/default/<alias>',
       ],
       'normalizer' => [
         'class' => 'yii\web\UrlNormalizer',
@@ -116,6 +118,9 @@ $config = [
     ],
     'visitor' => [
         'class' => 'frontend\modules\visitor\Module',
+    ],
+    'visits' => [
+      'class' => 'frontend\modules\visits\Module',
     ],
   ],
   'params' => $params,

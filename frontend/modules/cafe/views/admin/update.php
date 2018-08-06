@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\cafe\models\Cafe */
 
-$this->title = Yii::t('app', 'Update Cafe: ' . $model->name, [
+$this->title = Yii::t('app', 'Update Cafe: {nameAttribute}', [
     'nameAttribute' => '' . $model->name,
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Cafes'), 'url' => ['index']];
