@@ -22,6 +22,7 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use common\components\widget\NumberRangerWidget;
 use yii\helpers\ArrayHelper;
+use frontend\modules\users\models\Users;
 
 return [
     [
@@ -140,8 +141,8 @@ function getColumnParams($name,$type,$generator){
           \yii\helpers\ArrayHelper::map((array)Users::getCafesList(), \'id\', \'name\')
       ),
       \'value\' => function ($model, $key, $index, $column) {
-        $cafes=$model->cafe;
-        return $cafe->cafe->name;
+        $cafe=$model->cafe;
+        return $cafe->name;
       },
     ],';
   }

@@ -183,7 +183,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     }
 <?php };?>
     $model = new <?= $modelClass ?>();
-    $searchModel = new CafeSearch();
+    $searchModel = new <?=$generator->rbacName;?>Search();
 
     $request = Yii::$app->request;
 

@@ -3,7 +3,7 @@
 namespace frontend\modules\tarifs\models;
 
 use Yii;
-
+use frontend\modules\cafe\models\Cafe;
 /**
  * This is the model class for table "tarifs".
  *

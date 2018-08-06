@@ -24,7 +24,8 @@ echo "<?php\n";
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-  use kartik\color\ColorInput;
+use kartik\color\ColorInput;
+use frontend\modules\users\models\Users;
 
 /* @var $this yii\web\View */
 /* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
@@ -80,7 +81,7 @@ function getColumnInput($name,$type,$generator){
   }
 
   if(strpos($name,'cafe')!==false){
-    return '<?= $form->field($model, \''.$name.'\')->dropDownList(Yii::$app->params[\'lg_list\']) ?>';
+    return '<?= $form->field($model, \''.$name.'\')->dropDownList(\yii\helpers\ArrayHelper::map((array)Users::getCafesList(), \'id\', \'name\')) ?>';
   }
 
   return false;

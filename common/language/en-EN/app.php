@@ -80,5 +80,16 @@
   'time Zone' => 'time Zone',
   'Update Cafe: 294 RUE SAINTE-CATHERINE O,H2X 2A1' => 'Update Cafe: 294 RUE SAINTE-CATHERINE O,H2X 2A1',
   'Update Cafe: Hochelaga-Maisonneuve' => 'Update Cafe: Hochelaga-Maisonneuve',
+  'Create Visitor' => 'Create Visitor',
+  'Start Visit' => 'Start Visit',
+  'Next Hour' => 'Next Hour',
+  'First Hour' => 'First Hour',
+  'Max Sum' => 'Max Sum',
+  'Min Sum' => 'Min Sum',
+  'Cafe ID' => 'Cafe ID',
+  'Tarifs' => 'Tarifs',
+  'Create Tarifs' => 'Create Tarifs',
+  'Tarifs listing' => 'Tarifs listing',
+  'Create new Tarifs' => 'Create new Tarifs',
 );
 ?>

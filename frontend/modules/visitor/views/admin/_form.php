@@ -13,19 +13,19 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'f_name')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'f_name')->textInput() ?>
 
-    <?= $form->field($model, 'l_name')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'l_name')->textInput() ?>
 
-    <?= $form->field($model, 'code')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'code')->textInput() ?>
 
-    <?= $form->field($model, 'email')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'email')->textInput() ?>
 
-    <?= $form->field($model, 'phone')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'phone')->textInput() ?>
 
-    <?= $form->field($model, 'notice')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'notice')->textarea(['rows' => 4]) ?>
 
-<?= $form->field($model, 'lg')->dropDownList(Yii::$app->params['lg_list']) ?>
+    <?= $form->field($model, 'lg')->dropDownList(Yii::$app->params['lg_list']) ?>
 
     <?php if(!$isAjax){?>
       <div class="form-group">
