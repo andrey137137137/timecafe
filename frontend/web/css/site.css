@@ -40,3 +40,21 @@
 .required select{
   border-color:#f00;
 }*/
+
+
+.tarif_select_blk input{
+  display:none;
+}
+.tarif_select_blk .tab_control{
+  display:flex;
+  list-style: none;
+  background: #eee;
+  padding:0;
+}
+
+.tarif_select_blk .tab_control li{
+  padding:5px 15px
+}
+.accordion-title{
+  background:#f7e19d;
+}

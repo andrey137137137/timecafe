@@ -122,6 +122,9 @@ $config = [
     'visits' => [
       'class' => 'frontend\modules\visits\Module',
     ],
+    'language' => [
+      'class' => 'frontend\modules\language\Module',
+    ],
   ],
   'params' => $params,
 ];

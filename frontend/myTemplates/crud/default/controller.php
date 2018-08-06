@@ -151,7 +151,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             'columns' => $columns,
             'canCreate' => $canCreate,
             'afterTable'=>$afterTable,
-            'title'=>"<?= $modelClass ?>",
+            'title'=>"<?= $generator->generateString( $modelClass.' list'); ?>",
             'forAllCafe'=>true,
         ]);
 <?php else: ?>
@@ -161,7 +161,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             'columns' => $columns,
             'canCreate' => $canCreate,
             'afterTable'=>$afterTable,
-            'title'=>"<?= $modelClass ?>",
+            'title'=>"<?= $generator->generateString( $modelClass.' list'); ?>",
             'forAllCafe'=>true,
         ]);
 <?php endif; ?>
@@ -230,15 +230,15 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     }
 
     return [
-      'title'=> "Change visible columns in <?= $modelClass ?> table",
+      'title'=> "<?=$generator->generateString("Change visible columns in <?= $modelClass ?> table");?>",
       'content'=>$this->renderAjax('columns', [
         'sel_column' => $sel_column,
         'columns' => $columns,
         'model' => $model,
         'isAjax' => true
       ]),
-      'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-      Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+      'footer'=> Html::button("<?=$generator->generateString('Close');?>",['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+      Html::button("<?=$generator->generateString('Save');?>",['class'=>'btn btn-primary','type'=>"submit"])
 
     ];
   }
@@ -271,7 +271,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
       Yii::$app->response->format = Response::FORMAT_JSON;
       if($request->isGet){
         return [
-          'title'=> "Create new <?= $modelClass ?>",
+          'title'=> "<?=$generator->generateString("Create new ".$modelClass); ?>",
           'content'=>$this->renderAjax('create', [
             'model' => $model,
             'isAjax' => true
@@ -282,7 +282,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
       }else if($model->load($request->post()) && $model->save()){
         return [
           'forceReload'=>'#crud-datatable-pjax',
-          'title'=> "Create new <?= $modelClass ?>",
+          'title'=> "<?=$generator->generateString("Create new ".$modelClass); ?>",
           'content'=>'<span class="text-success">Create <?= $modelClass ?> success</span>',
           'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
             Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
@@ -290,7 +290,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         ];
       }else{
         return [
-          'title'=> "Create new <?= $modelClass ?>",
+          'title'=> "<?=$generator->generateString("Create new ".$modelClass); ?>",
           'content'=>$this->renderAjax('create', [
             'model' => $model,
             'isAjax' => true,

@@ -1,11 +1,11 @@
 <?php
 return array (
-    'Visitors in Anticafe' => 'Visitors in Anticafe',
-    'LOGOUT' => 'LOGOUT',
-    'Administrators' => 'Administrators',
-    'Administrator' => 'Administrator',
-    'System management' => 'System management',
-    'Add customer' => 'Add customer',
-    'Data visitors' => 'Data visitors',
+    'Visitors in Anticafe' => 'Посетители в Антикафе',
+    'LOGOUT' => 'ВЫХОД',
+    'Administrators' => 'Управление',
+    'Administrator' => 'Администратор',
+    'System management' => 'Управление системой',
+    'Add customer' => 'Добавить клиента',
+    'Data visitors' => 'Клиенты',
 );
 ?>

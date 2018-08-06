@@ -101,7 +101,7 @@ class AdminController extends Controller
             'columns' => $columns,
             'canCreate' => $canCreate,
             'afterTable'=>$afterTable,
-            'title'=>"Visitor",
+            'title'=>Yii::t('app',"Visitor"),
             'forAllCafe'=>true,
         ]);
     }
@@ -167,15 +167,15 @@ class AdminController extends Controller
     }
 
     return [
-      'title'=> "Change visible columns in Visitor table",
+      'title'=> Yii::t('app',"Change visible columns in Visitor table"),
       'content'=>$this->renderAjax('columns', [
         'sel_column' => $sel_column,
         'columns' => $columns,
         'model' => $model,
         'isAjax' => true
       ]),
-      'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-      Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+      'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+      Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
 
     ];
   }
@@ -206,32 +206,32 @@ class AdminController extends Controller
       Yii::$app->response->format = Response::FORMAT_JSON;
       if($request->isGet){
         return [
-          'title'=> "Create new Visitor",
+          'title'=> Yii::t('app',"Create new Visitor"),
           'content'=>$this->renderAjax('create', [
             'model' => $model,
             'isAjax' => true
           ]),
-          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-            Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+          'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+            Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
         ];
       }else if($model->load($request->post()) && $model->save()){
         return [
           'forceReload'=>'#crud-datatable-pjax',
-          'title'=> "Create new Visitor",
-          'content'=>'<span class="text-success">Create Visitor success</span>',
-          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+          'title'=> Yii::t('app',"Create new Visitor"),
+          'content'=>'<span class="text-success">'.Yii::t('app','Create Visitor success').'</span>',
+          'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+            Html::a(Yii::t('app','Create More'),['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
 
         ];
       }else{
         return [
-          'title'=> "Create new Visitor",
+          'title'=> Yii::t('app',"Create new Visitor"),
           'content'=>$this->renderAjax('create', [
             'model' => $model,
             'isAjax' => true,
           ]),
-          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-              Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+          'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+              Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
 
         ];
       }
@@ -261,9 +261,7 @@ class AdminController extends Controller
         /*
         *   Process for ajax request
         */
-        $title=Yii::t('app', 'Update Visitor: ' . $model->id, [
-    'nameAttribute' => '' . $model->id,
-]);
+        $title=Yii::t('app', 'Update Visitor: {f_name} {l_name}', $model);
         Yii::$app->response->format = Response::FORMAT_JSON;
         if($request->isGet){
           return [
@@ -272,16 +270,16 @@ class AdminController extends Controller
               'model' => $model,
               'isAjax' => true,
             ]),
-            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-              Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+            'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+              Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
           ];
         }else if($model->load($request->post()) && $model->save()){
           return [
             'forceReload'=>'#crud-datatable-pjax',
             'title'=> $title,
             'content'=>"<script>$('.modal-header .close').click()</script>",
-            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-              Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+            'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+              Html::a(Yii::t('app','Edit'),['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
           ];
         }else{
           return [
@@ -290,8 +288,8 @@ class AdminController extends Controller
               'model' => $model,
               'isAjax' => true,
             ]),
-            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-              Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+            'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+              Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
           ];
         }
     }
