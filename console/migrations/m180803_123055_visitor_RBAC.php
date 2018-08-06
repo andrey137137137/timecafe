@@ -14,11 +14,11 @@ class m180803_123055_visitor_RBAC extends \yii\db\Migration
 
 
 
-    $this->execute('TRUNCATE mysql.`time_zone` ;');
+    /*$this->execute('TRUNCATE mysql.`time_zone` ;');
     $this->execute('TRUNCATE mysql.`time_zone_leap_second` ;');
     $this->execute('TRUNCATE mysql.`time_zone_name` ;');
     $this->execute('TRUNCATE mysql.`time_zone_transition` ;');
-    $this->execute('TRUNCATE mysql.`time_zone_transition_type` ;');
+    $this->execute('TRUNCATE mysql.`time_zone_transition_type` ;');*/
     $this->execute('set time_zone = \'+4:00\';');
 
     $this->renameColumn('visitor', 'lang', 'lg');
