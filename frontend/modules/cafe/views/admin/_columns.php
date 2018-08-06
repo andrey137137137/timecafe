@@ -62,7 +62,22 @@ return [
       ),
       'value' => function ($model, $key, $index, $column) {
         $param= Yii::$app->params['currency'];
-        return in_array($model->currency,$param)?$model->currency:"-";
+        return isset($param[$model->currency])?$param[$model->currency]:"-";
+      },
+    ],
+    [
+      'attribute'=>'timeZone',
+      'filterType' => GridView::FILTER_SELECT2,
+      'format' => 'raw',
+      'filter'=> ArrayHelper::merge(
+        [
+          ''=>Yii::t('app', 'ALL')
+        ],
+        Yii::$app->params['timeZone']
+      ),
+      'value' => function ($model, $key, $index, $column) {
+        $param= Yii::$app->params['timeZone'];
+        return isset($param[$model->timeZone])?$param[$model->timeZone]:"-";
       },
     ],
     [

@@ -39,7 +39,8 @@ class Cafe extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'tps_value', 'tvq_value'], 'required'],
-            [['name', 'address', 'tps_code', 'tvq_code','currency'], 'string'],
+            [['name', 'address', 'tps_code', 'tvq_code','currency','timeZone'], 'trim'],
+            [['name', 'address', 'tps_code', 'tvq_code','currency','timeZone'], 'string'],
             [['max_person', 'last_task', 'franchisee'], 'integer'],
             [['tps_value', 'tvq_value'], 'number'],
         ];
@@ -62,6 +63,7 @@ class Cafe extends \yii\db\ActiveRecord
             'tvq_value' => Yii::t('app', 'Tvq Value'),
             'franchisee' => Yii::t('app', 'Franchisee'),
             'currency' => Yii::t('app', 'Currency'),
+            'timeZone' => Yii::t('app', 'time Zone'),
         ];
     }
 
@@ -82,7 +84,8 @@ class Cafe extends \yii\db\ActiveRecord
 
     return true;
   }
-    /**
+
+  /**
      * @return \yii\db\ActiveQuery
      */
     public function getPolls()

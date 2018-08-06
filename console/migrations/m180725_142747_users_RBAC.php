@@ -43,8 +43,8 @@ class m180725_142747_users_RBAC extends \yii\db\Migration
     );
 
     $this->createPermission(
-        'AllCurrency',
-        'Смена валюты',
+        'AllChange',
+        'Расширеные права для смены параметров (валюта,часовой пояс)',
         [$role]
     );
 

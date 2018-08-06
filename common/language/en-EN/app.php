@@ -77,5 +77,8 @@
   'Currency' => 'Currency',
   'Create new Visitors' => 'Create new Visitors',
   'Update Visitor: 1' => 'Update Visitor: 1',
+  'time Zone' => 'time Zone',
+  'Update Cafe: 294 RUE SAINTE-CATHERINE O,H2X 2A1' => 'Update Cafe: 294 RUE SAINTE-CATHERINE O,H2X 2A1',
+  'Update Cafe: Hochelaga-Maisonneuve' => 'Update Cafe: Hochelaga-Maisonneuve',
 );
 ?>

@@ -12,5 +12,6 @@ return [
   "franchisee"=>[
     1=>"Our cafes",
   ],
-  "currency"=>["USD","EUR","CAN"],
+  "currency"=>["USD"=>"USD","EUR"=>"EUR","CAN"=>"CAN","RUB"=>"RUB"],
+  "timeZone"=>["Etc/GMT+4"=>"Etc/GMT+4","Europe/Moscow"=>"Europe/Moscow"],
 ];

@@ -20,6 +20,7 @@ class Cafe extends Component
     if(!$cafe_id)return;
 
     $this->cafe=CafeModule::findOne(['id'=>$cafe_id]);
+    Yii::$app->timeZone=$this->cafe->timeZone;
 
     $this->iCan= isset(Yii::$app->params['iCan'])?Yii::$app->params['iCan']:[];
   }

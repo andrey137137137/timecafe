@@ -27,7 +27,9 @@
   <script src="/js/bootstrap.min.js"></script>
   <script src="/js/my.js"></script>
   <script type="text/javascript">
-    var difference = new Date("{{ date("r") }}") - new Date() //сразу вычисляем разницу между серверным временем и временем на клиенте
+    //сразу вычисляем разницу между серверным временем и временем на клиенте
+    var difference = new Date({{ date('Y') }},{{date('m')-1}},{{date('d')}},{{date('g')}},{{date('i')}}) - new Date(); //по часовому поясу кафе
+    //var difference = new Date("{{ date("r") }}") - new Date(); //по часовому поясу ПК
   </script>
 
   <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>

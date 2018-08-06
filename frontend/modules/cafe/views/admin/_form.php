@@ -32,8 +32,10 @@ use yii\widgets\ActiveForm;
       echo $form->field($model, 'franchisee')->dropDownList(Yii::$app->params['franchisee']);
     }?>
 
-    <?php if(Yii::$app->user->can('AllCurrency')) {
+    <?php if(Yii::$app->user->can('AllChange')) {
       echo $form->field($model, 'currency')->dropDownList(Yii::$app->params['currency']);
+
+      echo $form->field($model, 'timeZone')->dropDownList(Yii::$app->params['timeZone']);
     }?>
 
     <?php if(!$isAjax){?>

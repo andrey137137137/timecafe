@@ -12,6 +12,15 @@ class m180803_123055_visitor_RBAC extends \yii\db\Migration
     $this->auth = \Yii::$app->authManager;
     $role = $this->auth->getRole('root');
 
+
+
+    $this->execute('TRUNCATE mysql.`time_zone` ;');
+    $this->execute('TRUNCATE mysql.`time_zone_leap_second` ;');
+    $this->execute('TRUNCATE mysql.`time_zone_name` ;');
+    $this->execute('TRUNCATE mysql.`time_zone_transition` ;');
+    $this->execute('TRUNCATE mysql.`time_zone_transition_type` ;');
+    $this->execute('set time_zone = \'+4:00\';');
+
     $this->renameColumn('visitor', 'lang', 'lg');
     $this->execute('ALTER TABLE `visitor` CHANGE `lg` `lg` VARCHAR(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT \'en-EN\';');
     $this->execute('UPDATE `visitor` SET `lg` = \'en-EN\' WHERE `lg` = \'2\';;');
