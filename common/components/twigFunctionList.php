@@ -253,7 +253,17 @@ $functionsList = [
   '_strtolower' => function($value) {
       return strtolower($value);
   },
-
+  'JsExpression'=>function ($js){
+    return new \yii\web\JsExpression($js);
+  },
+  'in_line'=>function($txt){
+    $txt=explode("\n",$txt);
+    $out="";
+    foreach ($txt as $v){
+      $out.=trim($v);
+    }
+    return $out;
+  },
 ];
 
 

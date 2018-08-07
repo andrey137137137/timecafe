@@ -56,7 +56,7 @@
   'Phone' => 'Phone',
   'Code' => 'Code',
   'L Name' => 'L Name',
-  'F Name' => 'F Name',
+  'F Name' => 'First Name',
   'Visitors listing' => 'Visitors listing',
   'Visitors' => 'Visitors',
   'create' => 'create',
@@ -89,5 +89,11 @@
   'Create new Visitor' => 'Create new Visitor',
   'Edit' => 'Edit',
   'Incorrect username or password.' => 'Incorrect username or password.',
+  'Start new visit' => 'Start new visit',
+  'Start' => 'Start',
+  'visitor type' => 'visitor type',
+  'Anonymous' => 'Anonymous',
+  'Regular' => 'Regular',
+  'New user' => 'New user',
 );
 ?>

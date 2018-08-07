@@ -69,12 +69,12 @@ $config = [
         '<module:\w+>/<controller:\w+>/<action:(\w|-)+>/<id:\d+>' => '<module>/<controller>/<action>',
 
         'site/<action>' => '404',
-        '/visits/default/<action>' => '404',
+        //'/<models>/default/<action>' => '404',
         [
           'class' => 'frontend\components\LoginPage',
         ],
         '<alias:\w+>' => 'site/<alias>',
-        '/visits/<alias:\w+>'=>'/visits/default/<alias>',
+        '<models:visits|visitor>/<alias:\w+>'=>'/<models>/default/<alias>',
       ],
       'normalizer' => [
         'class' => 'yii\web\UrlNormalizer',

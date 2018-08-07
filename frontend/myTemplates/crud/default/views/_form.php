@@ -104,8 +104,8 @@ function canEdit($attribute,$not_gen ){
   - Installing kartik-v/bootstrap-star-rating (4.0.3): Downloading (100%) оценка звездами
   - Installing kartik-v/yii2-widget-rating (v1.0.3): Downloading (100%) оценка звездами
   - Installing kartik-v/yii2-widget-rangeinput (v1.0.1): Downloading (100%) ползунок
-  - Installing kartik-v/yii2-widget-growl (v1.1.1): Downloading (100%)
-  - Installing ./bootstrap-fileinput (v4.4.8): Downloading (100%) уведомления
+  - Installing kartik-v/yii2-widget-growl (v1.1.1): Downloading (100%) Уведомлялки
+  - Installing ./bootstrap-fileinput (v4.4.8): Downloading (100%)
   - Installing kartik-v/yii2-widget-fileinput (v1.0.6): Downloading (100%)
   - Installing kartik-v/dependent-dropdown (v1.4.8): Downloading (100%)
   - Installing kartik-v/yii2-widget-depdrop (v1.0.4): Downloading (100%)

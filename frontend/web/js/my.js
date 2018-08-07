@@ -135,3 +135,19 @@ function showControl(e){
   e.preventDefault();
   return false;
 }
+
+//http://twitter.github.io/typeahead.js/examples/
+//https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md#datasets
+function userAA(ev, suggestion) {
+  if($('#startvisit-type input:checked').val()==0){
+    $('#startvisit-type input[value=1][type=radio]')[0].checked = true;
+  };
+  if(ev.type=="typeahead:select"){
+    $.each( suggestion, function( key, value ) {
+      $('#startvisit-'+key).val(value);
+      //alert( key + ": " + value );
+    });
+    $('#startvisit-type input[value=2][type=radio]')[0].checked = true;
+  }
+  console.log(ev,suggestion);
+}
