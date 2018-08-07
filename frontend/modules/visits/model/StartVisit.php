@@ -2,6 +2,7 @@
 
 namespace frontend\modules\visits\model;
 
+use frontend\modules\visitor\models\Visitor;
 use Yii;
 use yii\base\Model;
 
@@ -52,23 +53,31 @@ class StartVisit extends \yii\db\ActiveRecord
         [['f_name', 'l_name', 'code', 'email', 'phone','lg'], 'string'],
         [[ 'id','type'], 'integer'],
         [[ 'email'], 'email'],
-        [[ 'code','email','phone'], 'unique','filter' =>function($model) {
-          return $model;
-          if($model->type==2){
-            return "id!=".$model->id;
-          }
-          return "1==1";
-        },'when' => function($model) {
-          return $model->type > 0;
+        [[ 'code','email','phone'], 'unique'
+        ,'when' => function($model) {
+          return $model->type == 1;
         }],
-        //[[ 'code'], 'unique', 'targetAttribute' => ['code', 'id']],
-        //[[ 'email'], 'unique', 'targetAttribute' => ['email']],
-        //[[ 'phone'], 'unique', 'targetAttribute' => ['phone', 'id']],
+        [[ 'code','email','phone'], 'testUnique'
+          ,'when' => function($model) {
+          return $model->type == 2;
+        }],
         [['f_name'],"required",'when' => function($model) {
           return $model->type > 0;
-        }]
-        //[[ 'email'], 'email'],
-
+        }, 'whenClient' => "function (attribute, value) {
+            return $('#startvisit-type input:checked').val() >0;
+        }"]
     ];
+  }
+
+  public function testUnique($attribute, $params){
+    if(Visitor::find()
+        ->where("id!=".$this->id)
+        ->andWhere([$attribute=>$this->$attribute])
+        ->count()>0){
+      $this->addError($attribute, Yii::t('app',"There is already a user with this {atribute}",[
+          'atribute'=>$attribute,
+          'value'=>$this->$attribute
+      ]));
+    }
   }
 }

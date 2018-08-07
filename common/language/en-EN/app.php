@@ -86,5 +86,13 @@
   'Visitor' => 'Visitor',
   'Edit' => 'Edit',
   'Create new Visitor' => 'Create new Visitor',
+  'Start' => 'Start',
+  'visitor type' => 'visitor type',
+  'Start new visit' => 'Start new visit',
+  'Anonymous' => 'Anonymous',
+  'Regular' => 'Regular',
+  'New user' => 'New user',
+  '{{value}} already a user with this {{atribute}}' => '{{value}} already a user with this {{atribute}}',
+  'There is already a user with this {atribute}' => 'There is already a user with this {atribute}',
 );
 ?>
