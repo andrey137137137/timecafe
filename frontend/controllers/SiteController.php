@@ -84,8 +84,8 @@ class SiteController extends Controller
     }
 
     if(count($cafe_list)==1){
-      $cafe=(array)($cafe_list[0]);
-      Yii::$app->session->set('cafe_id',$cafe['id']);
+      $cafe=($cafe_list[0]);
+      Yii::$app->session->set('cafe_id',$cafe->cafe_id);
       return $this->goBack();
     }
 

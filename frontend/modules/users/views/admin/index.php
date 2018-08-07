@@ -24,8 +24,8 @@ CrudAsset::register($this);
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'pjax'=>true,
-            'floatHeader'=>true,
-            'floatHeaderOptions'=>['scrollingTop'=>'50'],
+            //'floatHeader'=>true,
+            //'floatHeaderOptions'=>['scrollingTop'=>'50'],
             'columns' => $columns,
             'toolbar'=> [
                 ['content'=>

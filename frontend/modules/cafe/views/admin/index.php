@@ -22,8 +22,8 @@ CrudAsset::register($this);
             'id'=>'crud-datatable',
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'floatHeader'=>true,
-            'floatHeaderOptions'=>['scrollingTop'=>'50'],
+            //'floatHeader'=>true,
+            //'floatHeaderOptions'=>['scrollingTop'=>'50'],
             'pjax'=>true,
             'columns' => $columns,
             'toolbar'=> [
@@ -47,7 +47,7 @@ CrudAsset::register($this);
             'panel' => [
                 'type' => 'default',
                 'heading' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('app', 'Cafes listing'),
-                'before'=>'',
+                'before'=>'<em>'.Yii::t('app', '* Resize table columns just like a spreadsheet by dragging the column edges.').'</em>',
                 'after'=>$afterTable,
             ]
         ])?>

@@ -20,9 +20,9 @@ class UsersSearch extends Users
     public function rules()
     {
         return [
-            [['id', 'role', 'state','franchisee','cafe'], 'integer'],
+            [['id', 'state','franchisee','cafe'], 'integer'],
             ['lg','string'],
-            [['name', 'pass', 'last_sess', 'email', 'color'], 'safe'],
+            [['name', 'pass', 'last_sess', 'email', 'color','role'], 'safe'],
         ];
     }
 

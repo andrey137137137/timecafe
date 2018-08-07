@@ -37,9 +37,12 @@ CrudAsset::register($this);
             'id'=>'crud-datatable',
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'floatHeader'=>true,
-            'floatHeaderOptions'=>['scrollingTop'=>'50'],
+            //'floatHeader'=>true,
+            //'floatHeaderOptions'=>['scrollingTop'=>'50'],
             'pjax'=>true,
+            'striped' => true,
+            'condensed' => true,
+            'responsive' => true,
             'columns' => $columns,
             'toolbar'=> [
                 ['content'=>
@@ -55,14 +58,11 @@ CrudAsset::register($this);
                     '{toggleData}'.
                     '{export}'
                 ],
-            ],          
-            'striped' => true,
-            'condensed' => true,
-            'responsive' => true,          
+            ],
             'panel' => [
                 'type' => 'default',
                 'heading' => '<i class="glyphicon glyphicon-list"></i> '.<?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass))) . ' listing');?>,
-                'before'=>'',
+                'before'=>'<em>'.<?=$generator->generateString('* Resize table columns just like a spreadsheet by dragging the column edges.');?>.'</em>',
                 'after'=>$afterTable,
             ]
         ])<?="?>\n"?>

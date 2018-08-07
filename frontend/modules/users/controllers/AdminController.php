@@ -181,15 +181,15 @@ class AdminController extends Controller
     }
 
     return [
-        'title' => Yii::t("Change visible columns in Users table"),
+        'title' => Yii::t('app',"Change visible columns in Users table"),
         'content' => $this->renderAjax('columns', [
             'sel_column' => $sel_column,
             'columns' => $columns,
             'model' => $model,
             'isAjax' => true
         ]),
-        'footer' => Html::button(Yii::t('Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-            Html::button(Yii::t('Save'), ['class' => 'btn btn-primary', 'type' => "submit"])
+        'footer' => Html::button(Yii::t('app','Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+            Html::button(Yii::t('app','Save'), ['class' => 'btn btn-primary', 'type' => "submit"])
 
     ];
   }
@@ -227,7 +227,7 @@ class AdminController extends Controller
       Yii::$app->response->format = Response::FORMAT_JSON;
       if ($request->isGet) {
         return [
-            'title' => Yii::t("Create new Users"),
+            'title' => Yii::t('app',"Create new Users"),
             'content' => $this->renderAjax('create', [
                 'model' => $model,
                 'cafes' => $cafe,
@@ -239,7 +239,7 @@ class AdminController extends Controller
       } else if ($model->load($request->post()) && $model->save()) {
         return [
             'forceReload' => '#crud-datatable-pjax',
-            'title' => Yii::t("Create new Users"),
+            'title' => Yii::t('app',"Create new Users"),
             'content' => '<span class="text-success">'.Yii::t('app','Create Users success').'</span>',
             'footer' => Html::button(Yii::t('app','Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
                 Html::a(Yii::t('app','Create More'), ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])

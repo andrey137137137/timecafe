@@ -120,7 +120,7 @@ class AdminController extends Controller
       return false;
     }
     $model = new Visitor();
-    $searchModel = new CafeSearch();
+    $searchModel = new VisitorSearch();
 
     $request = Yii::$app->request;
 

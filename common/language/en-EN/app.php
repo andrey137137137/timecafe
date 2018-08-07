@@ -83,5 +83,11 @@
   'Close' => 'Close',
   'Tarifs list' => 'Tarifs list',
   'Change visible columns in Tarifs table' => 'Change visible columns in Tarifs table',
+  'Change visible columns in Users table' => 'Change visible columns in Users table',
+  'Create new Cafe' => 'Create new Cafe',
+  'Visitor' => 'Visitor',
+  'Create new Visitor' => 'Create new Visitor',
+  'Edit' => 'Edit',
+  'Incorrect username or password.' => 'Incorrect username or password.',
 );
 ?>

@@ -19,5 +19,8 @@ return [
                 "blue", "green", "violet", "cyan", "magenta", "purple",
             ],
         ]
+    ],
+    'defaultAccess'=>[
+        "VisitorView"
     ]
 ];

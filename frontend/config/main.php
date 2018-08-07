@@ -17,6 +17,10 @@ $config = [
   'language' => defined('LANGUAGE') ? LANGUAGE : 'en-EN',
   'sourceLanguage' => 'dev',
   'components' => [
+    'authManager' => [
+      //'class' => 'yii\rbac\DbManager',
+      'class' => 'frontend\components\RBACmng',
+    ],
     'assetManager' => [
       'bundles' => [
         'yii\bootstrap\BootstrapAsset' => [
@@ -61,6 +65,9 @@ $config = [
       // Use pretty URLs
       'enablePrettyUrl' => true,
       'rules' => [
+        '<module:\w+>/<controller:\w+>/<action:(\w|-)+>' => '<module>/<controller>/<action>',
+        '<module:\w+>/<controller:\w+>/<action:(\w|-)+>/<id:\d+>' => '<module>/<controller>/<action>',
+
         'site/<action>' => '404',
         '/visits/default/<action>' => '404',
         [
@@ -104,7 +111,7 @@ $config = [
       'class' => 'developeruz\db_rbac\Yii2DbRbac',
       'params' => [
         'userClass' => 'frontend\modules\users\models\Users',
-        'accessRoles' => ['admin']
+        'accessRoles' => ['root']
       ]
     ],
     'cafe' => [
@@ -124,6 +131,14 @@ $config = [
     ],
     'language' => [
       'class' => 'frontend\modules\language\Module',
+    ],
+    'permit' => [
+        'class' => 'developeruz\db_rbac\Yii2DbRbac',
+        //'layout' => '//admin'
+        'params' => [
+            'userClass' => 'frontend\modules\users\models\Users',
+            'accessRoles' => ['root']
+        ]
     ],
   ],
   'params' => $params,
