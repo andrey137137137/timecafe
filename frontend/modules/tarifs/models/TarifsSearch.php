@@ -114,7 +114,7 @@ class TarifsSearch extends Tarifs
     // grid filtering conditions
     $query->andFilterWhere([
              'id' => $this->id,
-             'cafe_id' => $this->cafe_id,
+             'cafe_id' => Yii::$app->cafe->id,
              'min_sum' => $this->min_sum,
              'max_sum' => $this->max_sum,
              'first_hour' => $this->first_hour,

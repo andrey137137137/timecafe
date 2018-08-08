@@ -101,7 +101,6 @@ class AdminController extends Controller
             'canCreate' => $canCreate,
             'afterTable'=>$afterTable,
             'title'=>Yii::t('app',"Tarifs list"),
-            'forAllCafe'=>true,
         ]);
     }
 

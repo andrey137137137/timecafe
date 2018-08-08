@@ -43,11 +43,10 @@ CrudAsset::register($this);
             ],          
             'striped' => true,
             'condensed' => true,
-            'before'=>'<em>'.Yii::t('app', '* Resize table columns just like a spreadsheet by dragging the column edges.').'</em>',
             'panel' => [
                 'type' => 'default',
-                'heading' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('app', 'Tarifs listing'),
-                'before'=>'',
+                'heading' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('app', 'Cafes listing'),
+                'before'=>'<em>'.Yii::t('app', '* Resize table columns just like a spreadsheet by dragging the column edges.').'</em>',
                 'after'=>$afterTable,
             ]
         ])?>

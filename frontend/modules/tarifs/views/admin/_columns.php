@@ -16,21 +16,6 @@ return [
     ],
     'id',
     [
-      'attribute'=>'cafe_id',
-      'filterType' => GridView::FILTER_SELECT2,
-      'format' => 'raw',
-      'filter'=> ArrayHelper::merge(
-          [
-              '0'=>Yii::t('app',"ALL")
-          ],
-          \yii\helpers\ArrayHelper::map((array)Users::getCafesList(), 'id', 'name')
-      ),
-      'value' => function ($model, $key, $index, $column) {
-        $cafe=$model->cafe;
-        return $cafe->name;
-      },
-    ],
-    [
       'attribute' => 'min_sum',
       'filter'=>NumberRangerWidget::widget([
         'model'=>$searchModel,
