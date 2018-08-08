@@ -69,7 +69,7 @@ class DefaultController extends Controller
             Yii::$app->session->addFlash('success', Yii::t('app', 'New visitor added to cafe'));
             return [
                 'title' => "",
-                'content' => "<script>$('.modal-header .close').click()</script>",
+                'content' => "<script>$('.modal-header .close').click();updateMain(false);</script>",
                 'footer' => ""
             ];
           }

@@ -16,5 +16,6 @@
 						 <div class="col-md-6"><i class="fa fa-phone"></i> : {{phone}}</div>
                        </div>',
   'Unable to find repositories for selected.' => 'Unable to find repositories for selected.',
+  'Visitors' => 'Visitors',
 );
 ?>

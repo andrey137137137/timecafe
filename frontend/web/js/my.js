@@ -152,7 +152,7 @@ function userAA(ev, suggestion) {
   console.log(ev,suggestion);
 }
 
-if(is_main) {
+if(typeof(is_main)!="undefined") {
   var template = (function () {
     var tpls = {};
 
@@ -174,11 +174,13 @@ if(is_main) {
     }
   })();
 
-  function updateMain(){
+  function updateMain(not_timeout){
     $.get('/get_cafe_status',function(data){
       for(index in data){
         var wrap=$('#'+index+"_log");
         if(wrap.length!=1)continue;
+        var wrap_start = wrap.find('hr').first()
+
         var els=wrap.find('.tile');
         els.addClass('old');
 
@@ -186,10 +188,10 @@ if(is_main) {
         for(var i =0; i<data[index].length;i++){
           item_data=data[index][i];
           out=template.render(index+"_log",item_data);
-          wrap.append(out);
+          wrap_start.after(out);
         }
       }
-      setTimeout(updateMain,2000);
+      if(!not_timeout)setTimeout(updateMain,2000);
     },'json')
   }
 

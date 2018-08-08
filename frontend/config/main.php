@@ -70,10 +70,11 @@ $config = [
 
         'site/<action>' => '404',
         '<models>/default/<action>' => '404',
-         '<models>/admin'=>'/<models>/admin/index',
         [
           'class' => 'frontend\components\LoginPage',
         ],
+
+        '<models>/admin'=>'/<models>/admin/index',
         '<alias:\w+>' => 'site/<alias>',
         '<models:visits|visitor>/<alias:\w+>'=>'/<models>/default/<alias>',
       ],
