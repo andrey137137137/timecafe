@@ -188,9 +188,11 @@ class VisitorLog extends \yii\db\ActiveRecord
       $visitor=array();
       if($visit->visitor_id){
         $v=$visit->visitor;
-        $visitor['name']=$v['f_name'].' '.$v['l_name'];
+        $visitor['l_name']=$v['l_name'];
+        $visitor['f_name']=$v['f_name'];
       }else{
-        $visitor['name']=Yii::t('app', "Anonymous");
+        $visitor['f_name']=Yii::t('app', "Anonymous");
+        $visitor['l_name']="";
       }
       $visitor['id']=$visit['id'];
       $visitor['start_time']=date(Yii::$app->params['lang']['time'],strtotime($visit['add_time']));
