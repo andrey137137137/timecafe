@@ -184,12 +184,30 @@ if(typeof(is_main)!="undefined") {
         var els=wrap.find('.tile');
         els.addClass('old');
 
-        els.remove();
+        //els.remove();
         for(var i =0; i<data[index].length;i++){
-          item_data=data[index][i];
+          var item_data=data[index][i];
+          var pv = wrap.find('[code='+item_data.id+']');
+          var hash = JSON.stringify(item_data).hashCode();
+
+          if(pv.length==1) {
+            if(pv.data('hash')==hash){
+              pv.removeClass('old');
+              continue;
+            }
+          }
+
           out=template.render(index+"_log",item_data);
-          wrap_start.after(out);
+          out=$(out);
+          out.data('hash',hash);
+          if(pv.length>0){
+            pv.after(out);
+            pv.remove();
+          }else {
+            wrap_start.after(out);
+          }
         }
+        wrap.find('.old').remove();
       }
       if(!not_timeout)setTimeout(updateMain,2000);
     },'json')
