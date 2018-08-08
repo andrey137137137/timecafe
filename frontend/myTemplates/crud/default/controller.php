@@ -206,7 +206,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 
       return [
         'forceReload'=>'#crud-datatable-pjax',
-       'content'=>"<script>$('.modal-header .close').click()</script>"
+       'content'=>Yii::$app->view->closeModal(),
       ];
     }
     $actions="";

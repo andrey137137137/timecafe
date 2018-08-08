@@ -143,7 +143,7 @@ class AdminController extends Controller
 
       return [
         'forceReload'=>'#crud-datatable-pjax',
-       'content'=>"<script>$('.modal-header .close').click()</script>"
+       'content'=>Yii::$app->view->closeModal(),
       ];
     }
     $actions="";

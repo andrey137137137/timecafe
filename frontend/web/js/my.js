@@ -209,9 +209,9 @@ if(typeof(is_main)!="undefined") {
         }
         wrap.find('.old').remove();
       }
-      if(!not_timeout)setTimeout(updateMain,2000);
+      //if(!not_timeout)setTimeout(updateMain,2000);
     },'json')
   }
 
-  setTimeout(updateMain,300);
+  setInterval(updateMain,2000);
 }

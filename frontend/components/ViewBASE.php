@@ -64,10 +64,7 @@ class ViewBASE extends View
 
   public function getNotification(){
     $session = Yii::$app->session;
-    if ($session->isActive){
-      $session->close();
-    }
-    $session->open();
+
     $flashes = $session->allFlashes;
     if (count($flashes) == 0) {
       return '';
@@ -178,5 +175,9 @@ class ViewBASE extends View
         $output,
         $this->all_params
     );
+  }
+
+  public function closeModal(){
+    return $this->renderAjax("@frontend/views/closeModal.twig");
   }
 }
