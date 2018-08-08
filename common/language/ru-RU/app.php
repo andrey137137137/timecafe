@@ -58,7 +58,7 @@
   'F Name' => 'Имя',
   'Visitors listing' => 'Список посетителей',
   'Visitors' => 'Посетители',
-  'create' => 'создать',
+  'create' => 'Создан',
   'Currency' => 'Валюта',
   'Create new Visitors' => 'Создать нового посетителя',
   'Update Users: {nameAttribute}' => 'Обновить Юзеров: {nameAttribute}',
