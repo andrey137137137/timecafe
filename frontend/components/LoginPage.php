@@ -26,7 +26,6 @@ class LoginPage implements UrlRuleInterface
       if(!Yii::$app->session->get('cafe_id',false)){
         return ["site/change-cafe",[]];
       }
-
       return false;
     }
     return ["site/login",[]];

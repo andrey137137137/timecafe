@@ -65,17 +65,15 @@ $config = [
       // Use pretty URLs
       'enablePrettyUrl' => true,
       'rules' => [
-        '<module:\w+>/<controller:\w+>/<action:(\w|-)+>' => '<module>/<controller>/<action>',
-        '<module:\w+>/<controller:\w+>/<action:(\w|-)+>/<id:\d+>' => '<module>/<controller>/<action>',
-
         'site/<action>' => '404',
         '<models>/default/<action>' => '404',
         [
           'class' => 'frontend\components\LoginPage',
         ],
-
+        '<module:\w+>/<controller:\w+>/<action:(\w|-)+>' => '<module>/<controller>/<action>',
+        '<module:\w+>/<controller:\w+>/<action:(\w|-)+>/<id:\d+>' => '<module>/<controller>/<action>',
         '<models>/admin'=>'/<models>/admin/index',
-        '<alias:\w+>' => 'site/<alias>',
+        '<alias:\w+|change-cafe>' => 'site/<alias>',
         '<models:visits|visitor>/<alias:\w+>'=>'/<models>/default/<alias>',
       ],
       'normalizer' => [

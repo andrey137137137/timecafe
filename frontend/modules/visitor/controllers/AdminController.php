@@ -261,8 +261,8 @@ class AdminController extends Controller
         /*
         *   Process for ajax request
         */
-        $title=Yii::t('app', 'Update Visitor: {f_name} {l_name}', $model);
-        Yii::$app->response->format = Response::FORMAT_JSON;
+      $title=Yii::t('app', 'Update Visitor: {f_name} {l_name}', $model->toArray());
+      Yii::$app->response->format = Response::FORMAT_JSON;
         if($request->isGet){
           return [
             'title'=> $title,
@@ -277,7 +277,7 @@ class AdminController extends Controller
           return [
             'forceReload'=>'#crud-datatable-pjax',
             'title'=> $title,
-            'content'=>"<script>$('.modal-header .close').click()</script>",
+            'content'=>Yii::$app->view->closeModal(),
             'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
               Html::a(Yii::t('app','Edit'),['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
           ];

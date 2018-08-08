@@ -21,6 +21,6 @@ return [
         ]
     ],
     'defaultAccess'=>[
-        "VisitorView"
+        "VisitorView","ChooseCafe"
     ]
 ];

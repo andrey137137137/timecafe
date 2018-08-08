@@ -10,9 +10,7 @@
 
 {% import "macro.twig" as macro %}
 {% include 'base/head.twig' %}
-<script>
-  var is_main=true;
-</script>
+
 <body class="{{ this.all_params.screen_class }} modernui-dark-bg">
   {% if(this.all_params.page_wrap) %}
     {% include 'page_wrap/'~this.all_params.page_wrap~'.twig' %}

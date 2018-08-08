@@ -9,6 +9,12 @@ class RBACmng extends DbManager
 {
   public function checkAccess($userId, $permissionName, $params = [])
   {
+
+    if($permissionName=="ChooseCafe"){
+      $cafe_list=Yii::$app->user->identity->cafes;
+      if(count($cafe_list))return false;
+    }
+
     if(in_array($permissionName,Yii::$app->params['defaultAccess'])) {
       return true;
     };

@@ -5,13 +5,18 @@
         <a href="/" class="hover-underline-none "><i class="icon-metro-arrow-left-3"></i></a> <span class="fa fa-list-alt"></span>
         {{ this.all_params.title }}
         {% if not(this.all_params.forAllCafe) %}
-          - <font style="font-size: 28px;font-weight: 500;"><span class="title">294 RUE SAINTE-CATHERINE O,H2X 2A1.</span></font>
-          <button type="button" class="btn btn-science-blue ch_cafe"><i class="fa fa-exchange"></i> Change to view Anticafe</button>         </h2>
+        {% if _can('ChooseCafe') %}
+          - <font style="font-size: 28px;font-weight: 500;"><span class="title">{{ this.cafe.name }}</span></font>
+          <a role="modal-remote" class="btn btn-science-blue ch_cafe" href="/change-cafe">
+            <i class="fa fa-exchange"></i>
+            {{ t('app','Change to view Anticafe') }}</a>
         {% endif %}
+        {% endif %}
+      </h2>
       <div class="clearfix"></div>
     </div>
-	 <div class="panel-body table-responsive">
-    {{ content|raw }}
+    <div class="panel-body table-responsive">
+      {{ content|raw }}
      </div>
   </div>
 </div>

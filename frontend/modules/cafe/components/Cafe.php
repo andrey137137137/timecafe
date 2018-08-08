@@ -38,4 +38,7 @@ class Cafe extends Component
   public function getId(){
     return $this->cafe?$this->cafe->id:null;
   }
+  public function getName(){
+    return $this->cafe?$this->cafe->name:null;
+  }
 }

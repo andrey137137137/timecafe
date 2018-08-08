@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\modules\visits\model;
+namespace frontend\modules\visits\models;
 
 use frontend\modules\cafe\models\Cafe;
 use frontend\modules\users\models\Users;

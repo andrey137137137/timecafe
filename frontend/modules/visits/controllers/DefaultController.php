@@ -2,8 +2,8 @@
 
 namespace frontend\modules\visits\controllers;
 
-use frontend\modules\visits\model\StartVisit;
-use frontend\modules\visits\model\VisitorLog;
+use frontend\modules\visits\models\StartVisit;
+use frontend\modules\visits\models\VisitorLog;
 use kartik\widgets\Typeahead;
 use yii\web\Controller;
 use Yii;

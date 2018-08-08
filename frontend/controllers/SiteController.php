@@ -2,7 +2,7 @@
 namespace frontend\controllers;
 
 use frontend\modules\visitor\models\Visitor;
-use frontend\modules\visits\model\VisitorLog;
+use frontend\modules\visits\models\VisitorLog;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;

@@ -53,6 +53,12 @@ class m180725_142747_users_RBAC extends \yii\db\Migration
         'Users - может менять кафе пользователю и в системе',
         [$role]
     );
+
+    $this->createPermission(
+        'ChooseCafe',
+        'Cafe - Менять текущее кафе без выхода из системы',
+        [$role]
+    );
   }
 
   public function down()

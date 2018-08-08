@@ -94,5 +94,10 @@
   'Anonymous' => 'Anonymous',
   'Change visible columns in Users table' => 'Change visible columns in Users table',
   'Cafe' => 'Cafe',
+  'Certificate Number' => 'Certificate Number',
+  'Terminal Ans' => 'Terminal Ans',
+  'Kiosk Disc' => 'Kiosk Disc',
+  'Update Visitor: {{f_name}} {{l_name}}' => 'Update Visitor: {{f_name}} {{l_name}}',
+  'Change to view Anticafe' => 'Change to view Anticafe',
 );
 ?>
