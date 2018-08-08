@@ -187,7 +187,7 @@ class AdminController extends Controller
     }
 
     return [
-      'title'=> "Yii::t('app', 'Change visible columns in <?= VisitorLog ?> table')",
+      'title'=> Yii::t('app', 'Change visible columns in Visits table'),
       'content'=>$this->renderAjax('columns', [
         'sel_column' => $sel_column,
         'columns' => $columns,

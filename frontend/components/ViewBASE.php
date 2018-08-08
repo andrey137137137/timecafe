@@ -180,4 +180,7 @@ class ViewBASE extends View
   public function closeModal(){
     return $this->renderAjax("@frontend/views/closeModal.twig");
   }
+  public function reloadPage(){
+    return $this->renderAjax("@frontend/views/reloadPage.twig");
+  }
 }

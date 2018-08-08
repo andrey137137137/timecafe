@@ -1,5 +1,6 @@
-cl
 <script>
   $('.modal-header .close').click();
-  updateMain(false);
+  if(typeof(updateMain)!=="undefined") {
+    updateMain(false);
+  }
 </script>

@@ -11,7 +11,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use frontend\modules\users\models\LoginForm;
 use yii\web\Response;
-
+use yii\helpers\Html;
 
 /**
  * Site controller
@@ -97,11 +97,34 @@ class SiteController extends Controller
        foreach ($cafe_list as $cafe){
          if($cafe['id']==$cafe_id){
            Yii::$app->session->set('cafe_id',$cafe_id);
-           return $this->goBack();
+           if(Yii::$app->request->isAjax) {
+             Yii::$app->response->format = Response::FORMAT_JSON;
+             return [
+                 'title' => Yii::t('app', 'Change cafe'),
+                 'content' => Yii::$app->view->reloadPage(),
+                 'footer' => ""
+             ];
+           }else {
+             return $this->goBack();
+           }
          }
        }
     }
 
+    if(Yii::$app->request->isAjax) {
+      Yii::$app->response->format = Response::FORMAT_JSON;
+      return [
+          'title' => Yii::t('app', 'Change cafe'),
+          'content' => $this->renderAjax('change-cafe', [
+            'cafe_list' => $cafe_list,
+            'isModal'=>true,
+            'cafe_change' =>Yii::$app->cafe->id,
+          ]),
+          'footer' => Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+              Html::button(Yii::t('app', 'Select'), ['class' => 'btn btn-primary', 'type' => "submit"])
+
+      ];
+    }
     Yii::$app->layout="form_page";
 
     return $this->render('change-cafe', [
