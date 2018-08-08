@@ -151,3 +151,46 @@ function userAA(ev, suggestion) {
   }
   console.log(ev,suggestion);
 }
+
+if(is_main) {
+  var template = (function () {
+    var tpls = {};
+
+    $.get('/tpls', function (data) {
+      for(index in data){
+        tpls[index] = Twig.twig({
+          data: data[index],
+        });
+      }
+    }, 'json');
+
+    function render(tpl, data) {
+      if (!tpls[tpl]) return '';
+      return tpls[tpl].render(data);
+    }
+
+    return {
+      render: render
+    }
+  })();
+
+  function updateMain(){
+    $.get('/get_cafe_status',function(data){
+      for(index in data){
+        var wrap=$('#'+index+"_log");
+        if(wrap.length!=1)continue;
+        var els=wrap.find('.tile');
+        els.addClass('old');
+
+        els.remove();
+        for(var i =0; i<data[index].length;i++){
+          item_data=data[index][i];
+          out=template.render(index+"_log",item_data);
+          wrap.append(out);
+        }
+      }
+    },'json')
+  }
+
+  setTimeout(updateMain,300);
+}

@@ -69,7 +69,8 @@ $config = [
         '<module:\w+>/<controller:\w+>/<action:(\w|-)+>/<id:\d+>' => '<module>/<controller>/<action>',
 
         'site/<action>' => '404',
-        //'/<models>/default/<action>' => '404',
+        '<models>/default/<action>' => '404',
+         '<models>/admin'=>'/<models>/admin/index',
         [
           'class' => 'frontend\components\LoginPage',
         ],

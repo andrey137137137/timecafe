@@ -1,6 +1,8 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\modules\visitor\models\Visitor;
+use frontend\modules\visits\model\VisitorLog;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -8,6 +10,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use frontend\modules\users\models\LoginForm;
+use yii\web\Response;
 
 
 /**
@@ -104,6 +107,44 @@ class SiteController extends Controller
     return $this->render('change-cafe', [
         'cafe_list' => $cafe_list,
     ]);
+  }
+
+  public function actionGet_cafe_status(){
+    $request = Yii::$app->request;
+    if (Yii::$app->user->isGuest || !Yii::$app->cafe->id && !$request->isAjax) {
+      throw new ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
+      return false;
+    }
+
+    $out=[
+        'visitors'=> VisitorLog::getUserInCafe()
+    ];
+
+    Yii::$app->response->format = Response::FORMAT_JSON;
+    return $out;
+  }
+
+  public function actionTpls(){
+    $request = Yii::$app->request;
+    if (Yii::$app->user->isGuest || !Yii::$app->cafe->id && !$request->isAjax && !$request->isGet) {
+      throw new ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
+      return false;
+    }
+
+    $out=[];
+    $path=Yii::$app->viewPath.'/browser/';
+    $files=scandir($path);
+    foreach ($files as $key => $value){
+      if (!in_array($value,array(".",".."))){
+        $name=str_replace('.twig','',$value);
+        $out[$name]= file_get_contents ($path.$value);
+      }
+    }
+
+
+    Yii::$app->response->format = Response::FORMAT_JSON;
+
+    return $out;
   }
     /**
      * Logs in a user.

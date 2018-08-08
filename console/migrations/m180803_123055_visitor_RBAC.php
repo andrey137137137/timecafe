@@ -33,6 +33,7 @@ class m180803_123055_visitor_RBAC extends \yii\db\Migration
     $this->execute('ALTER TABLE `visitor` CHANGE `create` `create` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;');
 
 
+    $this->execute('ALTER TABLE `visitor` CHANGE `notice` `notice` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;');
 
     $this->createPermission(
       'VisitorView',

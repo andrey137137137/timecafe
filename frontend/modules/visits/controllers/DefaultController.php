@@ -3,6 +3,7 @@
 namespace frontend\modules\visits\controllers;
 
 use frontend\modules\visits\model\StartVisit;
+use frontend\modules\visits\model\VisitorLog;
 use kartik\widgets\Typeahead;
 use yii\web\Controller;
 use Yii;
@@ -27,37 +28,65 @@ class DefaultController extends Controller
       }
 
       $request = Yii::$app->request;
-      /*if (!$request->isAjax) {
+      if (!$request->isAjax) {
         throw new ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
         return false;
-      }*/
+      }
       Yii::$app->response->format = Response::FORMAT_JSON;
 
-      $model= new StartVisit();
+      $model = new StartVisit();
 
-      $type_list=[
-          1=>Yii::t('app',"New user"),
-          2=>Yii::t('app',"Regular")
+      $type_list = [
+          1 => Yii::t('app', "New user"),
+          2 => Yii::t('app', "Regular")
       ];
-      if(Yii::$app->cafe->can("AnonymousVisitor")){
-        $type_list[0]=Yii::t('app',"Anonymous");
+      if (Yii::$app->cafe->can("AnonymousVisitor")) {
+        $type_list[0] = Yii::t('app', "Anonymous");
       };
       ksort($type_list);
 
-      if($model->load($request->post())&&$model->validate()){
-        return [
-            'title'=> "",
-            'content'=>"<script>$('.modal-header .close').click()</script>",
-            'footer'=> ""
-        ];
-      }
+      if ($model->load($request->post()) && $model->validate()) {
+        if ($model->type == 2) {
+          $model = StartVisit::find()->where(['id' => $model->id])->one();
+          $model->load($request->post());
+        }
+        if ($model->type == 1) $model->id = null;
+
+        if (
+          count($model->errors)==0 &&
+          ($model->type == 0 || $model->save())
+        ) {
+          $visit = new VisitorLog();
+          if ($model->type > 0) {
+            $visit->visitor_id = $model->id;
+          }
+          $visit->type = $model->type;
+          $visit->user_id = Yii::$app->user->id;
+          $visit->cafe_id = Yii::$app->cafe->id;
+          $visit->add_time = date("Y-m-d H:i:s");
+
+          if($visit->save()){
+            Yii::$app->session->addFlash('success', Yii::t('app', 'New visitor added to cafe'));
+            return [
+                'title' => "",
+                'content' => "<script>$('.modal-header .close').click()</script>",
+                'footer' => ""
+            ];
+          }
+
+          if(count($model->errors)==0 && $model->type == 1){
+            $model->type=2;
+          }
+          Yii::$app->session->addFlash('error', Yii::t('app', 'Error added visitor to cafe'));
+        }
+      };
 
       if($model->type===false)$model->type= key($type_list);
 
       $js='<script>
         $("#startvisit-f_name").bind(\'typeahead:select\', userAA)
         .bind(\'typeahead:change\', userAA);
-        $(\'.modal-body\').find(\'input,select\').on(\'change\',userAA);
+        $(\'.modal-body\').find(\'input,select\').not("[type=radio]").on(\'change\',userAA);
        </script>';
 
       return [

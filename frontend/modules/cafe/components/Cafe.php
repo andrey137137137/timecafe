@@ -34,4 +34,8 @@ class Cafe extends Component
     if(!isset($this->iCan[$code]))return false;
     return $this->iCan[$code];
   }
+
+  public function getId(){
+    return $this->cafe?$this->cafe->id:null;
+  }
 }

@@ -16,5 +16,6 @@
                        <span><b>ID</b> : {{code}}</span>
                        </p>',
   'Unable to find repositories for selected.' => 'Unable to find repositories for selected.',
+  'Visitors' => 'Visitors',
 );
 ?>

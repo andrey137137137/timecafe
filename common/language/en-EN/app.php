@@ -94,5 +94,12 @@
   'New user' => 'New user',
   '{{value}} already a user with this {{atribute}}' => '{{value}} already a user with this {{atribute}}',
   'There is already a user with this {atribute}' => 'There is already a user with this {atribute}',
+  'New visitor added to cafe' => 'New visitor added to cafe',
+  'Error added visitor to cafe' => 'Error added visitor to cafe',
+  'Certificate Number' => 'Certificate Number',
+  'Terminal Ans' => 'Terminal Ans',
+  'Kiosk Disc' => 'Kiosk Disc',
+  'Pre Enter' => 'Pre Enter',
+  'Sum No Cert' => 'Sum No Cert',
 );
 ?>

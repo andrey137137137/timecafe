@@ -27,6 +27,9 @@ class m180806_122038_visitor_log extends Migration
       $this->execute("ALTER TABLE `visitor_log` CHANGE `visitor_id` `visitor_id` INT(11) NULL;");
       $this->execute("UPDATE `visitor_log` SET `visitor_id` = NULL WHERE `visitor_id` = 0;");
       $this->execute("DELETE FROM `user` WHERE `user`.`id` = 0");
+
+      $this->execute('ALTER TABLE `visitor_log` CHANGE `notice` `notice` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;');
+      $this->execute('ALTER TABLE `visitor_log` CHANGE `finish_time` `finish_time` DATETIME NULL;');
     }
 
     /**

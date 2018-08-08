@@ -6,7 +6,7 @@ use frontend\modules\visitor\models\Visitor;
 use Yii;
 use yii\base\Model;
 
-class StartVisit extends \yii\db\ActiveRecord
+class StartVisit extends Visitor
 {
 
   /*public $f_name;
@@ -17,12 +17,6 @@ class StartVisit extends \yii\db\ActiveRecord
   public $phone;
   public $email;*/
   public $type=false;
-
-  //таблица задана что б проверить уникальность полей
-  public static function tableName()
-  {
-    return 'visitor';
-  }
 
 //https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md#datasets
   /**
@@ -53,14 +47,17 @@ class StartVisit extends \yii\db\ActiveRecord
         [['f_name', 'l_name', 'code', 'email', 'phone','lg'], 'string'],
         [[ 'id','type'], 'integer'],
         [[ 'email'], 'email'],
+
         [[ 'code','email','phone'], 'unique'
         ,'when' => function($model) {
           return $model->type == 1;
         }],
+
         [[ 'code','email','phone'], 'testUnique'
           ,'when' => function($model) {
           return $model->type == 2;
         }],
+
         [['f_name'],"required",'when' => function($model) {
           return $model->type > 0;
         }, 'whenClient' => "function (attribute, value) {
