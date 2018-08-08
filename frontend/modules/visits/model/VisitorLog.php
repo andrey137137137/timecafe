@@ -174,7 +174,7 @@ class VisitorLog extends \yii\db\ActiveRecord
         $visitor['name']=Yii::t('app', "Anonymous");
       }
       $visitor['id']=$visit['id'];
-      $visitor['start_time']=date(Yii::$app->params['lang']['date'],strtotime($visit['add_time']));
+      $visitor['start_time']=date(Yii::$app->params['lang']['time'],strtotime($visit['add_time']));
       $visitor['user']=$visit->user->name;
       $visitor['type']=$visit->type;
       $visitor['type_str']=VisitorLog::typeList($visit->type);

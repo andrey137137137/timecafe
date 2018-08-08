@@ -189,6 +189,7 @@ if(is_main) {
           wrap.append(out);
         }
       }
+      setTimeout(updateMain,2000);
     },'json')
   }
 
