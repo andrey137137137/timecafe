@@ -28,6 +28,8 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use <?= ltrim($generator->modelClass, '\\') . (isset($modelAlias) ? " as $modelAlias" : "") ?>;
 use kartik\daterange\DateRangeBehavior;
+use yii\db\Expression;
+use frontend\modules\visitor\models\Visitor;
 
 /**
  * <?= $searchModelClass ?> represents the model behind the search form of `<?= $generator->modelClass ?>`.
@@ -102,17 +104,47 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
     // add conditions that should always apply here
 
     $dataProvider = new ActiveDataProvider([
-        'query' => $query,
+      'query' => $query,
+      'pagination' => [
+        'pageSize' => 50,
+      ],
+      'sort'=>array(
+        'defaultOrder'=>[
+          'id'=>SORT_DESC
+        ]
+      ),
     ]);
 
     $this->load($params);
 
     if (!$this->validate()) {
-        // uncomment the following line if you do not want to return any records when validation fails
-        // $query->where('0=1');
-        return $dataProvider;
+      // uncomment the following line if you do not want to return any records when validation fails
+      // $query->where('0=1');
+      return $dataProvider;
     }
 
+<?php if($generator->has_column("visitor_id")){?>
+    if($this->visitor_id==Yii::t('app', 'Anonymous')){
+      $query->andFilterWhere(['is','visitor_id',(new Expression('Null'))]);
+    }else if($this->visitor_id){
+      $query->leftJoin('visitor','visitor.id=visitor_id');
+      Visitor::findByString($this->visitor_id,$query);
+    }
+
+
+<?php  }?>
+<?php if($generator->has_column("cafe_id")){?>
+    $user_id=$this->user_id;
+    if($user_id==0){
+      $user_id=null;
+    }else if($this->user_id==-1){
+      $query->andFilterWhere(['is','user_id',(new Expression('Null'))]);
+    }else if($user_id){
+     $query->andFilterWhere(['user_id'=>new Expression('Null')]);
+    }
+
+
+<?php  }?>
     // grid filtering conditions
     <?= implode("\n        ", $searchConditions) ?>
 

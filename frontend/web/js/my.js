@@ -214,4 +214,5 @@ if(typeof(is_main)!="undefined") {
   }
 
   setInterval(updateMain,2000);
+  updateMain();
 }

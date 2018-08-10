@@ -123,7 +123,7 @@ class AdminController extends Controller
             'canCreate' => $canCreate,
             'afterTable'=>$afterTable,
             'title'=>Yii::t('app', 'VisitorLog list'),
-        ]);
+                    ]);
     }
 
 
@@ -187,7 +187,7 @@ class AdminController extends Controller
     }
 
     return [
-      'title'=> Yii::t('app', 'Change visible columns in Visits table'),
+      'title'=> "Yii::t('app', 'Change visible columns in <?= VisitorLog ?> table')",
       'content'=>$this->renderAjax('columns', [
         'sel_column' => $sel_column,
         'columns' => $columns,

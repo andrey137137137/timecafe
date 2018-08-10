@@ -2,6 +2,7 @@
 
 namespace frontend\modules\cafe\components;
 
+use frontend\modules\users\models\Users;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -12,6 +13,7 @@ class Cafe extends Component
 
   private $cafe=false;
   private $iCan = [];
+  private $usersList = false;
 
   public function init()
   {
@@ -40,5 +42,18 @@ class Cafe extends Component
   }
   public function getName(){
     return $this->cafe?$this->cafe->name:null;
+  }
+
+  public function getUsersList(){
+    if(!$this->cafe)return array();
+
+    if(!$this->usersList) {
+      $this->usersList = Users::find()
+          ->where(['franchisee' => $this->cafe->franchisee])
+          ->asArray()
+          ->all();
+    };
+
+    return $this->usersList;
   }
 }

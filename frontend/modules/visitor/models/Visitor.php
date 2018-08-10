@@ -101,4 +101,42 @@ class Visitor extends \yii\db\ActiveRecord
     {
         return $this->hasMany(PollsAns::className(), ['visitor_id' => 'id']);
     }
+
+    static function findByString($term,$model=false){
+      $term=str_replace('  ',' ',trim(strip_tags($term)));
+      $q = addslashes($term);
+
+      if(!$model){
+        $model=Visitor::find();
+      }
+
+      if(is_numeric($q)){
+        $model=$model->orWhere(['id'=>$q]);
+      }
+
+      $q=explode(' ',$q);
+      if(count($q)==1){
+        $model=$model->orWhere(['like','email',$q[0].'%',false]);
+        $model=$model->orWhere(['like','phone',$q[0]]);
+        $model=$model->orWhere(['like','f_name',$q[0].'%',false]);
+        $model=$model->orWhere(['like','l_name',$q[0].'%',false]);
+        $model=$model->orWhere(['like','code',$q[0]]);
+      }else if(count($q)==2){
+        $model=$model->orWhere([
+            'and',
+            ['like','l_name',$q[0].'%',false],
+            ['like','f_name',$q[1].'%',false],
+        ]);
+
+        $model=$model->orWhere([
+            'and',
+            ['like','l_name',$q[1].'%',false],
+            ['like','f_name',$q[0].'%',false],
+        ]);
+      }else{
+        return false;
+      }
+
+      return $model;
+    }
 }

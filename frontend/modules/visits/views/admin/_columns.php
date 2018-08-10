@@ -4,6 +4,7 @@ use kartik\grid\GridView;
 use common\components\widget\NumberRangerWidget;
 use yii\helpers\ArrayHelper;
 use frontend\modules\users\models\Users;
+use \frontend\modules\visits\models\VisitorLog;
 
 return [
     [
@@ -17,39 +18,42 @@ return [
     'id',
     [
       'attribute' => 'user_id',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'user_id',
-      ])
-    ],
-    [
-      'attribute' => 'visitor_id',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'visitor_id',
-      ])
-    ],
-    [
-      'attribute' => 'type',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'type',
-      ])
-    ],
-    [
-      'attribute'=>'cafe_id',
       'filterType' => GridView::FILTER_SELECT2,
       'format' => 'raw',
       'filter'=> ArrayHelper::merge(
           [
-              '0'=>Yii::t('app',"ALL")
+              '0'=>Yii::t('app',"ALL"),
+              '-1'=>Yii::t('app',"nobody"),
           ],
-          \yii\helpers\ArrayHelper::map((array)Users::getCafesList(), 'id', 'name')
+          ArrayHelper::map((array)Yii::$app->cafe->getUsersList(), 'id', 'name')
       ),
       'value' => function ($model, $key, $index, $column) {
-        $cafe=$model->cafe;
-        return $cafe->name;
+        $user=$model->user;
+        return $user?$user->name:'-';
       },
+    ],
+    [
+      'attribute' => 'visitor_id',
+      'value' => function ($model, $key, $index, $column) {
+        if(!$model->visitor_id)return Yii::t('app', 'Anonymous');
+        $visitor = $model->visitor;
+        return $visitor->f_name.' '.$visitor->l_name;
+      },
+    ],
+    [
+        'attribute' => 'type',
+        'filterType' => GridView::FILTER_SELECT2,
+        'format' => 'raw',
+        'filter'=> ArrayHelper::merge(
+            [
+                '-1'=>Yii::t('app',"ALL"),
+            ],
+            VisitorLog::typeList(false)
+        ),
+        'value' => function ($model, $key, $index, $column) {
+          //return $model->type;
+          return VisitorLog::typeList($model->type);
+        }
     ],
     [
       'attribute' => 'add_time',
@@ -66,6 +70,7 @@ return [
       'filterType' => GridView::FILTER_DATE_RANGE,
       'filterWidgetOptions' =>Yii::$app->params['datetime_option'],
       'value'=> function ($model, $key, $index, $column) {
+        if(!$model->finish_time)return "-";
         $datetime=strtotime($model->finish_time);
         return date(Yii::$app->params['lang']['datetime'], $datetime);
       },

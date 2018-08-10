@@ -29,35 +29,12 @@ class DefaultController extends Controller
     }*/
     Yii::$app->response->format = Response::FORMAT_JSON;
 
-    $term=str_replace('  ',' ',trim(strip_tags($term)));
     $results = [];
-    $q = addslashes($term);
-
-    $visitors=Visitor::find();
-    $q=explode(' ',$q);
-    if(count($q)==1){
-      $visitors=$visitors->orWhere(['like','email',$q[0].'%',false]);
-      $visitors=$visitors->orWhere(['like','phone',$q[0]]);
-      $visitors=$visitors->orWhere(['like','f_name',$q[0].'%',false]);
-      $visitors=$visitors->orWhere(['like','l_name',$q[0].'%',false]);
-    }else if(count($q)==2){
-      $visitors=$visitors->orWhere([
-          'and',
-          ['like','l_name',$q[0].'%',false],
-          ['like','f_name',$q[1].'%',false],
-          ]);
-
-      $visitors=$visitors->orWhere([
-          'and',
-          ['like','l_name',$q[1].'%',false],
-          ['like','f_name',$q[0].'%',false],
-      ]);
-    }else{
-      return array();
-    }
 
 
-      /*  ->orWhere(['like','f_name',$q])*/
+    $visitors=Visitor::findByString($term);
+
+    if(!$visitors)return [];
 
     $visitors=$visitors->limit(30)->all();
 

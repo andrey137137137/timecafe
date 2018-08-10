@@ -59,6 +59,8 @@ class Generator extends \yii\gii\Generator
   private $rangeConditions = [];
 
   public $behaviors = [];
+
+  public $allCafe=true;
   /**
    * @inheritdoc
    */
@@ -175,6 +177,11 @@ class Generator extends \yii\gii\Generator
     $rbacName=$migrationName[count($migrationName)-1];
     $this->rbacName=$rbacName;
 
+    $cols=$this->getColumnNames();
+    if(in_array('cafe_id',$cols)){
+      $this->allCafe=false;
+    }
+
     $controllerFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->controllerClass, '\\')) . '.php');
     $files = [
         new CodeFile($controllerFile, $this->render('controller.php')),
@@ -183,6 +190,7 @@ class Generator extends \yii\gii\Generator
       $searchModel = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->searchModelClass, '\\') . '.php'));
       $files[] = new CodeFile($searchModel, $this->render('search.php'));
     }
+
     $viewPath = $this->getViewPath();
     $templatePath = $this->getTemplatePath() . '/views';
     foreach (scandir($templatePath) as $file) {
@@ -394,28 +402,32 @@ class Generator extends \yii\gii\Generator
     }
     $types = [];
     foreach ($table->columns as $column) {
-      switch ($column->type) {
-        case Schema::TYPE_SMALLINT:
-        case Schema::TYPE_INTEGER:
-        case Schema::TYPE_BIGINT:
-          $type_this='integer';
-          break;
-        case Schema::TYPE_BOOLEAN:
-          $type_this='boolean';
-          break;
-        case Schema::TYPE_FLOAT:
-        case Schema::TYPE_DOUBLE:
-        case Schema::TYPE_DECIMAL:
-        case Schema::TYPE_MONEY:
-          $type_this='number';
-          break;
-        case Schema::TYPE_DATE:
-        case Schema::TYPE_TIME:
-        case Schema::TYPE_DATETIME:
-        case Schema::TYPE_TIMESTAMP:
-        default:
-          $type_this='safe';
-          break;
+      if(in_array($column->name,['visitor_id'])){
+        $type_this='safe';
+      }else {
+        switch ($column->type) {
+          case Schema::TYPE_SMALLINT:
+          case Schema::TYPE_INTEGER:
+          case Schema::TYPE_BIGINT:
+            $type_this = 'integer';
+            break;
+          case Schema::TYPE_BOOLEAN:
+            $type_this = 'boolean';
+            break;
+          case Schema::TYPE_FLOAT:
+          case Schema::TYPE_DOUBLE:
+          case Schema::TYPE_DECIMAL:
+          case Schema::TYPE_MONEY:
+            $type_this = 'number';
+            break;
+          case Schema::TYPE_DATE:
+          case Schema::TYPE_TIME:
+          case Schema::TYPE_DATETIME:
+          case Schema::TYPE_TIMESTAMP:
+          default:
+            $type_this = 'safe';
+            break;
+        }
       }
 
       $types[$type_this][] = $column->name;
@@ -438,7 +450,7 @@ class Generator extends \yii\gii\Generator
 
     if(strpos($name,'color')!==false) return $arr;
     if(strpos($name,'franchisee')!==false) return $arr;
-    if(in_array($name,['id','franchisee','last_task']))return $arr;
+    if(in_array($name,['id','franchisee','last_task','visitor_id']))return $arr;
 
     switch ($type) {
       case Schema::TYPE_SMALLINT:
@@ -458,8 +470,8 @@ class Generator extends \yii\gii\Generator
         ];
         $this->SearchVarsPublic[$name.'_from']=false;
         $this->SearchVarsPublic[$name.'_to']=false;
-        $this->rangeConditions[]="->andFilterWhere(['>=', '{$name}', \$this->{$name}_from])";
-        $this->rangeConditions[]="->andFilterWhere(['<=', '{$name}', \$this->{$name}_to])";
+        $this->rangeConditions[$name][]="->andFilterWhere(['>=', '{$name}', \$this->{$name}_from])";
+        $this->rangeConditions[$name][]="->andFilterWhere(['<=', '{$name}', \$this->{$name}_to])";
         break;
       case Schema::TYPE_DATE:
       case Schema::TYPE_TIME:
@@ -474,8 +486,8 @@ class Generator extends \yii\gii\Generator
             'dateEndAttribute' => $name.'_to',
         ];
         $dt=Schema::TYPE_DATE?'+'.(24*60*60):'';
-        $this->rangeConditions[]="->andFilterWhere(['>=', '{$name}', date(\"Y-m-d H:i:s\",\$this->{$name}_from)])";
-        $this->rangeConditions[]="->andFilterWhere(['<=', '{$name}', date(\"Y-m-d H:i:s\",\$this->{$name}_to".$dt.")])";
+        $this->rangeConditions[$name][]="->andFilterWhere(['>=', '{$name}', date(\"Y-m-d H:i:s\",\$this->{$name}_from)])";
+        $this->rangeConditions[$name][]="->andFilterWhere(['<=', '{$name}', date(\"Y-m-d H:i:s\",\$this->{$name}_to".$dt.")])";
         $arr['match']['/^.+\s\-\s.+$/'][]=$name;
         break;
     };
@@ -527,8 +539,8 @@ class Generator extends \yii\gii\Generator
     $likeConditions = [];
     $hashConditions = [];
 
-
     foreach ($columns as $column => $type) {
+      if(in_array($column,['visitor_id','user_id']))continue;
       switch ($type) {
         case Schema::TYPE_SMALLINT:
         case Schema::TYPE_INTEGER:
@@ -538,6 +550,10 @@ class Generator extends \yii\gii\Generator
         case Schema::TYPE_DOUBLE:
         case Schema::TYPE_DECIMAL:
         case Schema::TYPE_MONEY:
+          if($column=="cafe_id"){
+            $hashConditions[] = " '{$column}' => Yii::\$app->cafe->id,";
+            break;
+          }
           $hashConditions[] = " '{$column}' => \$this->{$column},";
           break;
         case Schema::TYPE_DATE:
@@ -562,7 +578,13 @@ class Generator extends \yii\gii\Generator
     }
 
     if (!empty($this->rangeConditions)) {
-      $conditions[] = "\$query" . implode("\n" . str_repeat(' ', 12), $this->rangeConditions) . ";\n";
+      foreach($this->rangeConditions as $k=>$range){
+        $conditions[] = "
+        //Filter for ranger {$k}
+        if(\$this->{$k}){\n  	     \$query\n".
+        str_repeat(' ', 12).implode("\n" . str_repeat(' ', 12), $range)  . ";\n".str_repeat(' ', 8).'};';
+        //$conditions[] = "\$query" . implode("\n" . str_repeat(' ', 12), $this->rangeConditions) . ";\n";
+      };
     }
     return $conditions;
   }
@@ -681,7 +703,12 @@ class Generator extends \yii\gii\Generator
     return $columns;
   }
 
+  public function has_column($name){
+    $column=$this->getColumns();
+    return isset($column[$name]);
+  }
+/*
   public function getRangeParams(){
 
-  }
+  }*/
 }

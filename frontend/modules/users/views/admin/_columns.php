@@ -61,7 +61,7 @@ return [
             [
                 '0'=>Yii::t('app',"ALL")
             ],
-            \yii\helpers\ArrayHelper::map((array)Users::getCafesList(), 'id', 'name')
+            ArrayHelper::map((array)Users::getCafesList(), 'id', 'name')
         ),
         'value' => function ($model, $key, $index, $column) {
           $cafes=$model->cafes;

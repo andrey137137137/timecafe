@@ -82,6 +82,7 @@ class DefaultController extends Controller
       };
 
       if($model->type===false)$model->type= key($type_list);
+      if(!$model->lg)$model->lg = Yii::$app->user->identity->lg;
 
       $js='<script>
         $("#startvisit-f_name").bind(\'typeahead:select\', userAA)

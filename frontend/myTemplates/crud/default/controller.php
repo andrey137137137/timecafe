@@ -152,7 +152,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             'canCreate' => $canCreate,
             'afterTable'=>$afterTable,
             'title'=><?= $generator->generateString( $modelClass.' list'); ?>,
-            //'forAllCafe'=>true,
+            <?=($generator->allCafe)?"\n            'forAllCafe'=>true,":"";?>
         ]);
 <?php else: ?>
 
@@ -162,7 +162,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             'canCreate' => $canCreate,
             'afterTable'=>$afterTable,
             'title'=><?= $generator->generateString( $modelClass.' list'); ?>,
-            //'forAllCafe'=>true,
+            <?=($generator->allCafe)?"\n            'forAllCafe'=>true,":"";?>
         ]);
 <?php endif; ?>
     }

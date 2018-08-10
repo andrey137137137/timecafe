@@ -69,6 +69,14 @@ class VisitorSearch extends Visitor
 
     $dataProvider = new ActiveDataProvider([
         'query' => $query,
+        'pagination' => [
+            'pageSize' => 50,
+        ],
+        'sort'=>array(
+            'defaultOrder'=>[
+                'id'=>SORT_DESC
+            ]
+        ),
     ]);
 
     $this->load($params);
@@ -92,7 +100,7 @@ class VisitorSearch extends Visitor
             ->andFilterWhere(['like', '.notice', $this->notice])
             ->andFilterWhere(['like', '.lg', $this->lg]);
 
-      if($this->create_from) {
+      if($this->create) {
         $query->andFilterWhere(['>=', 'create', date("Y-m-d H:i:s", $this->create_from)])
             ->andFilterWhere(['<=', 'create', date("Y-m-d H:i:s", $this->create_to + 86400)]);
       };

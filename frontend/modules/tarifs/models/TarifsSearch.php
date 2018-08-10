@@ -101,6 +101,14 @@ class TarifsSearch extends Tarifs
 
     $dataProvider = new ActiveDataProvider([
         'query' => $query,
+        'pagination' => [
+            'pageSize' => 50,
+        ],
+        'sort'=>array(
+            'defaultOrder'=>[
+                'id'=>SORT_DESC
+            ]
+        ),
     ]);
 
     $this->load($params);
