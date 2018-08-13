@@ -102,4 +102,47 @@ class DefaultController extends Controller
 
       ];
     }
+
+  public function actionView($id)
+  {
+    if (Yii::$app->user->isGuest || !Yii::$app->cafe->can("startVisit")) {
+      throw new ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
+      return false;
+    }
+
+    $request = Yii::$app->request;
+    if (!$request->isAjax) {
+      throw new ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
+      return false;
+    }
+    Yii::$app->response->format = Response::FORMAT_JSON;
+
+    $model=VisitorLog::find()->where(['id'=>$id])->one();
+
+    if(!$model){
+      return [
+          'title' => Yii::t('app',"View visit error"),
+          'content' =>Yii::t('app',"Visit not found"),
+          'footer' => Html::button(Yii::t('app','Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]),
+
+    ];
+    }
+
+    /*return $this->renderAjax('view', [
+        'model'=>$model,
+        'cafe' => Yii::$app->cafe,
+    ]);*/
+
+    return [
+        'title' => '<span class="fa fa-user antagon-color-main"></span>'.Yii::t('app',"Estimation visit"),
+        'content' => $this->renderAjax('view', [
+            'model'=>$model,
+            'cafe' => Yii::$app->cafe,
+            ]),
+        'footer' =>
+            Html::button(Yii::t('app','Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+            Html::button(Yii::t('app','Stop'), ['class' => 'btn btn-primary', 'type' => "submit"])
+
+    ];
+  }
 }

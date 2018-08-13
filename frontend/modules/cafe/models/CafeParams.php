@@ -37,6 +37,7 @@ class CafeParams extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
+            [['show_sum'], 'integer'],
             [['name'], 'string', 'max' => 20],
             [['vat_list'], 'string', 'max' => 1000],
             [['time_zone', 'datetime', 'datetime_js', 'date', 'date_js', 'time', 'time_js'], 'string', 'max' => 30],
@@ -59,6 +60,7 @@ class CafeParams extends \yii\db\ActiveRecord
             'date_js' => Yii::t('app', 'Date Js'),
             'time' => Yii::t('app', 'Time'),
             'time_js' => Yii::t('app', 'Time Js'),
+            'show_sum' => Yii::t('app', 'Show sum'),
         ];
     }
 

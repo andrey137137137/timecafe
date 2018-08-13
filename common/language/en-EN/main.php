@@ -17,5 +17,14 @@
                        </div>',
   'Unable to find repositories for selected.' => 'Unable to find repositories for selected.',
   'Visitors' => 'Visitors',
+  'Visitor' => 'Visitor',
+  'id' => 'id',
+  'Duration' => 'Duration',
+  'During visit' => 'During visit',
+  'Tax' => 'Tax',
+  'Amount' => 'Amount',
+  'Input date' => 'Input date',
+  'Input time' => 'Input time',
+  'USD' => 'USD',
 );
 ?>

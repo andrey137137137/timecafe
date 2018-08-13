@@ -246,6 +246,25 @@ $functionsList = [
   'year' => function () {
     return date('Y');
   },
+  'local_time' => function ($date) {
+    if(!is_numeric($date))$date=strtotime($date);
+    return date(Yii::$app->params['lang']['time'],$date);
+  },
+  'local_date' => function ($date) {
+    if(!is_numeric($date))$date=strtotime($date);
+    return date(Yii::$app->params['lang']['date'],$date);
+  },
+  'echo_duration'=>function ($time) {
+    $s= $time % 60;
+    $m= (($time-$s)/60) % 60;
+    $h= ($time-$s-$m*60)/360;
+    if($m<10)$m='0'.$m;
+    if($s<10)$m='0'.$s;
+    return $h.':'.$m;
+  },
+  'cafe'=>function($params){
+      return Yii::$app->cafe->$params;
+  },
   '_ucfirst' => function($value) {
         return ucfirst($value);
   },

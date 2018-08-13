@@ -1,0 +1,35 @@
+<h6>{{ t('main','id') }}: {{ model.id }}</h6>
+
+{% if(model.visitor_id) %}
+  <h6>{{ t('main','Visitor') }}: </h6>
+  <h6>Name: Max Matuhin				</h6>
+  <h6>Email: matuhinmax@mail.ru</h6>
+  <h6>Phone: 632399292</h6>
+  <h6>Native Language: FR</h6>
+  <h6>Number of visits ( week/ 30day / All ): 1 / 1 / 1</h6>
+{% else %}
+  <h6>{{ t('main','Visitor') }}: {{ t('app','Anonymous') }}</h6>
+{% endif %}
+<h6>{{ t('main','Input time') }}: {{ local_time(model.add_time) }}</h6>
+<h6>{{ t('main','Input date') }}: {{ local_date(model.add_time) }}</h6>
+<h6>{{ t('main','Duration') }}: {{ echo_duration(model.duration) }}</h6>
+<h6>{{ t('main','Administrator') }} : {{ model.user.name }}</h6>
+
+{% if model.cost==false %}
+  <h3>{{ model.sum }}</h3>
+
+{% else %}
+  {% if(cafe.params.show_sum==1) %}
+    <h5><b>{{ t('main','Amount') }}: {{ _nf(model.sum) }} {{ cafe.currency }}</b></h5>
+  {% endif %}
+
+  {% for vat in model.vat %}
+    <h5><b>{{ vat.name }}( {{ vat.value }}%): {{ _nf(vat.vat) }} {{ cafe.currency }}</b></h5>
+  {% endfor %}
+
+  <h4><b>{{ t('main','During visit') }}:
+      <span class="cost_pers">{{ _nf(model.cost) }}</span>
+      {{ cafe.currency }}
+    </b>
+  </h4>
+{% endif %}

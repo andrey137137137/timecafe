@@ -16,6 +16,11 @@ class m180806_122038_visitor_log extends Migration
 
       $this->execute('set time_zone = \'+4:00\';');
 
+      $this->addColumn("visitor_log",'vat',$this->string(300));
+      $this->dropColumn('visitor_log', 'tps');
+      $this->dropColumn('visitor_log', 'tvq');
+      $this->dropColumn('visitor_log', 'tip');
+
       $this->execute('ALTER TABLE `visitor_log` CHANGE `add_time` `add_time` TEXT NOT NULL;');
       $this->execute('UPDATE `visitor_log` SET `add_time` = from_unixtime(`add_time`);');
       $this->execute('ALTER TABLE `visitor_log` CHANGE `add_time` `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;');

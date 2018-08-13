@@ -126,5 +126,16 @@
   'User ID' => 'User ID',
   'Time Zone' => 'Time Zone',
   'Vat List' => 'Vat List',
+  'Change to view Anticafe' => 'Change to view Anticafe',
+  'Change cafe' => 'Change cafe',
+  'New visitor added to cafe' => 'New visitor added to cafe',
+  'Visit not found' => 'Visit not found',
+  'View visit error' => 'View visit error',
+  'Estimation visit' => 'Estimation visit',
+  'Stop' => 'Stop',
+  'USD' => '$',
+  'No rates found for this cafe.' => 'No rates found for this cafe.',
+  'Create More' => 'Create More',
+  '' => NULL,
 );
 ?>

@@ -2,6 +2,7 @@
 
 namespace frontend\modules\cafe\components;
 
+use frontend\modules\tarifs\models\Tarifs;
 use frontend\modules\users\models\Users;
 use Yii;
 use yii\base\Component;
@@ -14,6 +15,8 @@ class Cafe extends Component
   private $cafe=false;
   private $iCan = [];
   private $usersList = false;
+  public $tariff=[];
+  public $params=[];
 
   public function init()
   {
@@ -31,6 +34,11 @@ class Cafe extends Component
       $data['params']=$data['cafe']->getParam()->one()->toArray();
       $data['iCan'] = isset(Yii::$app->params['iCan']) ? Yii::$app->params['iCan'] : [];
 
+      $data['tariff']=Tarifs::find()
+          ->where(['cafe_id'=>$data['cafe']['id'],'active'=>0])
+          ->orderBy('start_visit desc')
+          ->asArray()
+          ->all();
       return $data;
     });
 
@@ -39,9 +47,13 @@ class Cafe extends Component
     if($data['cafe']) {
       Yii::$app->timeZone = $data['params']['time_zone'];
       $this->iCan = $data['iCan'];
+      $this->tariff = $data['tariff'];
+      $this->params = $data['params'];
 
       Yii::$app->params['lang']['datetime']=$data['params']['datetime'];
       Yii::$app->params['lang']['datetime_js']=$data['params']['datetime_js'];
+      Yii::$app->params['lang']['datetime_short']=$data['params']['datetime_short'];
+      Yii::$app->params['lang']['datetime_short_js']=$data['params']['datetime_short_js'];
       Yii::$app->params['lang']['date']=$data['params']['date'];
       Yii::$app->params['lang']['date_js']=$data['params']['date_js'];
       Yii::$app->params['lang']['time']=$data['params']['time'];
@@ -61,6 +73,10 @@ class Cafe extends Component
   }
   public function getName(){
     return $this->cafe?$this->cafe->name:null;
+  }
+
+  public function getCurrency(){
+    return $this->cafe?Yii::t('app',$this->cafe->currency):null;
   }
 
   public function getUsersList(){

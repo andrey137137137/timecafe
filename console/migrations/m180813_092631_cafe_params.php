@@ -16,20 +16,23 @@ class m180813_092631_cafe_params extends Migration
       $this->execute('SET SQL_MODE=\'ALLOW_INVALID_DATES\';');
 
       $this->addColumn("cafe",'params_id',$this->integer()->notNull()->defaultValue(1));
-      $this->addColumn("cafe",'vat_value',$this->string());
+      $this->addColumn("cafe",'vat_code',$this->string());
       $this->addColumn("cafe",'logo',$this->string());
 
       $this->createTable('cafe_params', [
         'id' => $this->primaryKey(),
         'name'=> $this->string(20)->notNull(),
         'vat_list'=> $this->string(1000)->defaultValue("{\"tps\":\"794470914RT0001\",\"tvq\":\"1225055111TQ0001\"}"),
+        'show_sum'=> $this->integer(1)->defaultValue(1),
         'time_zone'=> $this->string(30)->defaultValue("Etc/GMT+4"),
-        'datetime'=> $this->string(30)->defaultValue("Y-m-d H:i:s"),
+        'datetime'=> $this->string(30)->defaultValue("Y-m-d g:i:s A"),
         'datetime_js'=> $this->string(30)->defaultValue("YYYY-MM-DD"),
+        'datetime_short'=> $this->string(30)->defaultValue("Y-m-d"),
+        'datetime_short_js'=> $this->string(30)->defaultValue("Y-m-d"),
         'date'=> $this->string(30)->defaultValue("Y-m-d"),
         'date_js'=> $this->string(30)->defaultValue("YYYY-MM-DD"),
-        'time'=> $this->string(30)->defaultValue("H:i"),
-        'time_js'=> $this->string(30)->defaultValue("H:i"),
+        'time'=> $this->string(30)->defaultValue("g:i A"),
+        'time_js'=> $this->string(30)->defaultValue("g:i A"),
       ]);
 
       $this->dropColumn('cafe', 'timeZone');
@@ -42,6 +45,19 @@ class m180813_092631_cafe_params extends Migration
       $params->id=1;
       $params->name="Canada";
       $params->vat_list="[{\"code\":\"tps\",\"name\":\"tps\",\"value\":\"1\",\"add_to_cost\":true,\"only_for_base_cost\":true},{\"code\":\"tvq\",\"name\":\"Tvq\",\"value\":\"0.5\",\"add_to_cost\":true,\"only_for_base_cost\":true}]";
+      $params->save();
+
+      $params= new \frontend\modules\cafe\models\CafeParams();
+      $params->id=2;
+      $params->name="Russia";
+      $params->show_sum=false;
+      $params->vat_list="[{\"code\":\"nds\",\"name\":\"НДС\",\"value\":\"20\",\"add_to_cost\":false,\"only_for_base_cost\":true}]";
+      $params->datetime="Y-m-d H:i:s";
+      $params->datetime_js="Y-m-d H:i:s";
+      $params->date="Y-m-d";
+      $params->date_js="Y-m-d";
+      $params->time="H:i";
+      $params->time_js="H:i";
       $params->save();
 
       $this->addForeignKey (
