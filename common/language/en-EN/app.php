@@ -124,5 +124,7 @@
   'Type' => 'Type',
   'Visitor ID' => 'Visitor ID',
   'User ID' => 'User ID',
+  'Time Zone' => 'Time Zone',
+  'Vat List' => 'Vat List',
 );
 ?>

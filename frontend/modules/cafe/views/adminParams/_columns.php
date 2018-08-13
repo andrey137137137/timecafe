@@ -3,51 +3,34 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use common\components\widget\NumberRangerWidget;
 use yii\helpers\ArrayHelper;
+use frontend\modules\users\models\Users;
 
 return [
+    [
+      'class' => 'kartik\grid\CheckboxColumn',
+      'width' => '20px',
+    ],
     [
       'class' => 'kartik\grid\SerialColumn',
       'width' => '30px',
     ],
     'id',
     'name',
+    'vat_list',
     [
-      'attribute' => 'max_person',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'max_person',
-      ])
-    ],
-    'address',
-    [
-      'attribute'=>'franchisee',
-      'filterType' => GridView::FILTER_SELECT2,
-      'format' => 'raw',
-      'filter'=> ArrayHelper::merge(
-        [
-          ''=>Yii::t('app', 'ALL')
-        ],
-        Yii::$app->params['franchisee']
-      ),
-      'value' => function ($model, $key, $index, $column) {
-        $param= Yii::$app->params['franchisee'];
-        return isset($param[$model->franchisee])?$param[$model->franchisee]:"-";
-      },
-    ],
-    [
-      'attribute'=>'currency',
-      'filterType' => GridView::FILTER_SELECT2,
-      'format' => 'raw',
-      'filter'=> ArrayHelper::merge(
-        [
-          ''=>Yii::t('app', 'ALL')
-        ],
-        Yii::$app->params['currency']
-      ),
-      'value' => function ($model, $key, $index, $column) {
-        $param= Yii::$app->params['currency'];
-        return isset($param[$model->currency])?$param[$model->currency]:"-";
-      },
+        'attribute'=>'time_zone',
+        'filterType' => GridView::FILTER_SELECT2,
+        'format' => 'raw',
+        'filter'=> ArrayHelper::merge(
+            [
+                ''=>Yii::t('app', 'ALL')
+            ],
+            Yii::$app->params['timeZone']
+        ),
+        'value' => function ($model, $key, $index, $column) {
+          $param= Yii::$app->params['timeZone'];
+          return isset($param[$model->timeZone])?$param[$model->timeZone]:"-";
+        },
     ],
     [
       'class' => 'kartik\grid\ActionColumn',

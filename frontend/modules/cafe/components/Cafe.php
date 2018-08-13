@@ -21,12 +21,24 @@ class Cafe extends Component
     $cafe_id = Yii::$app->session->get('cafe_id',false);
     if(!$cafe_id)return;
 
-    $this->cafe=CafeModule::findOne(['id'=>$cafe_id]);
+    $cache = Yii::$app->cache;
 
-    if($this->cafe) {
-      Yii::$app->timeZone = $this->cafe->timeZone;
+    $data = $cache->getOrSet("cafe_params_".$cafe_id, function () use ($cafe_id)  {
+      $data['cafe']=CafeModule::findOne(['id'=>$cafe_id]);
 
-      $this->iCan = isset(Yii::$app->params['iCan']) ? Yii::$app->params['iCan'] : [];
+      if(!$data['cafe'])return false;
+
+      $data['params']=$data['cafe']->getParam()->one()->toArray();
+      $data['iCan'] = isset(Yii::$app->params['iCan']) ? Yii::$app->params['iCan'] : [];
+
+      return $data;
+    });
+
+    $this->cafe=$data['cafe'];
+
+    if($data['cafe']) {
+      Yii::$app->timeZone = $data['params']['time_zone'];
+      $this->iCan = $data['iCan'];
     }else{
       $this->iCan=[];
     }

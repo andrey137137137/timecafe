@@ -19,14 +19,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'address')->textarea(['rows' => 3]) ?>
 
-    <?= $form->field($model, 'tps_code')->textInput() ?>
-
-    <?= $form->field($model, 'tvq_code')->textInput() ?>
-
-    <?= $form->field($model, 'tps_value')->textInput() ?>
-
-    <?= $form->field($model, 'tvq_value')->textInput() ?>
-
 
     <?php if(Yii::$app->user->can('AllFranchisee')) {
       echo $form->field($model, 'franchisee')->dropDownList(Yii::$app->params['franchisee']);
@@ -34,8 +26,6 @@ use yii\widgets\ActiveForm;
 
     <?php if(Yii::$app->user->can('AllChange')) {
       echo $form->field($model, 'currency')->dropDownList(Yii::$app->params['currency']);
-
-      echo $form->field($model, 'timeZone')->dropDownList(Yii::$app->params['timeZone']);
     }?>
 
     <?php if(!$isAjax){?>

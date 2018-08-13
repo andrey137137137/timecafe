@@ -14,30 +14,14 @@ class CafeSearch extends Cafe
 {
   public $max_person_from;
   public $max_person_to;
-  public $tps_value_from;
-  public $tps_value_to;
-  public $tvq_value_from;
-  public $tvq_value_to;
 
   private $slideParams=array (
   'max_person' => 
   array (
     'min' => 0,
-    'max' => 100,
+    'max' => 200,
     'step' => 1,
-  ),
-  'tps_value' => 
-  array (
-    'min' => 0,
-    'max' => 100,
-    'step' => 0.1,
-  ),
-  'tvq_value' => 
-  array (
-    'min' => 0,
-    'max' => 100,
-    'step' => 0.1,
-  ),
+  )
 );
   /**
    * {@inheritdoc}
@@ -45,10 +29,9 @@ class CafeSearch extends Cafe
   public function rules()
   {
       return [
-      [['id', 'max_person', 'max_person_from', 'max_person_to', 'last_task', 'franchisee'], 'integer'],
-            [['name', 'address', 'tps_code', 'tvq_code','currency','timeZone'], 'trim'],
-            [['name', 'address', 'tps_code', 'tvq_code','currency','timeZone'], 'safe'],
-            [['tps_value', 'tps_value_from', 'tps_value_to', 'tvq_value', 'tvq_value_from', 'tvq_value_to'], 'number'],
+      [['id', 'max_person', 'max_person_from', 'max_person_to', 'last_task', 'franchisee','params_id'], 'integer'],
+            [['name', 'address','currency'], 'trim'],
+            [['name', 'address','currency'], 'safe']
     ];
   }
 
@@ -92,25 +75,17 @@ class CafeSearch extends Cafe
              'id' => $this->id,
              'max_person' => $this->max_person,
              'last_task' => $this->last_task,
-             'tps_value' => $this->tps_value,
-             'tvq_value' => $this->tvq_value,
              'franchisee' => $this->franchisee,
              'currency' =>$this->currency,
-             'timeZone' =>$this->timeZone,
         ]);
 
         $query->andFilterWhere(['like', '.name', $this->name])
-            ->andFilterWhere(['like', '.address', $this->address])
-            ->andFilterWhere(['like', '.tps_code', $this->tps_code])
-            ->andFilterWhere(['like', '.tvq_code', $this->tvq_code]);
+            ->andFilterWhere(['like', '.address', $this->address]);
 
-        $query->andFilterWhere(['>=', 'max_person', $this->max_person_from])
-            ->andFilterWhere(['<=', 'max_person', $this->max_person_to])
-            ->andFilterWhere(['>=', 'tps_value', $this->tps_value_from])
-            ->andFilterWhere(['<=', 'tps_value', $this->tps_value_to])
-            ->andFilterWhere(['>=', 'tvq_value', $this->tvq_value_from])
-            ->andFilterWhere(['<=', 'tvq_value', $this->tvq_value_to]);
-
+        if($this->max_person_from) {
+          $query->andFilterWhere(['>=', 'max_person', $this->max_person_from])
+              ->andFilterWhere(['<=', 'max_person', $this->max_person_to]);
+        }
     return $dataProvider;
   }
 
