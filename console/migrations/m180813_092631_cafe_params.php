@@ -20,18 +20,17 @@ class m180813_092631_cafe_params extends Migration
       $this->addColumn("cafe",'logo',$this->string());
 
       $this->createTable('cafe_params', [
-          'id' => $this->primaryKey(),
-          'name'=> $this->string(20)->notNull(),
-          'vat_list'=> $this->string(1000)->defaultValue("{\"tps\":\"794470914RT0001\",\"tvq\":\"1225055111TQ0001\"}"),
-          'time_zone'=> $this->string(30)->defaultValue("Etc/GMT+4"),
+        'id' => $this->primaryKey(),
+        'name'=> $this->string(20)->notNull(),
+        'vat_list'=> $this->string(1000)->defaultValue("{\"tps\":\"794470914RT0001\",\"tvq\":\"1225055111TQ0001\"}"),
+        'time_zone'=> $this->string(30)->defaultValue("Etc/GMT+4"),
         'datetime'=> $this->string(30)->defaultValue("Y-m-d H:i:s"),
-        'datetime_js'=> $this->string(30)->defaultValue("Y-m-d H:i:s"),
+        'datetime_js'=> $this->string(30)->defaultValue("YYYY-MM-DD"),
         'date'=> $this->string(30)->defaultValue("Y-m-d"),
-        'date_js'=> $this->string(30)->defaultValue("Y-m-d"),
+        'date_js'=> $this->string(30)->defaultValue("YYYY-MM-DD"),
         'time'=> $this->string(30)->defaultValue("H:i"),
         'time_js'=> $this->string(30)->defaultValue("H:i"),
       ]);
-
 
       $this->dropColumn('cafe', 'timeZone');
       $this->dropColumn('cafe', 'tps_code');

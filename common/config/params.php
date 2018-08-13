@@ -21,4 +21,10 @@ return [
       "Etc/GMT+4"=>"Etc/GMT+4",
       "Europe/Moscow"=>"Europe/Moscow"
   ],
+  'lang'=>[
+      "datetime"=>'Y-m-d H:i:s',
+      "datetime_js"=>'Y-m-d H:i:s',
+      "date"=>'Y-m-d',
+      "time"=>'H:i',
+  ],
 ];

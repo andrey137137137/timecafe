@@ -39,6 +39,13 @@ class Cafe extends Component
     if($data['cafe']) {
       Yii::$app->timeZone = $data['params']['time_zone'];
       $this->iCan = $data['iCan'];
+
+      Yii::$app->params['lang']['datetime']=$data['params']['datetime'];
+      Yii::$app->params['lang']['datetime_js']=$data['params']['datetime_js'];
+      Yii::$app->params['lang']['date']=$data['params']['date'];
+      Yii::$app->params['lang']['date_js']=$data['params']['date_js'];
+      Yii::$app->params['lang']['time']=$data['params']['time'];
+      Yii::$app->params['lang']['time_js']=$data['params']['time_js'];
     }else{
       $this->iCan=[];
     }
