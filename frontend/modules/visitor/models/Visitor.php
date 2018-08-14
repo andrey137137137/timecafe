@@ -139,4 +139,9 @@ class Visitor extends \yii\db\ActiveRecord
 
       return $model;
     }
+
+    public function getLang(){
+      $lg_list=Yii::$app->params['lg_list'];
+      return isset($lg_list[$this->lg])?$lg_list[$this->lg]:$this->lg;
+    }
 }

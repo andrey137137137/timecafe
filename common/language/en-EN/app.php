@@ -143,5 +143,9 @@
   'The visit is already on a pause' => 'The visit is already on a pause',
   'The visit is not on a pause' => 'The visit is not on a pause',
   'The visit was removed from a pause.' => 'The visit was removed from a pause.',
+  'The visit has already been completed.' => 'The visit has already been completed.',
+  'The visit was successfully completed.' => 'The visit was successfully completed.',
+  'Acceptance of payment.' => 'Acceptance of payment.',
+  'There is already a user with this {atribute}' => 'There is already a user with this {atribute}',
 );
 ?>

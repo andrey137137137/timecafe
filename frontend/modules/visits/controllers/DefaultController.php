@@ -115,7 +115,6 @@ class DefaultController extends Controller
           'title' => Yii::t('app', "View visit error"),
           'content' => Yii::t('app', "Visit not found"),
           'footer' => Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]),
-
       ];
     }
 
@@ -125,7 +124,6 @@ class DefaultController extends Controller
     ]);*/
 
     $button = Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]);
-
 
     if ($model->cost !== false) {
       if($model->pause_start){
@@ -197,4 +195,41 @@ class DefaultController extends Controller
 
   }
 
+  public function actionStop($id)
+  {
+    $model = VisitorLog::find()->where(['id' => $id])->one();
+
+    if (!$model) {
+      return [
+          'title' => Yii::t('app', "View visit error"),
+          'content' => Yii::t('app', "Visit not found"),
+          'footer' => Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]),
+      ];
+    }
+
+    if($model->finish_time){
+      return [
+          'title' => Yii::t('app', "View visit error"),
+          'content' => Yii::t('app', "The visit has already been completed."),
+          'footer' => Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]),
+      ];
+    }
+
+    $model->endPause();
+    $model->finish_time = date("Y-m-d H:i:s");
+    $model->save();
+
+
+    $button = Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]);
+    Yii::$app->session->addFlash('success', Yii::t('app', 'The visit was successfully completed.'));
+
+    return [
+        'title' => Yii::t('app', "Acceptance of payment."),
+        'content' => $this->renderAjax('view', [
+            'model' => $model,
+            'cafe' => Yii::$app->cafe,
+        ]),
+        'footer' => $button
+    ];
+  }
 }

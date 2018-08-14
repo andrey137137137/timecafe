@@ -26,5 +26,9 @@
   'Input date' => 'Input date',
   'Input time' => 'Input time',
   'USD' => 'USD',
+  'Number of visits ( week/ 30day / All )' => 'Number of visits ( week/ 30day / All )',
+  'Native Language' => 'Native Language',
+  'Phone' => 'Phone',
+  'Email' => 'Email',
 );
 ?>
