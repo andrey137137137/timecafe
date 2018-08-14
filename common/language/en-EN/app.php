@@ -137,5 +137,11 @@
   'No rates found for this cafe.' => 'No rates found for this cafe.',
   'Create More' => 'Create More',
   '' => NULL,
+  'The visit is paused' => 'The visit is paused',
+  'vat' => 'vat',
+  'Resume' => 'Resume',
+  'The visit is already on a pause' => 'The visit is already on a pause',
+  'The visit is not on a pause' => 'The visit is not on a pause',
+  'The visit was removed from a pause.' => 'The visit was removed from a pause.',
 );
 ?>

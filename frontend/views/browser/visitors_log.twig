@@ -1,4 +1,4 @@
-<div class="tile duble-width {{ color }}" type="{{ type }}" code="{{ id }}">
+<div class="tile duble-width {{ color }}{% if  pause_start %} pause{% endif %}" type="{{ type }}" code="{{ id }}">
   <a class="ajax view fg-white" role="modal-remote" href="/visits/view?id={{ id }}">
     <div class="tile-content">
       <div class="text-right padding-10 padding-off-top">

@@ -1,3 +1,9 @@
+{{ use('yii\widgets\ActiveForm') }}
+
+{% set form = active_form_begin() %}
+  {{ form.field(model, 'id').hiddenInput().label(false, {'style':'display:none'})|raw }}
+{{ active_form_end() }}
+
 <h6>{{ t('main','id') }}: {{ model.id }}</h6>
 
 {% if(model.visitor_id) %}

@@ -124,6 +124,7 @@ function stopEvent(e){
   return false;
 }
 
+//показать фильтр в таблице
 function showControl(e){
   id=$(this).attr('for');
   control_d=eval(id);
@@ -136,6 +137,8 @@ function showControl(e){
   return false;
 }
 
+
+//выпадающий список юеров при поиске
 //http://twitter.github.io/typeahead.js/examples/
 //https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md#datasets
 function userAA(ev, suggestion) {
@@ -149,9 +152,9 @@ function userAA(ev, suggestion) {
     });
     $('#startvisit-type input[value=2][type=radio]')[0].checked = true;
   }
-  console.log(ev,suggestion);
 }
 
+//операции на стартовом экране
 if(typeof(is_main)!="undefined") {
   var template = (function () {
     var tpls = {};

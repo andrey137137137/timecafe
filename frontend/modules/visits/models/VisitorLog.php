@@ -79,9 +79,9 @@ class VisitorLog extends \yii\db\ActiveRecord
         return [
             [['user_id','cafe_id'], 'required'],
             [['user_id', 'visitor_id', 'type', 'cafe_id', 'pay_state', 'pause_start', 'pause', 'certificate_type', 'guest_m', 'guest_chi', 'chi', 'pre_enter', 'kiosk_disc', 'terminal_ans'], 'integer'],
-            [['add_time', 'finish_time'], 'safe'],
+            [['add_time', 'finish_time','vat'], 'safe'],
             [['comment', 'notice', 'visit_cnt', 'pay_man', 'cnt_disk', 'certificate_number'], 'string'],
-            [['cost', 'sum', 'vat', 'certificate_val', 'sum_no_cert'], 'number'],
+            [['cost', 'sum', 'certificate_val', 'sum_no_cert'], 'number'],
         ];
     }
 
@@ -283,6 +283,7 @@ class VisitorLog extends \yii\db\ActiveRecord
       $visitor['start_time']=date(Yii::$app->params['lang']['time'],strtotime($visit['add_time']));
       $visitor['user']=$visit->user->name;
       $visitor['type']=$visit->type;
+      $visitor['pause_start']=$visit->pause_start;
       $visitor['visit_cnt']=$visit->visit_cnt;
       $visitor['type_str']=VisitorLog::typeList($visit->type);
       $visitor['color']=$colors[$visit->type];
@@ -294,4 +295,9 @@ class VisitorLog extends \yii\db\ActiveRecord
     return $out;
   }
 
+  public function endPause(){
+    if(!$this->pause_start)return;
+    $this->pause+=time()-$this->pause_start;
+    $this->pause_start=0;
+  }
 }
