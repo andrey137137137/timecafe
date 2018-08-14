@@ -82,6 +82,7 @@ class VisitorLog extends \yii\db\ActiveRecord
             [['add_time', 'finish_time','vat'], 'safe'],
             [['comment', 'notice', 'visit_cnt', 'pay_man', 'cnt_disk', 'certificate_number'], 'string'],
             [['cost', 'sum', 'certificate_val', 'sum_no_cert'], 'number'],
+            ['comment','string','min'=>10]
         ];
     }
 
@@ -300,9 +301,11 @@ class VisitorLog extends \yii\db\ActiveRecord
     return $out;
   }
 
-  public function endPause(){
+  public function endPause($onlyCalc=false){
     if(!$this->pause_start)return;
     $this->pause+=time()-$this->pause_start;
-    $this->pause_start=0;
+    if(!$onlyCalc) {
+      $this->pause_start = 0;
+    }
   }
 }

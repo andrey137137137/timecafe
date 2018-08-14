@@ -30,5 +30,7 @@
   'Native Language' => 'Native Language',
   'Phone' => 'Phone',
   'Email' => 'Email',
+  'Pause' => 'Pause',
+  'on pause' => 'on pause',
 );
 ?>

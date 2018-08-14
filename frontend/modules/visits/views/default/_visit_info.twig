@@ -1,0 +1,46 @@
+<h6>{{ t('main','id') }}: {{ model.id }}</h6>
+
+{% if(model.visitor_id) %}
+  {%  set visitor = model.visitor %}
+  <h6>{{ t('main','Visitor') }}: {{ visitor.f_name }} {{ visitor.l_name	}}</h6>
+  <h6>{{ t('main','Email') }}: {{ visitor.email }}</h6>
+  <h6>{{ t('main','Phone') }}: {{ visitor.phone }}</h6>
+  <h6>{{ t('main','Native Language') }}: {{ visitor.lang }}</h6>
+  <h6>{{ t('main','Number of visits ( week/ 30day / All )') }}: {{ model.visit_cnt }}</h6>
+{% else %}
+  <h6>{{ t('main','Visitor') }}: {{ t('app','Anonymous') }}</h6>
+{% endif %}
+<h6>{{ t('main','Input time') }}: {{ local_time(model.add_time) }}</h6>
+<h6>{{ t('main','Input date') }}: {{ local_date(model.add_time) }}</h6>
+<h6>{{ t('main','Duration') }}: {{ echo_duration(model.duration) }}</h6>
+
+{% if model.pause %}
+  <h6>
+    {{ t('main','Pause') }}:
+    {{ echo_duration(model.pause) }}
+    {% if model.pause_start %}
+      <b>{{ t('main','on pause') }}</b>
+    {% endif %}
+  </h6>
+{% endif %}
+
+<h6>{{ t('main','Administrator') }} : {{ model.user.name }}</h6>
+
+{% if model.cost==false %}
+  <h3>{{ model.sum }}</h3>
+
+{% else %}
+  {% if(cafe.params.show_sum==1) %}
+    <h5><b>{{ t('main','Amount') }}: {{ _nf(model.sum) }} {{ cafe.currency }}</b></h5>
+  {% endif %}
+
+  {% for vat in model.vat %}
+    <h5><b>{{ vat.name }}( {{ vat.value }}%): {{ _nf(vat.vat) }} {{ cafe.currency }}</b></h5>
+  {% endfor %}
+
+  <h4><b>{{ t('main','During visit') }}:
+      <span class="cost_pers">{{ _nf(model.cost) }}</span>
+      {{ cafe.currency }}
+    </b>
+  </h4>
+{% endif %}

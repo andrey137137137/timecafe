@@ -1,0 +1,7 @@
+{% include '_visit_info.twig' %}
+
+{{ use('yii\widgets\ActiveForm') }}
+
+{% set form = active_form_begin() %}
+  {{ form.field(model, 'id').hiddenInput().label(false, {'style':'display:none'})|raw }}
+{{ active_form_end() }}

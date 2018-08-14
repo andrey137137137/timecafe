@@ -256,8 +256,8 @@ $functionsList = [
   },
   'echo_duration'=>function ($time) {
     $s= $time % 60;
-    $m= (($time-$s)/60) % 60;
-    $h= ($time-$s-$m*60)/360;
+    $m= round((($time-$s)/60) % 60);
+    $h= round(($time-$s-$m*60)/360);
     if($m<10)$m='0'.$m;
     if($s<10)$m='0'.$s;
     return $h.':'.$m;
@@ -288,6 +288,8 @@ $functionsList = [
 
 if (YII_DEBUG) {
   $functionsList['_ddd']='ddd';
+}else{
+  $functionsList['_ddd']=function(){};
 }
 
 return $functionsList;

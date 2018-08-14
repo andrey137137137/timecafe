@@ -147,5 +147,14 @@
   'The visit was successfully completed.' => 'The visit was successfully completed.',
   'Acceptance of payment.' => 'Acceptance of payment.',
   'There is already a user with this {atribute}' => 'There is already a user with this {atribute}',
+  'Not Paid' => 'Not Paid',
+  'Pay Card' => 'Pay Card',
+  'Pay Cash' => 'Pay Cash',
+  'Acceptance of payment (NOT PAY).' => 'Acceptance of payment (NOT PAY).',
+  'Back' => 'Back',
+  'Field is required.' => 'Field is required.',
+  'Check visit' => 'Check visit',
+  'Send mail' => 'Send mail',
+  'Print check' => 'Print check',
 );
 ?>

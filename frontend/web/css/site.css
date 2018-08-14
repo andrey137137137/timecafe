@@ -63,9 +63,9 @@
 }
 /* Artur_07082018*/
 @media screen and (min-width: 480px){.select2-container--krajee .select2-dropdown{
-min-width:100px;
-white-space: nowrap;
-width: auto !important;
+  min-width:100px;
+  white-space: nowrap;
+  width: auto !important;
 }}
 .select2-container--krajee .select2-selection,
 .select2-container--krajee .select2-search--dropdown .select2-search__field,
@@ -73,9 +73,42 @@ width: auto !important;
 .select2-container--krajee .select2-selection--single,
 .bootstrap-dialog .modal-header{border-radius:0px !important;box-shadow: none!important;}
 .tt-menu .tt-suggestion {
-    margin: -15px 0px !important;
-    border-bottom: 1px solid #ccc !important;
+  margin: -15px 0px !important;
+  border-bottom: 1px solid #ccc !important;
 }
 .modal.fade.in {
-    padding-right: 0px !important;
+  padding-right: 0px !important;
+}
+.tile.pause{
+  opacity: 0.6;
+}
+
+/*фикс модалки что б была по центру*/
+#ajaxCrudModal{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom: 0;
+  margin: 0;
+  background: transparent;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+#ajaxCrudModal .modal-dialog{
+  /* max-width: 500px; */
+  /* margin: auto auto; */
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  overflow: auto;
+}
+
+#ajaxCrudModal .modal-content{
+  margin: auto auto;
+  overflow: auto;
+  max-width: 500px;
+  min-width: 30vw;
 }

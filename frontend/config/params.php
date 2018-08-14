@@ -22,5 +22,23 @@ return [
     ],
     'defaultAccess'=>[
         "VisitorView","ChooseCafe"
+    ],
+    'iCan'=>[
+        "startVisit" => true,     //Работа с визитами
+        "AnonymousVisitor"=>true, //Анонимный пользователь
+        "payCash" => true,        //Оплата наличкой
+        "payCard" => true,        //Оплата картой
+        "payNOT" => true,         //Отказ оплаты
+    ],
+    'datetime_option'=>[
+        'convertFormat'=>false,
+        'presetDropdown' => true,
+        'pluginOptions'=>[
+            'separator' => ' - ',
+            'format' => 'YYYY-MM-DD',
+            'locale' => [
+                'format' => 'YYYY-MM-DD'
+            ],
+        ]
     ]
 ];

@@ -135,13 +135,15 @@ class DefaultController extends Controller
       $button .= Html::a(Yii::t('app', 'Stop'), ['/visits/stop', 'id' => $model->id], ['class' => 'btn btn-success', "role" => "modal-remote"]);
     }
 
+    $model->endPause(true);
     return [
         'title' => '<span class="fa fa-user antagon-color-main"></span>' . Yii::t('app', "Estimation visit"),
         'content' => $this->renderAjax('view', [
             'model' => $model,
             'cafe' => Yii::$app->cafe,
         ]),
-        'footer' => $button
+        'footer' => $button,
+      'header'=>"1231",
     ];
   }
 
@@ -219,13 +221,143 @@ class DefaultController extends Controller
     $model->finish_time = date("Y-m-d H:i:s");
     $model->save();
 
-
-    $button = Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]);
     Yii::$app->session->addFlash('success', Yii::t('app', 'The visit was successfully completed.'));
+
+    return $this->actionPay($id);
+  }
+
+  public function actionPay($id,$method=false){
+
+    $model = VisitorLog::find()->where(['id' => $id])->one();
+
+    if (!$model) {
+      return [
+          'title' => Yii::t('app', "View visit error"),
+          'content' => Yii::t('app', "Visit not found"),
+          'footer' => Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]),
+      ];
+    }
+
+    if ($model->pay_state!=0) {
+      return [
+          'title' => Yii::t('app', "View visit error"),
+          'content' => Yii::t('app', "The visit has already been paid."),
+          'footer' => Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]),
+      ];
+    }
+
+    $button = '';//Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]);
+    $request = Yii::$app->request;
+
+    if(Yii::$app->cafe->can('payNOT')){
+      if($method=="NOT"){
+        if ($model->load($request->post()) && $model->validate()) {
+          if(mb_strlen($model->comment)<10){
+            $model->addError(
+                'comment',
+                Yii::t(
+                    'app',
+                    'Field is required.'));;
+          }else{
+            //сохраняем и идем на следующий шаг
+            $model->pay_state=-1;
+            $model->save();
+            return $this->actionPrint_check($id);
+          }
+        }
+
+        $button = Html::a(Yii::t('app', 'Back'),
+            ['/visits/pay', 'id' => $model->id],
+            ['class' => 'btn btn-default pull-left', "role" => "modal-remote"]
+        );
+        $button .= Html::button(
+            '<i class="icon-metro-cc-nc"></i>'.Yii::t('app', 'Not Paid'),
+            ['class' => 'btn bg-scarlet fg-white', 'type' => "submit"]
+        );
+        return [
+            'title' => Yii::t('app', "Acceptance of payment (NOT PAY)."),
+            'content' => $this->renderAjax('not_pay', [
+                'model' => $model,
+                'cafe' => Yii::$app->cafe,
+            ]),
+            'footer' => $button
+        ];
+      }
+
+      $button .= Html::a(
+          '<i class="icon-metro-cc-nc"></i>'.Yii::t('app', 'Not Paid'),
+          ['/visits/pay', 'id' => $model->id,'method'=>"NOT"],
+          ['class' => 'btn bg-scarlet fg-white', "role" => "modal-remote"]
+      );
+    }
+
+    if(Yii::$app->cafe->can('payCard')){
+      if($method=="Card"){
+        //сохраняем и идем на следующий шаг
+        $model->pay_state=1;
+        $model->save();
+        return $this->actionPrint_check($id);
+      };
+      $button .= Html::a(
+          '<i class="fa fa-credit-card"></i>'.Yii::t('app', 'Pay Card'),
+          ['/visits/pay', 'id' => $model->id,'method'=>"Card"],
+          ['class' => 'btn btn-info fg-white', "role" => "modal-remote"]
+      );
+    }
+
+    if(Yii::$app->cafe->can('payCash')){
+      if($method=="Cash"){
+        //сохраняем и идем на следующий шаг
+
+        $model->pay_state=2;
+        $model->save();
+        return $this->actionPrint_check($id);
+      };
+      $button .= Html::a(
+          '<i class="fa fa-money"></i>'.Yii::t('app', 'Pay Cash'),
+          ['/visits/pay', 'id' => $model->id,'method'=>"Cash"],
+          ['class' => 'btn btn-success fg-white', "role" => "modal-remote"]
+      );
+    }
 
     return [
         'title' => Yii::t('app', "Acceptance of payment."),
-        'content' => $this->renderAjax('view', [
+        'content' => $this->renderAjax('stop', [
+            'model' => $model,
+            'cafe' => Yii::$app->cafe,
+        ]),
+        'footer' => $button
+    ];
+  }
+
+
+  public function actionPrint_check($id,$method=false){
+    $model = VisitorLog::find()->where(['id' => $id])->one();
+
+    if (!$model) {
+      return [
+          'title' => Yii::t('app', "View visit error"),
+          'content' => Yii::t('app', "Visit not found"),
+          'footer' => Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]),
+      ];
+    }
+
+    $button = Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]);
+
+    /*$button .= Html::a(
+        '<i class="fa fa-print"></i>'.Yii::t('app', 'Print check'),
+        ['/visits/print_check', 'id' => $model->id,'method'=>"print"],
+        ['class' => 'btn btn-blue-gem', "role" => "modal-remote"]
+    );
+
+    $button .= Html::a(
+        '<i class="fa fa-envelope-o"></i>'.Yii::t('app', 'Send mail'),
+        ['/visits/print_check', 'id' => $model->id,'method'=>"mail"],
+        ['class' => 'btn btn-success', "role" => "modal-remote"]
+    );*/
+    return [
+        'title' => Yii::t('app', "Check visit"),
+        'content' => $this->renderAjax('stop', [
             'model' => $model,
             'cafe' => Yii::$app->cafe,
         ]),
