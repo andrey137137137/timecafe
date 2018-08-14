@@ -12,9 +12,12 @@ echo $form->field($generator, 'indexWidgetType')->dropDownList([
     'grid' => 'GridView',
 ]);
 echo $form->field($generator, 'enableI18N')->checkbox();
+
 echo $form->field($generator, 'enablePjax')->checkbox();
 
 echo $form->field($generator, 'enableRBAC')->checkbox();
+
+echo $form->field($generator, 'disableDelate')->checkbox();
 
 echo $form->field($generator, 'messageCategory');
 

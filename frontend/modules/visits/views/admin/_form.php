@@ -32,12 +32,6 @@ use frontend\modules\users\models\Users;
 
     <?= $form->field($model, 'sum')->textInput() ?>
 
-    <?= $form->field($model, 'tip')->textInput() ?>
-
-    <?= $form->field($model, 'tps')->textInput() ?>
-
-    <?= $form->field($model, 'tvq')->textInput() ?>
-
     <?= $form->field($model, 'notice')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'pay_state')->textInput() ?>
@@ -71,6 +65,8 @@ use frontend\modules\users\models\Users;
     <?= $form->field($model, 'terminal_ans')->textInput() ?>
 
     <?= $form->field($model, 'certificate_number')->textarea(['rows' => 6]) ?>
+
+    <?= $form->field($model, 'vat')->textInput(['maxlength' => true]) ?>
 
     <?php if(!$isAjax){?>
       <div class="form-group">

@@ -72,13 +72,13 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     public function behaviors()
     {
       return [
-        'verbs' => [
+<?php if(!$generator->disableDelate){ ?>      'verbs' => [
           'class' => VerbFilter::className(),
           'actions' => [
             'delete' => ['post'],
             'bulk-delete' => ['post'],
           ],
-        ],
+        ],<?php }?>
       ];
     }
 
@@ -106,8 +106,8 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         $canCreate = Yii::$app->user->can('<?=$generator->rbacName;?>Create');
         $actions = "";
         $actions.= Yii::$app->user->can('<?=$generator->rbacName;?>Update')?"{update}":"";
-        $actions.= Yii::$app->user->can('<?=$generator->rbacName;?>Delete')?"{delete}":"";
-        $afterTable='';
+<?php if(!$generator->disableDelate): ?>        $actions.= Yii::$app->user->can('<?=$generator->rbacName;?>Delete')?"{delete}":"";
+<?php endif;?>        $afterTable='';<?php if(!$generator->disableDelate): ?>
         if( Yii::$app->user->can('<?=$generator->rbacName;?>Delete')){
           $afterTable=BulkButtonWidget::widget([
             'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp; '.<?=$generator->generateString("Delete All");?>,
@@ -122,11 +122,12 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             ]),
             ]).
             '<div class="clearfix"></div>';
-        };
+        };<?php endif;?>
 <?php }else{?>
         $canCreate=true;
-        $actions = "{update}{delete}";
+<?php if(!$generator->disableDelate): ?>        $actions = "{update}{delete}";<?php endif;?>
 <?php };?>
+
         $columns = include(__DIR__.'<?=$generator->getViewPathFromController('_columns');?>');
         if(Yii::$app->user->isGuest){
           $sel_column=Yii::$app->session->get("columns_<?= $modelClass ?>",false);
@@ -152,7 +153,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             'canCreate' => $canCreate,
             'afterTable'=>$afterTable,
             'title'=><?= $generator->generateString( $modelClass.' list'); ?>,
-            <?=($generator->allCafe)?"\n            'forAllCafe'=>true,":"";?>
+<?=($generator->allCafe)?"            'forAllCafe'=>true,":"";?>
         ]);
 <?php else: ?>
 
@@ -364,7 +365,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
           ];
         }
     }
-
+<?php if(!$generator->disableDelate){ ?>
     /**
      * Delete an existing <?= $modelClass ?> model.
      * For ajax request will return json object
@@ -432,7 +433,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         return $this->redirect(['index']);
       }
        
-    }
+    }<?php };?>
 
     /**
      * Finds the <?= $modelClass ?> model based on its primary key value.

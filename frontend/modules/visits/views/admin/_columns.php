@@ -4,7 +4,6 @@ use kartik\grid\GridView;
 use common\components\widget\NumberRangerWidget;
 use yii\helpers\ArrayHelper;
 use frontend\modules\users\models\Users;
-use \frontend\modules\visits\models\VisitorLog;
 
 return [
     [
@@ -41,25 +40,25 @@ return [
       },
     ],
     [
-        'attribute' => 'type',
-        'filterType' => GridView::FILTER_SELECT2,
-        'format' => 'raw',
-        'filter'=> ArrayHelper::merge(
-            [
-                '-1'=>Yii::t('app',"ALL"),
-            ],
-            VisitorLog::typeList(false)
-        ),
-        'value' => function ($model, $key, $index, $column) {
-          //return $model->type;
-          return VisitorLog::typeList($model->type);
-        }
+      'attribute' => 'type',
+      'filterType' => GridView::FILTER_SELECT2,
+      'format' => 'raw',
+      'filter'=> ArrayHelper::merge(
+          [
+              '-1'=>Yii::t('app',"ALL"),
+          ],
+          \frontend\modules\visits\models\VisitorLog::typeList()
+      ),
+      'value' => function ($model, $key, $index, $column) {
+        return \frontend\modules\visits\models\VisitorLog::typeList($model->type);
+      }
     ],
     [
       'attribute' => 'add_time',
       'filterType' => GridView::FILTER_DATE_RANGE,
       'filterWidgetOptions' =>Yii::$app->params['datetime_option'],
       'value'=> function ($model, $key, $index, $column) {
+        if(!$model->add_time)return '-';
         $datetime=strtotime($model->add_time);
         return date(Yii::$app->params['lang']['datetime'], $datetime);
       },
@@ -70,69 +69,78 @@ return [
       'filterType' => GridView::FILTER_DATE_RANGE,
       'filterWidgetOptions' =>Yii::$app->params['datetime_option'],
       'value'=> function ($model, $key, $index, $column) {
-        if(!$model->finish_time)return "-";
+        if(!$model->finish_time)return '-';
         $datetime=strtotime($model->finish_time);
         return date(Yii::$app->params['lang']['datetime'], $datetime);
       },
+    ],
+    [
+        'attribute' => 'sum',
+        'filter'=>NumberRangerWidget::widget([
+            'model'=>$searchModel,
+            'attribute'=>'sum',
+        ]),
+        'value'=>function ($model, $key, $index, $column) {
+          return number_format($model->sum,  2,'.',' ').' '.Yii::$app->cafe->getCurrency();
+        }
+    ],
+    [
+        'attribute' => 'vat',
+        'filter'=>false,
+        'enableSorting' => false,
+        'format' => 'raw',
+        'value'=>function ($model, $key, $index, $column) {
+          $out=array();
+          $vat_list=$model->vat;
+          if(!is_array($vat_list))return "-";
+          foreach ($vat_list as $vat){
+            $out[]='<nobr>'.$vat['name'].' ('.$vat['value'].'%): '.number_format($vat['vat'],  2,'.',' ').' '.Yii::$app->cafe->getCurrency().'</nobr>';
+          }
+          return implode('<br>',$out);
+        }
     ],
     [
       'attribute' => 'cost',
       'filter'=>NumberRangerWidget::widget([
         'model'=>$searchModel,
         'attribute'=>'cost',
-      ])
-    ],
-    [
-      'attribute' => 'sum',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'sum',
-      ])
-    ],
-    [
-      'attribute' => 'tip',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'tip',
-      ])
-    ],
-    [
-      'attribute' => 'tps',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'tps',
-      ])
-    ],
-    [
-      'attribute' => 'tvq',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'tvq',
-      ])
+      ]),
+      'value'=>function ($model, $key, $index, $column) {
+        return number_format($model->cost,  2,'.',' ').' '.Yii::$app->cafe->getCurrency();
+      }
     ],
     'notice',
     [
       'attribute' => 'pay_state',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'pay_state',
-      ])
-    ],
-    [
-      'attribute' => 'pause_start',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'pause_start',
-      ])
+        'filterType' => GridView::FILTER_SELECT2,
+        'format' => 'raw',
+        'filter'=> ArrayHelper::merge(
+            [
+                '-2'=>Yii::t('app',"ALL"),
+            ],
+            \frontend\modules\visits\models\VisitorLog::payStatusList()
+        ),
+        'value' => function ($model, $key, $index, $column) {
+          return \frontend\modules\visits\models\VisitorLog::payStatusList($model->pay_state);
+        }
     ],
     [
       'attribute' => 'pause',
-      'filter'=>NumberRangerWidget::widget([
-        'model'=>$searchModel,
-        'attribute'=>'pause',
-      ])
+        'value' => function ($model, $key, $index, $column) {
+          $time=$model->pause;
+          if(!$time || $time<0)return "-";
+
+          $s= $time % 60;
+          $time=round(($time-$s)/60);
+          $m= ($time) % 60;
+          $h=round(($time-$m)/60);
+
+          if($m<10)$m='0'.$m;
+          if($s<10)$s='0'.$s;
+          return $h.':'.$m;
+        }
     ],
-    [
+ /*   [
       'attribute' => 'certificate_type',
       'filter'=>NumberRangerWidget::widget([
         'model'=>$searchModel,
@@ -145,9 +153,13 @@ return [
         'model'=>$searchModel,
         'attribute'=>'certificate_val',
       ])
+    ],*/
+    [
+        'attribute' => 'visit_cnt',
+        'filter'=>false,
+        'enableSorting' => false,
     ],
-    'visit_cnt',
-    'pay_man',
+   /* 'pay_man',
     [
       'attribute' => 'guest_m',
       'filter'=>NumberRangerWidget::widget([
@@ -198,7 +210,7 @@ return [
         'attribute'=>'terminal_ans',
       ])
     ],
-    'certificate_number',
+    'certificate_number',*/
     [
       'class' => 'kartik\grid\ActionColumn',
       'dropdown' => false,

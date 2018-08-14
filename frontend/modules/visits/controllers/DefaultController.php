@@ -39,14 +39,7 @@ class DefaultController extends Controller
     $request = Yii::$app->request;
     $model = new StartVisit();
 
-    $type_list = [
-        1 => Yii::t('app', "New user"),
-        2 => Yii::t('app', "Regular")
-    ];
-    if (Yii::$app->cafe->can("AnonymousVisitor")) {
-      $type_list[0] = Yii::t('app', "Anonymous");
-    };
-    ksort($type_list);
+    $type_list = VisitorLog::typeList();
 
     if ($model->load($request->post()) && $model->validate()) {
       if ($model->type == 2) {

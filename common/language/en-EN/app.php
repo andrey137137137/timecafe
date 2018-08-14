@@ -156,5 +156,10 @@
   'Check visit' => 'Check visit',
   'Send mail' => 'Send mail',
   'Print check' => 'Print check',
+  'Visitor Logs listing' => 'Visitor Logs listing',
+  'Create new Visitor Logs' => 'Create new Visitor Logs',
+  'nobody' => 'nobody',
+  'Visitor Logs' => 'Visitor Logs',
+  'VisitorLog list' => 'VisitorLog list',
 );
 ?>

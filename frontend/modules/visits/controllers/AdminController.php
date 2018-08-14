@@ -29,9 +29,6 @@ class AdminController extends Controller
           'finish_time',
           'cost',
           'sum',
-          'tip',
-          'tps',
-          'tvq',
           'notice',
           'pay_state',
           'pause_start',
@@ -49,6 +46,7 @@ class AdminController extends Controller
           'kiosk_disc',
           'terminal_ans',
           'certificate_number',
+          'vat',
       ];
     /**
      * @inheritdoc
@@ -56,13 +54,6 @@ class AdminController extends Controller
     public function behaviors()
     {
       return [
-        'verbs' => [
-          'class' => VerbFilter::className(),
-          'actions' => [
-            'delete' => ['post'],
-            'bulk-delete' => ['post'],
-          ],
-        ],
       ];
     }
 
@@ -82,23 +73,8 @@ class AdminController extends Controller
   
         $canCreate = Yii::$app->user->can('VisitorLogCreate');
         $actions = "";
-        $actions.= Yii::$app->user->can('VisitorLogUpdate')?"{update}":"";
-        $actions.= Yii::$app->user->can('VisitorLogDelete')?"{delete}":"";
+        //$actions.= Yii::$app->user->can('VisitorLogUpdate')?"{update}":"";
         $afterTable='';
-        if( Yii::$app->user->can('VisitorLogDelete')){
-          $afterTable=BulkButtonWidget::widget([
-            'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp; '.Yii::t('app', 'Delete All'),
-            ["bulk-delete"] ,
-            [
-              "class"=>"btn btn-danger btn-xs",
-              'role'=>'modal-remote-bulk',
-              'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
-              'data-request-method'=>'post',
-              'data-confirm-title'=>Yii::t('app', 'Are you sure?'),
-              'data-confirm-message'=>Yii::t('app', 'Are you sure want to delete this item')            ]),
-            ]).
-            '<div class="clearfix"></div>';
-        };
         $columns = include(__DIR__.'/../views/admin/_columns.php');
         if(Yii::$app->user->isGuest){
           $sel_column=Yii::$app->session->get("columns_VisitorLog",false);
@@ -123,7 +99,7 @@ class AdminController extends Controller
             'canCreate' => $canCreate,
             'afterTable'=>$afterTable,
             'title'=>Yii::t('app', 'VisitorLog list'),
-                    ]);
+        ]);
     }
 
 
@@ -314,71 +290,6 @@ class AdminController extends Controller
               Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
           ];
         }
-    }
-
-    /**
-     * Delete an existing VisitorLog model.
-     * For ajax request will return json object
-     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-      if (Yii::$app->user->isGuest || !Yii::$app->user->can('VisitorLogDelete')) {
-        throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
-        return false;
-      }
-      $request = Yii::$app->request;
-      $this->findModel($id)->delete();
-
-      if($request->isAjax){
-        /*
-        *   Process for ajax request
-        */
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-      }else{
-        /*
-        *   Process for non-ajax request
-        */
-        return $this->redirect(['index']);
-      }
-    }
-
-     /**
-     * Delete multiple existing VisitorLog model.
-     * For ajax request will return json object
-     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionBulkDelete()
-    {
-      if (Yii::$app->user->isGuest || !Yii::$app->user->can('VisitorLogDelete')) {
-        throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Page does not exist'));
-        return false;
-      }
-      $request = Yii::$app->request;
-      $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
-      foreach ( $pks as $pk ) {
-        $model = $this->findModel($pk);
-        $model->delete();
-      }
-
-      if($request->isAjax){
-        /*
-        *   Process for ajax request
-        */
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-      }else{
-        /*
-        *   Process for non-ajax request
-        */
-        return $this->redirect(['index']);
-      }
-       
     }
 
     /**

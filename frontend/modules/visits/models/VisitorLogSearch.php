@@ -2,25 +2,19 @@
 
 namespace frontend\modules\visits\models;
 
-use frontend\modules\visitor\models\Visitor;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use frontend\modules\visits\models\VisitorLog;
 use kartik\daterange\DateRangeBehavior;
 use yii\db\Expression;
+use frontend\modules\visitor\models\Visitor;
 
 /**
  * VisitorLogSearch represents the model behind the search form of `frontend\modules\visits\models\VisitorLog`.
  */
 class VisitorLogSearch extends VisitorLog
 {
-  public $user_id_from;
-  public $user_id_to;
-  public $type_from;
-  public $type_to;
-  public $cafe_id_from;
-  public $cafe_id_to;
   public $add_time_from;
   public $add_time_to;
   public $finish_time_from;
@@ -29,22 +23,6 @@ class VisitorLogSearch extends VisitorLog
   public $cost_to;
   public $sum_from;
   public $sum_to;
-  public $tip_from;
-  public $tip_to;
-  public $tps_from;
-  public $tps_to;
-  public $tvq_from;
-  public $tvq_to;
-  public $pay_state_from;
-  public $pay_state_to;
-  public $pause_start_from;
-  public $pause_start_to;
-  public $pause_from;
-  public $pause_to;
-  public $certificate_type_from;
-  public $certificate_type_to;
-  public $certificate_val_from;
-  public $certificate_val_to;
   public $guest_m_from;
   public $guest_m_to;
   public $guest_chi_from;
@@ -57,17 +35,9 @@ class VisitorLogSearch extends VisitorLog
   public $pre_enter_to;
   public $kiosk_disc_from;
   public $kiosk_disc_to;
-  public $terminal_ans_from;
-  public $terminal_ans_to;
 
   private $slideParams=array (
   'user_id' => 
-  array (
-    'min' => 0,
-    'max' => 100,
-    'step' => 1,
-  ),
-  'type' => 
   array (
     'min' => 0,
     'max' => 100,
@@ -91,48 +61,7 @@ class VisitorLogSearch extends VisitorLog
     'max' => 100,
     'step' => 0.1,
   ),
-  'tip' => 
-  array (
-    'min' => 0,
-    'max' => 100,
-    'step' => 0.1,
-  ),
-  'tps' => 
-  array (
-    'min' => 0,
-    'max' => 100,
-    'step' => 0.1,
-  ),
-  'tvq' => 
-  array (
-    'min' => 0,
-    'max' => 100,
-    'step' => 0.1,
-  ),
-  'pay_state' => 
-  array (
-    'min' => 0,
-    'max' => 100,
-    'step' => 1,
-  ),
-  'pause_start' => 
-  array (
-    'min' => 0,
-    'max' => 100,
-    'step' => 1,
-  ),
-  'pause' => 
-  array (
-    'min' => 0,
-    'max' => 100,
-    'step' => 1,
-  ),
-  'certificate_type' => 
-  array (
-    'min' => 0,
-    'max' => 100,
-    'step' => 1,
-  ),
+
   'certificate_val' => 
   array (
     'min' => 0,
@@ -175,12 +104,6 @@ class VisitorLogSearch extends VisitorLog
     'max' => 100,
     'step' => 1,
   ),
-  'terminal_ans' => 
-  array (
-    'min' => 0,
-    'max' => 100,
-    'step' => 1,
-  ),
 );
 
   public function behaviors()
@@ -206,10 +129,10 @@ class VisitorLogSearch extends VisitorLog
   public function rules()
   {
     return [
-      [['id', 'user_id', 'user_id_from', 'user_id_to', 'type', 'type_from', 'type_to', 'cafe_id', 'cafe_id_from', 'cafe_id_to', 'pay_state', 'pay_state_from', 'pay_state_to', 'pause_start', 'pause_start_from', 'pause_start_to', 'pause', 'pause_from', 'pause_to', 'certificate_type', 'certificate_type_from', 'certificate_type_to', 'guest_m', 'guest_m_from', 'guest_m_to', 'guest_chi', 'guest_chi_from', 'guest_chi_to', 'chi', 'chi_from', 'chi_to', 'pre_enter', 'pre_enter_from', 'pre_enter_to', 'kiosk_disc', 'kiosk_disc_from', 'kiosk_disc_to', 'terminal_ans', 'terminal_ans_from', 'terminal_ans_to'], 'integer'],
-      [['visitor_id', 'add_time', 'comment', 'finish_time', 'notice', 'visit_cnt', 'pay_man', 'cnt_disk', 'certificate_number'], 'safe'],
+      [['id', 'user_id', 'type', 'cafe_id','certificate_type', 'guest_m', 'guest_m_from', 'guest_m_to', 'guest_chi', 'guest_chi_from', 'guest_chi_to', 'chi', 'chi_from', 'chi_to', 'pre_enter', 'pre_enter_from', 'pre_enter_to', 'kiosk_disc', 'kiosk_disc_from', 'kiosk_disc_to', 'terminal_ans'], 'integer'],
+      [['visitor_id', 'add_time', 'comment', 'finish_time', 'notice', 'visit_cnt', 'pay_man', 'cnt_disk', 'certificate_number', 'vat'], 'safe'],
       [['add_time', 'finish_time'], 'match', 'pattern'=>'/^.+\s\-\s.+$/'],
-      [['cost', 'cost_from', 'cost_to', 'sum', 'sum_from', 'sum_to', 'tip', 'tip_from', 'tip_to', 'tps', 'tps_from', 'tps_to', 'tvq', 'tvq_from', 'tvq_to', 'certificate_val', 'certificate_val_from', 'certificate_val_to', 'sum_no_cert', 'sum_no_cert_from', 'sum_no_cert_to'], 'number'],
+      [['cost', 'cost_from', 'cost_to', 'sum', 'sum_from', 'sum_to', 'certificate_val', 'sum_no_cert', 'sum_no_cert_from', 'sum_no_cert_to'], 'number'],
     ];
   }
 
@@ -279,13 +202,9 @@ class VisitorLogSearch extends VisitorLog
     // grid filtering conditions
     $query->andFilterWhere([
              'id' => $this->id,
-             'type' => $this->type,
              'cafe_id' => Yii::$app->cafe->id,
              'cost' => $this->cost,
              'sum' => $this->sum,
-             'tip' => $this->tip,
-             'tps' => $this->tps,
-             'tvq' => $this->tvq,
              'pay_state' => $this->pay_state,
              'pause_start' => $this->pause_start,
              'pause' => $this->pause,
@@ -298,6 +217,7 @@ class VisitorLogSearch extends VisitorLog
              'pre_enter' => $this->pre_enter,
              'kiosk_disc' => $this->kiosk_disc,
              'terminal_ans' => $this->terminal_ans,
+             'type' => $this->type,
         ]);
 
         $query->andFilterWhere(['like', '.comment', $this->comment])
@@ -305,29 +225,9 @@ class VisitorLogSearch extends VisitorLog
             ->andFilterWhere(['like', '.visit_cnt', $this->visit_cnt])
             ->andFilterWhere(['like', '.pay_man', $this->pay_man])
             ->andFilterWhere(['like', '.cnt_disk', $this->cnt_disk])
-            ->andFilterWhere(['like', '.certificate_number', $this->certificate_number]);
+            ->andFilterWhere(['like', '.certificate_number', $this->certificate_number])
+            ->andFilterWhere(['like', '.vat', $this->vat]);
 
-        
-        //Filter for ranger user_id
-        if($this->user_id){
-  	     $query
-            ->andFilterWhere(['>=', 'user_id', $this->user_id_from])
-            ->andFilterWhere(['<=', 'user_id', $this->user_id_to]);
-        };
-        
-        //Filter for ranger type
-        if($this->type){
-  	     $query
-            ->andFilterWhere(['>=', 'type', $this->type_from])
-            ->andFilterWhere(['<=', 'type', $this->type_to]);
-        };
-        
-        //Filter for ranger cafe_id
-        if($this->cafe_id){
-  	     $query
-            ->andFilterWhere(['>=', 'cafe_id', $this->cafe_id_from])
-            ->andFilterWhere(['<=', 'cafe_id', $this->cafe_id_to]);
-        };
         
         //Filter for ranger add_time
         if($this->add_time){
@@ -356,63 +256,8 @@ class VisitorLogSearch extends VisitorLog
             ->andFilterWhere(['>=', 'sum', $this->sum_from])
             ->andFilterWhere(['<=', 'sum', $this->sum_to]);
         };
-        
-        //Filter for ranger tip
-        if($this->tip){
-  	     $query
-            ->andFilterWhere(['>=', 'tip', $this->tip_from])
-            ->andFilterWhere(['<=', 'tip', $this->tip_to]);
-        };
-        
-        //Filter for ranger tps
-        if($this->tps){
-  	     $query
-            ->andFilterWhere(['>=', 'tps', $this->tps_from])
-            ->andFilterWhere(['<=', 'tps', $this->tps_to]);
-        };
-        
-        //Filter for ranger tvq
-        if($this->tvq){
-  	     $query
-            ->andFilterWhere(['>=', 'tvq', $this->tvq_from])
-            ->andFilterWhere(['<=', 'tvq', $this->tvq_to]);
-        };
-        
-        //Filter for ranger pay_state
-        if($this->pay_state){
-  	     $query
-            ->andFilterWhere(['>=', 'pay_state', $this->pay_state_from])
-            ->andFilterWhere(['<=', 'pay_state', $this->pay_state_to]);
-        };
-        
-        //Filter for ranger pause_start
-        if($this->pause_start){
-  	     $query
-            ->andFilterWhere(['>=', 'pause_start', $this->pause_start_from])
-            ->andFilterWhere(['<=', 'pause_start', $this->pause_start_to]);
-        };
-        
-        //Filter for ranger pause
-        if($this->pause){
-  	     $query
-            ->andFilterWhere(['>=', 'pause', $this->pause_from])
-            ->andFilterWhere(['<=', 'pause', $this->pause_to]);
-        };
-        
-        //Filter for ranger certificate_type
-        if($this->certificate_type){
-  	     $query
-            ->andFilterWhere(['>=', 'certificate_type', $this->certificate_type_from])
-            ->andFilterWhere(['<=', 'certificate_type', $this->certificate_type_to]);
-        };
-        
-        //Filter for ranger certificate_val
-        if($this->certificate_val){
-  	     $query
-            ->andFilterWhere(['>=', 'certificate_val', $this->certificate_val_from])
-            ->andFilterWhere(['<=', 'certificate_val', $this->certificate_val_to]);
-        };
-        
+
+
         //Filter for ranger guest_m
         if($this->guest_m){
   	     $query
@@ -454,13 +299,7 @@ class VisitorLogSearch extends VisitorLog
             ->andFilterWhere(['>=', 'kiosk_disc', $this->kiosk_disc_from])
             ->andFilterWhere(['<=', 'kiosk_disc', $this->kiosk_disc_to]);
         };
-        
-        //Filter for ranger terminal_ans
-        if($this->terminal_ans){
-  	     $query
-            ->andFilterWhere(['>=', 'terminal_ans', $this->terminal_ans_from])
-            ->andFilterWhere(['<=', 'terminal_ans', $this->terminal_ans_to]);
-        };
+
     return $dataProvider;
   }
 

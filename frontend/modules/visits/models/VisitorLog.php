@@ -51,19 +51,40 @@ class VisitorLog extends \yii\db\ActiveRecord
   ];
 */
 
-    public $duration;
-
-    static function typeList ($type)
+    static function typeList ($type=false)
     {
-      $t=[
-        Yii::t('app', "Anonymous"),
-        Yii::t('app', "New user"),
-        Yii::t('app', "Regular")
+      $type_list = [
+          1 => Yii::t('app', "New user"),
+          2 => Yii::t('app', "Regular")
       ];
-      if(!is_numeric($type))return $t;
-      return(isset($t[$type])?$t[$type]:false);
-    } 
-    /**
+      if (Yii::$app->cafe->can("AnonymousVisitor")) {
+        $type_list[0] = Yii::t('app', "Anonymous");
+      };
+      ksort($type_list);
+
+      if(!is_numeric($type))return $type_list;
+      return(isset($type_list[$type])?$type_list[$type]:false);
+    }
+
+  static function payStatusList ($type=false)
+  {
+    $type_list = array();
+
+    if(Yii::$app->cafe->can('payNOT')){
+      $type_list[-1]=Yii::t('app', 'Not Paid');
+    }
+    $type_list[0]= '-';
+    if(Yii::$app->cafe->can('payCard')){
+      $type_list[1]=Yii::t('app', 'Pay Card');
+    }
+    if(Yii::$app->cafe->can('payCash')){
+      $type_list[2]=Yii::t('app', 'Pay Cash');
+    }
+
+    if(!is_numeric($type))return $type_list;
+    return(isset($type_list[$type])?$type_list[$type]:false);
+  }
+  /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -123,12 +144,21 @@ class VisitorLog extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getDuration(){
+      $duration=($this->finish_time?strtotime($this->finish_time):time());
+      $duration-=strtotime($this->add_time);
+
+      $duration-=$this->pause;
+
+
+      if($this->pause_start>0){
+        $duration-=(time()-$this->pause_start);
+      }
+      return $duration;
+    }
+
     public function afterFind()
     {
-      $this->duration=($this->finish_time?strtotime($this->finish_time):time())-strtotime($this->add_time)-$this->pause;
-      if($this->pause_start){
-        $this->duration+=time()-strtotime($this->pause_start);
-      }
 
       if(!$this->finish_time){
         $this->calcCost();

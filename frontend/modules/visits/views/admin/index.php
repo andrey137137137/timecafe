@@ -34,7 +34,7 @@ CrudAsset::register($this);
                     Html::a('<i class="glyphicon glyphicon-th-list"></i>', ['columns'],
                     ['role'=>'modal-remote','title'=> Yii::t('app', 'Columns visibled'),'class'=>'btn btn-default']).
 
-                    ($canCreate?Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'],
+                    (($canCreate && false)?Html::a('<i class="glyphicon glyphicon-plus"></i>', ['/visits/start'],
                     ['role'=>'modal-remote','title'=> Yii::t('app', 'Create new Visitor Logs'),'class'=>'btn btn-default']):'').
 
                     Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''],

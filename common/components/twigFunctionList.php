@@ -255,11 +255,15 @@ $functionsList = [
     return date(Yii::$app->params['lang']['date'],$date);
   },
   'echo_duration'=>function ($time) {
+    if(!$time || $time<0)$time=0;
+
     $s= $time % 60;
-    $m= round((($time-$s)/60) % 60);
-    $h= round(($time-$s-$m*60)/360);
+    $time=round(($time-$s)/60);
+    $m= ($time) % 60;
+    $h=round(($time-$m)/60);
+
     if($m<10)$m='0'.$m;
-    if($s<10)$m='0'.$s;
+    if($s<10)$s='0'.$s;
     return $h.':'.$m;
   },
   'cafe'=>function($params){

@@ -195,6 +195,9 @@ function getColumnParams($name,$type,$generator){
       'filter'=>NumberRangerWidget::widget([
         'model'=>\$searchModel,
         'attribute'=>'$name',
+        'value'=>function (\$model, \$key, \$index, \$column) {
+          return number_format(\$model->$name,  2,'.',' ');
+        }
       ])
     ],";
         break;
@@ -207,6 +210,7 @@ function getColumnParams($name,$type,$generator){
       'filterType' => GridView::FILTER_DATE_RANGE,
       'filterWidgetOptions' =>Yii::\$app->params['datetime_option'],
       'value'=> function (\$model, \$key, \$index, \$column) {
+        if(!\$model->$name)return '-';
         \$$type=strtotime(\$model->$name);
         return date(Yii::\$app->params['lang']['$type'], \$$type);
       },

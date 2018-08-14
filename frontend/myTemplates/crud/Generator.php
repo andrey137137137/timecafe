@@ -61,6 +61,7 @@ class Generator extends \yii\gii\Generator
   public $behaviors = [];
 
   public $allCafe=true;
+  public $disableDelate;
   /**
    * @inheritdoc
    */
@@ -93,7 +94,8 @@ class Generator extends \yii\gii\Generator
         [['controllerClass', 'searchModelClass'], 'validateNewClass'],
         [['indexWidgetType'], 'in', 'range' => ['grid', 'list']],
         [['modelClass'], 'validateModelClass'],
-        [['enableI18N', 'enablePjax','enableRBAC'], 'boolean'],
+        [['enableI18N', 'enablePjax','enableRBAC','disableDelate'], 'boolean'],
+        [['enableI18N', 'enablePjax','enableRBAC','disableDelate'], 'default', 'value' => 1],
         [['messageCategory'], 'validateMessageCategory', 'skipOnEmpty' => false],
         ['viewPath', 'safe'],
     ]);
@@ -245,32 +247,7 @@ class Generator extends \yii\gii\Generator
     return $files;
   }
 
-  /*public function save($files, $answers, &$results)
-  {
-    $lines = ['Generating code using template "' . $this->getTemplatePath() . '"...'];
-    $hasError = false;
-    foreach ($files as $file) {
-      $relativePath = $file->getRelativePath();
-      if (isset($answers[$file->id]) && !empty($answers[$file->id]) && $file->operation !== CodeFile::OP_SKIP) {
-        $error = $file->save();
-        if (is_string($error)) {
-          $hasError = true;
-          $lines[] = "generating $relativePath\n<span class=\"error\">$error</span>";
-        } else {
-          $lines[] = $file->operation === CodeFile::OP_CREATE ? " generated $relativePath" : " overwrote $relativePath";
-        }
-      } else {
-        $lines[] = "   skipped $relativePath";
-        $lines[] = isset($answers[$file->id])?"true":"false";
-        $lines[] = (!empty($answers[$file->id]))?"true":"false";
-        $lines[] = ($file->operation !== CodeFile::OP_SKIP)?"true":"false";
-      }
-    }
-    $lines[] = "done!\n";
-    $results = implode("\n", $lines);
 
-    return !$hasError;
-  }*/
 
   public function getViewPathFromController($view=false){
     $viewPath = explode('views',$this->getViewPath());

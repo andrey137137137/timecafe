@@ -37,13 +37,13 @@ class <?= $migrationName ?> extends \yii\db\Migration
       '<?=$rbacName;?>  - редактирование',
       [$role]
     );
-
+<?php if(!$generator->disableDelate): ?>
     $this->createPermission(
       '<?=$rbacName;?>Delete',
       '<?=$rbacName;?> - удаление',
       [$role]
     );
-
+<?php endif; ?>
     $this->createPermission(
       '<?=$rbacName;?>Create',
       '<?=$rbacName;?> - создание',
