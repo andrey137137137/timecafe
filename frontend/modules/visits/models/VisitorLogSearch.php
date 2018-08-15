@@ -249,14 +249,14 @@ class VisitorLogSearch extends VisitorLog
 
         
         //Filter for ranger add_time
-        if($this->add_time){
+        if($this->add_time_from){
   	     $query
             ->andFilterWhere(['>=', 'add_time', date("Y-m-d H:i:s",$this->add_time_from)])
             ->andFilterWhere(['<=', 'add_time', date("Y-m-d H:i:s",$this->add_time_to+86400)]);
         };
         
         //Filter for ranger finish_time
-        if($this->finish_time){
+        if($this->finish_time_from){
   	     $query
             ->andFilterWhere(['>=', 'finish_time', date("Y-m-d H:i:s",$this->finish_time_from)])
             ->andFilterWhere(['<=', 'finish_time', date("Y-m-d H:i:s",$this->finish_time_to+86400)]);
