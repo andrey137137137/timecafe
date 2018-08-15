@@ -112,3 +112,7 @@
   max-width: 500px;
   min-width: 30vw;
 }
+
+.tile.bg-info{
+  background-color: #05389f;
+}
