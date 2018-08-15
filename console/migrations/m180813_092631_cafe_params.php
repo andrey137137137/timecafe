@@ -44,14 +44,14 @@ class m180813_092631_cafe_params extends Migration
       $params= new \frontend\modules\cafe\models\CafeParams();
       $params->id=1;
       $params->name="Canada";
-      $params->vat_list="[{\"code\":\"tps\",\"name\":\"tps\",\"value\":\"1\",\"add_to_cost\":true,\"only_for_base_cost\":true},{\"code\":\"tvq\",\"name\":\"Tvq\",\"value\":\"0.5\",\"add_to_cost\":true,\"only_for_base_cost\":true}]";
+      $params->vat_list="[{\"name\":\"tps\",\"value\":\"1\",\"add_to_cost\":true,\"only_for_base_cost\":true},{\"name\":\"tvq\",\"value\":\"0.5\",\"add_to_cost\":true,\"only_for_base_cost\":true}]";
       $params->save();
 
       $params= new \frontend\modules\cafe\models\CafeParams();
       $params->id=2;
       $params->name="Russia";
       $params->show_sum=false;
-      $params->vat_list="[{\"code\":\"nds\",\"name\":\"НДС\",\"value\":\"20\",\"add_to_cost\":false,\"only_for_base_cost\":true}]";
+      $params->vat_list="[{\"name\":\"НДС\",\"value\":\"20\",\"add_to_cost\":false,\"only_for_base_cost\":true}]";
       $params->datetime="Y-m-d H:i:s";
       $params->datetime_js="Y-m-d H:i:s";
       $params->date="Y-m-d";

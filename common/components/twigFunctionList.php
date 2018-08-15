@@ -254,18 +254,7 @@ $functionsList = [
     if(!is_numeric($date))$date=strtotime($date);
     return date(Yii::$app->params['lang']['date'],$date);
   },
-  'echo_duration'=>function ($time) {
-    if(!$time || $time<0)$time=0;
-
-    $s= $time % 60;
-    $time=round(($time-$s)/60);
-    $m= ($time) % 60;
-    $h=round(($time-$m)/60);
-
-    if($m<10)$m='0'.$m;
-    if($s<10)$s='0'.$s;
-    return $h.':'.$m;
-  },
+  'echo_duration'=>Yii::$app->helper->echo_time,
   'cafe'=>function($params){
       return Yii::$app->cafe->$params;
   },

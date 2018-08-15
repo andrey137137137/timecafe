@@ -161,5 +161,13 @@
   'nobody' => 'nobody',
   'Visitor Logs' => 'Visitor Logs',
   'VisitorLog list' => 'VisitorLog list',
+  'Create Tarifs success' => 'Create Tarifs success',
+  'Change visible columns in VisitorLog table' => 'Change visible columns in VisitorLog table',
+  'duration' => 'duration',
+  'Card' => 'Card',
+  'Cash' => 'Cash',
+  'absent' => 'absent',
+  'present' => 'present',
+  'status' => 'status',
 );
 ?>

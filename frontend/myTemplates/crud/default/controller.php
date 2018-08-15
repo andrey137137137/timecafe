@@ -231,15 +231,15 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     }
 
     return [
-      'title'=> "<?=$generator->generateString("Change visible columns in <?= $modelClass ?> table");?>",
+      'title'=> <?=$generator->generateString("Change visible columns in $modelClass table");?>,
       'content'=>$this->renderAjax('columns', [
         'sel_column' => $sel_column,
         'columns' => $columns,
         'model' => $model,
         'isAjax' => true
       ]),
-      'footer'=> Html::button("<?=$generator->generateString('Close');?>",['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-      Html::button("<?=$generator->generateString('Save');?>",['class'=>'btn btn-primary','type'=>"submit"])
+      'footer'=> Html::button(<?=$generator->generateString('Close');?>,['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+      Html::button(<?=$generator->generateString('Save');?>,['class'=>'btn btn-primary','type'=>"submit"])
 
     ];
   }

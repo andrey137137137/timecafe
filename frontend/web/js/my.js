@@ -126,6 +126,7 @@ function stopEvent(e){
 
 //показать фильтр в таблице
 function showControl(e){
+  $('.temp_show.active').removeClass('active');
   id=$(this).attr('for');
   control_d=eval(id);
   control=$("#"+id+'-wrap');

@@ -447,8 +447,8 @@ class Generator extends \yii\gii\Generator
         ];
         $this->SearchVarsPublic[$name.'_from']=false;
         $this->SearchVarsPublic[$name.'_to']=false;
-        $this->rangeConditions[$name][]="->andFilterWhere(['>=', '{$name}', \$this->{$name}_from])";
-        $this->rangeConditions[$name][]="->andFilterWhere(['<=', '{$name}', \$this->{$name}_to])";
+        $this->rangeConditions[$name.'_from'][]="->andFilterWhere(['>=', '{$name}', (float)\$this->{$name}_from])";
+        $this->rangeConditions[$name.'_from'][]="->andFilterWhere(['<=', '{$name}', (float)\$this->{$name}_to])";
         break;
       case Schema::TYPE_DATE:
       case Schema::TYPE_TIME:
@@ -463,8 +463,8 @@ class Generator extends \yii\gii\Generator
             'dateEndAttribute' => $name.'_to',
         ];
         $dt=Schema::TYPE_DATE?'+'.(24*60*60):'';
-        $this->rangeConditions[$name][]="->andFilterWhere(['>=', '{$name}', date(\"Y-m-d H:i:s\",\$this->{$name}_from)])";
-        $this->rangeConditions[$name][]="->andFilterWhere(['<=', '{$name}', date(\"Y-m-d H:i:s\",\$this->{$name}_to".$dt.")])";
+        $this->rangeConditions[$name.'_from'][]="->andFilterWhere(['>=', '{$name}', date(\"Y-m-d H:i:s\",\$this->{$name}_from)])";
+        $this->rangeConditions[$name.'_from'][]="->andFilterWhere(['<=', '{$name}', date(\"Y-m-d H:i:s\",\$this->{$name}_to".$dt.")])";
         $arr['match']['/^.+\s\-\s.+$/'][]=$name;
         break;
     };

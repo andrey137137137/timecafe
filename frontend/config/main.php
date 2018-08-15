@@ -98,7 +98,10 @@ $config = [
     ],
     'cafe'=>[
        'class' => 'frontend\modules\cafe\components\Cafe',
-    ]
+    ],
+    'helper'=>[
+       'class' => 'common\components\Helper',
+    ],
   ],
   'modules' => [
     'users' => [

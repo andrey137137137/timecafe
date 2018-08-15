@@ -4,6 +4,7 @@ use kartik\grid\GridView;
 use common\components\widget\NumberRangerWidget;
 use yii\helpers\ArrayHelper;
 use frontend\modules\users\models\Users;
+use \frontend\modules\visits\models\VisitorLog;
 
 return [
     [
@@ -16,22 +17,6 @@ return [
     ],
     'id',
     [
-      'attribute' => 'user_id',
-      'filterType' => GridView::FILTER_SELECT2,
-      'format' => 'raw',
-      'filter'=> ArrayHelper::merge(
-          [
-              '0'=>Yii::t('app',"ALL"),
-              '-1'=>Yii::t('app',"nobody"),
-          ],
-          ArrayHelper::map((array)Yii::$app->cafe->getUsersList(), 'id', 'name')
-      ),
-      'value' => function ($model, $key, $index, $column) {
-        $user=$model->user;
-        return $user?$user->name:'-';
-      },
-    ],
-    [
       'attribute' => 'visitor_id',
       'value' => function ($model, $key, $index, $column) {
         if(!$model->visitor_id)return Yii::t('app', 'Anonymous');
@@ -40,39 +25,30 @@ return [
       },
     ],
     [
-      'attribute' => 'type',
-      'filterType' => GridView::FILTER_SELECT2,
-      'format' => 'raw',
-      'filter'=> ArrayHelper::merge(
-          [
-              '-1'=>Yii::t('app',"ALL"),
-          ],
-          \frontend\modules\visits\models\VisitorLog::typeList()
-      ),
-      'value' => function ($model, $key, $index, $column) {
-        return \frontend\modules\visits\models\VisitorLog::typeList($model->type);
-      }
+        'attribute' => 'add_time',
+        'filterType' => GridView::FILTER_DATE_RANGE,
+        'filterWidgetOptions' =>Yii::$app->params['datetime_option'],
+        'value'=> function ($model, $key, $index, $column) {
+          if(!$model->add_time)return '-';
+          $datetime=strtotime($model->add_time);
+          return date(Yii::$app->params['lang']['datetime'], $datetime);
+        },
     ],
     [
-      'attribute' => 'add_time',
-      'filterType' => GridView::FILTER_DATE_RANGE,
-      'filterWidgetOptions' =>Yii::$app->params['datetime_option'],
-      'value'=> function ($model, $key, $index, $column) {
-        if(!$model->add_time)return '-';
-        $datetime=strtotime($model->add_time);
-        return date(Yii::$app->params['lang']['datetime'], $datetime);
-      },
+        'attribute' => 'finish_time',
+        'filterType' => GridView::FILTER_DATE_RANGE,
+        'filterWidgetOptions' =>Yii::$app->params['datetime_option'],
+        'value'=> function ($model, $key, $index, $column) {
+          if(!$model->finish_time)return '-';
+          $datetime=strtotime($model->finish_time);
+          return date(Yii::$app->params['lang']['datetime'], $datetime);
+        },
     ],
-    'comment',
     [
-      'attribute' => 'finish_time',
-      'filterType' => GridView::FILTER_DATE_RANGE,
-      'filterWidgetOptions' =>Yii::$app->params['datetime_option'],
-      'value'=> function ($model, $key, $index, $column) {
-        if(!$model->finish_time)return '-';
-        $datetime=strtotime($model->finish_time);
-        return date(Yii::$app->params['lang']['datetime'], $datetime);
-      },
+        'attribute' => 'duration',
+        'value'=>function ($model, $key, $index, $column) {
+          return Yii::$app->helper->echo_time($model->duration);
+        }
     ],
     [
         'attribute' => 'sum',
@@ -94,7 +70,12 @@ return [
           $vat_list=$model->vat;
           if(!is_array($vat_list))return "-";
           foreach ($vat_list as $vat){
-            $out[]='<nobr>'.$vat['name'].' ('.$vat['value'].'%): '.number_format($vat['vat'],  2,'.',' ').' '.Yii::$app->cafe->getCurrency().'</nobr>';
+            $out[]='<nobr>'.
+                $vat['name'].
+                (isset($vat['value'])?' ('.$vat['value'].'%)':'').
+                ': '.number_format($vat['vat'],  2,'.',' ').' '.
+                Yii::$app->cafe->getCurrency().
+                '</nobr>';
           }
           return implode('<br>',$out);
         }
@@ -109,9 +90,8 @@ return [
         return number_format($model->cost,  2,'.',' ').' '.Yii::$app->cafe->getCurrency();
       }
     ],
-    'notice',
     [
-      'attribute' => 'pay_state',
+        'attribute' => 'pay_state',
         'filterType' => GridView::FILTER_SELECT2,
         'format' => 'raw',
         'filter'=> ArrayHelper::merge(
@@ -121,9 +101,42 @@ return [
             \frontend\modules\visits\models\VisitorLog::payStatusList()
         ),
         'value' => function ($model, $key, $index, $column) {
-          return \frontend\modules\visits\models\VisitorLog::payStatusList($model->pay_state);
+          return '<div class="center-color '.VisitorLog::$colors_payment[$model->pay_state].'">'.VisitorLog::payStatusList($model->pay_state).'</div>';
         }
     ],
+    [
+        'attribute' => 'status',
+        'filterType' => GridView::FILTER_SELECT2,
+        'format' => 'raw',
+        'filter'=>
+            [
+                '0'=>Yii::t('app',"ALL"),
+                '1'=>Yii::t('app',"present"),
+                '2'=>Yii::t('app',"absent")
+            ],
+        'value' => function ($model, $key, $index, $column) {
+          $st_id=$model->finish_time?0:1;
+          $st_name=$st_id?Yii::t('app',"present"):Yii::t('app',"absent");
+          $st_color=$st_id?"bg-green":"modernui-neutral-bg";
+          return '<div class="center-color '.$st_color.'">'.$st_name.'</div>';
+        }
+    ],
+    'notice',
+    [
+        'attribute' => 'type',
+        'filterType' => GridView::FILTER_SELECT2,
+        'format' => 'raw',
+        'filter'=> ArrayHelper::merge(
+            [
+                '-1'=>Yii::t('app',"ALL"),
+            ],
+            \frontend\modules\visits\models\VisitorLog::typeList()
+        ),
+        'value' => function ($model, $key, $index, $column) {
+          return '<div class="center-color '.VisitorLog::$colors[$model->type].'">'.VisitorLog::typeList($model->type).'</div>';
+        }
+    ],
+    'comment',
     [
       'attribute' => 'pause',
         'value' => function ($model, $key, $index, $column) {
@@ -211,6 +224,22 @@ return [
       ])
     ],
     'certificate_number',*/
+    [
+        'attribute' => 'user_id',
+        'filterType' => GridView::FILTER_SELECT2,
+        'format' => 'raw',
+        'filter'=> ArrayHelper::merge(
+            [
+                '0'=>Yii::t('app',"ALL"),
+                '-1'=>Yii::t('app',"nobody"),
+            ],
+            ArrayHelper::map((array)Yii::$app->cafe->getUsersList(), 'id', 'name')
+        ),
+        'value' => function ($model, $key, $index, $column) {
+          $user=$model->user;
+          return $user?$user->name:'-';
+        },
+    ],
     [
       'class' => 'kartik\grid\ActionColumn',
       'dropdown' => false,

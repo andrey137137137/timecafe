@@ -17,6 +17,7 @@ class Cafe extends Component
   private $usersList = false;
   public $tariff=[];
   public $params=[];
+  public $max_cost;
 
   public function init()
   {
@@ -39,6 +40,12 @@ class Cafe extends Component
           ->orderBy('start_visit desc')
           ->asArray()
           ->all();
+
+      $data['max_cost']=0;
+      foreach ($data['tariff'] as $t){
+        if($data['max_cost']<$t['max_sum'])$data['max_cost']=$t['max_sum'];
+      }
+
       return $data;
     });
 
@@ -49,6 +56,7 @@ class Cafe extends Component
       $this->iCan = $data['iCan'];
       $this->tariff = $data['tariff'];
       $this->params = $data['params'];
+      $this->max_cost=$data['max_cost'];
 
       Yii::$app->params['lang']['datetime']=$data['params']['datetime'];
       Yii::$app->params['lang']['datetime_js']=$data['params']['datetime_js'];
@@ -77,6 +85,10 @@ class Cafe extends Component
 
   public function getCurrency(){
     return $this->cafe?Yii::t('app',$this->cafe->currency):null;
+  }
+
+  public function getMaxCost(){
+    return $this->cafe?$this->max_cost:100;
   }
 
   public function getUsersList(){

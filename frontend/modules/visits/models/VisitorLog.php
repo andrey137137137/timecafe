@@ -51,6 +51,18 @@ class VisitorLog extends \yii\db\ActiveRecord
   ];
 */
 
+    static $colors=[
+      'bg-info',
+      'bg-lima',
+      'bg-regular',
+    ];
+    static $colors_payment=[
+      -1=>'btn-danger',
+      0=>'',
+      1=>'bg-info',
+      2=>'bg-tree-poppy',
+    ];
+
     static function typeList ($type=false)
     {
       $type_list = [
@@ -74,13 +86,12 @@ class VisitorLog extends \yii\db\ActiveRecord
       $type_list[-1]=Yii::t('app', 'Not Paid');
     }
     $type_list[0]= '-';
-    if(Yii::$app->cafe->can('payCard')){
-      $type_list[1]=Yii::t('app', 'Pay Card');
-    }
     if(Yii::$app->cafe->can('payCash')){
-      $type_list[2]=Yii::t('app', 'Pay Cash');
+      $type_list[1]=Yii::t('app', 'Cash');
     }
-
+    if(Yii::$app->cafe->can('payCard')){
+      $type_list[2]=Yii::t('app', 'Card');
+    }
     if(!is_numeric($type))return $type_list;
     return(isset($type_list[$type])?$type_list[$type]:false);
   }
@@ -141,6 +152,8 @@ class VisitorLog extends \yii\db\ActiveRecord
             'kiosk_disc' => Yii::t('app', 'Kiosk Disc'),
             'terminal_ans' => Yii::t('app', 'Terminal Ans'),
             'certificate_number' => Yii::t('app', 'Certificate Number'),
+            'duration' => Yii::t('app', 'duration'),
+            'status' => Yii::t('app', 'status'),
         ];
     }
 
@@ -210,28 +223,30 @@ class VisitorLog extends \yii\db\ActiveRecord
       };
       $sum=round($sum,2);
 
-      $this->sum=$sum;
+      //$this->sum=$sum;
       $vat=Yii::$app->cafe->params['vat_list'];
       if(!is_array($vat))$vat=json_decode($vat,true);
 
       $cost=$sum;
+      $tot_vat=0;
       foreach($vat as $k=>$v){
-        if($v['only_for_base_cost']){
-          $p=$v['only_for_base_cost']?$sum:$cost;
-          if($v['add_to_cost']){
-            $vat[$k]['vat']=round($p*$v['value']/100,2);
-            $cost+=$vat[$k]['vat'];
-          }else{
-            $vat[$k]['vat']=round($p/(1+$v['value']/100),2);
-          }
+        $p=$v['only_for_base_cost']?$sum:$cost;
+        if($v['add_to_cost']){
+          $vat[$k]['vat']=round($p*$v['value']/100,2);
+          $cost+=$vat[$k]['vat'];
+        }else{
+          $vat[$k]['vat']=round($p/(1+$v['value']/100),2);
         }
+
+        $tot_vat+=$vat[$k]['vat'];
 
         unset($v['only_for_base_cost']);
         unset($v['add_to_cost']);
       }
 
       $this->vat=$vat;
-      $this->cost=$cost;
+      $this->cost=round($cost,2);
+      $this->sum=round($this->cost-$tot_vat,2);
     }
   /**
    * @return \yii\db\ActiveQuery
@@ -295,11 +310,7 @@ class VisitorLog extends \yii\db\ActiveRecord
         ->andWhere(['finish_time'=>null])
         ->all();
     $out=[];
-    $colors=[
-        'bg-lima',
-        'bg-lima',
-        'bg-lima',
-    ];
+
     $icons=[
         'fa fa-user',
         'fa fa-user',
@@ -322,7 +333,7 @@ class VisitorLog extends \yii\db\ActiveRecord
       $visitor['pause_start']=$visit->pause_start;
       $visitor['visit_cnt']=$visit->visit_cnt;
       $visitor['type_str']=VisitorLog::typeList($visit->type);
-      $visitor['color']=$colors[$visit->type];
+      $visitor['color']=VisitorLog::$colors[$visit->type];
       $visitor['icon']=$icons[$visit->type];
 
       $out[]=$visitor;

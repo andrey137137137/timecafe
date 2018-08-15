@@ -22,6 +22,7 @@ class AdminController extends Controller
           'id',
           'user_id',
           'visitor_id',
+      'duration',
           'type',
           'cafe_id',
           'add_time',
@@ -47,6 +48,7 @@ class AdminController extends Controller
           'terminal_ans',
           'certificate_number',
           'vat',
+          'status',
       ];
     /**
      * @inheritdoc
@@ -163,15 +165,15 @@ class AdminController extends Controller
     }
 
     return [
-      'title'=> "Yii::t('app', 'Change visible columns in <?= VisitorLog ?> table')",
+      'title'=> Yii::t('app', 'Change visible columns in VisitorLog table'),
       'content'=>$this->renderAjax('columns', [
         'sel_column' => $sel_column,
         'columns' => $columns,
         'model' => $model,
         'isAjax' => true
       ]),
-      'footer'=> Html::button("Yii::t('app', 'Close')",['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-      Html::button("Yii::t('app', 'Save')",['class'=>'btn btn-primary','type'=>"submit"])
+      'footer'=> Html::button(Yii::t('app', 'Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+      Html::button(Yii::t('app', 'Save'),['class'=>'btn btn-primary','type'=>"submit"])
 
     ];
   }

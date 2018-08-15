@@ -287,7 +287,7 @@ class DefaultController extends Controller
     if(Yii::$app->cafe->can('payCard')){
       if($method=="Card"){
         //сохраняем и идем на следующий шаг
-        $model->pay_state=1;
+        $model->pay_state=2;
         $model->save();
         return $this->actionPrint_check($id);
       };
@@ -302,7 +302,7 @@ class DefaultController extends Controller
       if($method=="Cash"){
         //сохраняем и идем на следующий шаг
 
-        $model->pay_state=2;
+        $model->pay_state=1;
         $model->save();
         return $this->actionPrint_check($id);
       };

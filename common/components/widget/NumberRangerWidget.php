@@ -33,12 +33,11 @@ class NumberRangerWidget extends Widget
 
   private function genValue($name,$default=""){
     $name=$this->attribute.'_'.$name;
-    return (isset($this->model->$name)?$this->model->$name:$default);
+    return (isset($this->model->$name)&&is_numeric($this->model->$name)?$this->model->$name:$default);
   }
 
   public function run()
   {
-
     $name=$this->id;
     $tiptop="";
     $js="";
