@@ -38,7 +38,7 @@ class Cafe extends \yii\db\ActiveRecord
     'newName' => false,
     'oldName' => false,
     'path' => '/web/img/logos/',
-    'validated' = false
+    'validated' => false
   ];
 
     /**
@@ -56,8 +56,10 @@ class Cafe extends \yii\db\ActiveRecord
     {
       return [
         [['name', 'params_id'], 'required'],
-        [['name', 'address','currency','timeZone'], 'trim'],
-        [['name', 'address','currency','timeZone','vat_value', 'logo'], 'string'],
+        // [['name', 'address','currency','timeZone'], 'trim'],
+        // [['name', 'address','currency','timeZone','vat_value', 'logo'], 'string'],
+        [['name', 'address','currency'], 'trim'],
+        [['name', 'address','currency', 'logo'], 'string'],
         [['max_person', 'last_task', 'franchisee'], 'integer'],
         ['image', 'image', 'extensions' => 'gif, jpg, jpeg, png'/*, 'skipOnEmpty' => false*/]
       ];
@@ -80,7 +82,6 @@ class Cafe extends \yii\db\ActiveRecord
             'logo' => Yii::t('app', 'Logo')
         ];
     }
-
 
   public function beforeValidate()
   {
@@ -114,9 +115,9 @@ class Cafe extends \yii\db\ActiveRecord
 
           $this->name = substr($this->image->name, 0, $nameLen - $extLen);
 
-          $this->logo = $this->image->name;
         }
 
+        $this->logo = $this->image->name;
         $this->imageParams['newName'] = $this->logo;
         $this->imageParams['validated'] = true;
       }
@@ -141,20 +142,20 @@ class Cafe extends \yii\db\ActiveRecord
     }
   }
 
-  public function beforeDelete()
-  {
-    if (parent::beforeDelete()/* && ! $this->categories*/)
-    {
-      $this->imageParams['oldName'] = $this->ext;
-      $this->setGalleryPath();
-      $this->deleteImage();
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
+  // public function beforeDelete()
+  // {
+  //   if (parent::beforeDelete()/* && ! $this->categories*/)
+  //   {
+  //     $this->imageParams['oldName'] = $this->ext;
+  //     $this->setGalleryPath();
+  //     $this->deleteImage();
+  //     return true;
+  //   }
+  //   else
+  //   {
+  //     return false;
+  //   }
+  // }
 
   private function getImageExt(string $name)
   {

@@ -254,7 +254,9 @@ $functionsList = [
     if(!is_numeric($date))$date=strtotime($date);
     return date(Yii::$app->params['lang']['date'],$date);
   },
-  'echo_duration'=>Yii::$app->helper->echo_time,
+  'echo_duration'=>function ($second) {
+    return Yii::$app->helper->echo_time($second);
+  },
   'cafe'=>function($params){
       return Yii::$app->cafe->$params;
   },
@@ -276,6 +278,11 @@ $functionsList = [
     }
     return $out;
   },
+  'from_module'=>function($module,$view='index',$controller="default"){
+    //$path=explode('frontend',Yii::$app->viewPath);
+    $path='@frontend/modules/'.$module.'/views/'.$controller.'/'.$view.'.twig';
+    return $path;
+  }
 ];
 
 

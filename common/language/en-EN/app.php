@@ -169,5 +169,7 @@
   'absent' => 'absent',
   'present' => 'present',
   'status' => 'status',
+  'Change visible columns in Cafe table' => 'Change visible columns in Cafe table',
+  'Logo' => 'Logo',
 );
 ?>
