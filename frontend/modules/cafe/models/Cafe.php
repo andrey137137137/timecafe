@@ -3,6 +3,7 @@
 namespace frontend\modules\cafe\models;
 
 use Yii;
+use claviska\SimpleImage;
 
 /**
  * This is the model class for table "cafe".
@@ -29,15 +30,15 @@ class Cafe extends \yii\db\ActiveRecord
    */
   public $image;
 
-  private $galleryPath = '/web/img/logos/';
+  private $galleryPath = '/img/logos/';
 
   private $imageParams = [
-    'width' => 200,
-    'height' => 200,
-    'size' => 100,
+    // 'width' => 200,
+    // 'height' => 200,
+    // 'size' => 100,
     'newName' => false,
     'oldName' => false,
-    'path' => '/web/img/logos/',
+    'path' => '',
     'validated' => false
   ];
 
@@ -56,12 +57,10 @@ class Cafe extends \yii\db\ActiveRecord
     {
       return [
         [['name', 'params_id'], 'required'],
-        // [['name', 'address','currency','timeZone'], 'trim'],
-        // [['name', 'address','currency','timeZone','vat_value', 'logo'], 'string'],
         [['name', 'address','currency'], 'trim'],
         [['name', 'address','currency', 'logo'], 'string'],
         [['max_person', 'last_task', 'franchisee'], 'integer'],
-        ['image', 'image', 'extensions' => 'gif, jpg, jpeg, png'/*, 'skipOnEmpty' => false*/]
+        ['image', 'image', 'maxSize' => 102400, 'minWidth' => 200, 'maxWidth' => 200, 'minHeight' => 200, 'maxHeight' => 200, 'extensions' => 'gif, jpg, jpeg, png',/* 'skipOnEmpty' => false*/]
       ];
     }
 
@@ -208,11 +207,11 @@ class Cafe extends \yii\db\ActiveRecord
   private function createImage()
   {
     (new SimpleImage($this->image->tempName))->
-      best_fit(
-        $this->imageParams['width'],
-        $this->imageParams['height']
-      )->
-      save($this->imageParams['path'], 100);
+      // bestFit(
+      //   $this->imageParams['width'],
+      //   $this->imageParams['height']
+      // )->
+      toFile($this->imageParams['path']);
 
     // $this->fileModel->image->saveAs($this->imageParams['path']);
 

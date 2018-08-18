@@ -30,6 +30,7 @@ use yii\widgets\ActiveForm;
     }?>
 
     <?php
+      // echo $form->field($model, 'image')->fileInput();
       echo $form->field($model, 'image')->widget(
         FileInput::classname(),
         [

@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
 use johnitvn\ajaxcrud\BulkButtonWidget;
+use yii\web\UploadedFile;
 
 /**
  * AdminController implements the CRUD actions for Cafe model.
@@ -259,25 +260,30 @@ class AdminController extends Controller
         return false;
       }
 
-        if($request->isAjax){
-          /*
-          *   Process for ajax request
-          */
-          $title=Yii::t('app', 'Update Cafe: {nameAttribute}', [
-              'nameAttribute' => '' . $model->name,
-          ]);
-          Yii::$app->response->format = Response::FORMAT_JSON;
-          if($request->isGet){
-            return [
-              'title'=> $title,
-              'content'=>$this->renderAjax('update', [
-                'model' => $model,
-                'isAjax' => true,
-              ]),
-              'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
-            ];
-          }else if($model->load($request->post()) && $model->save()){
+      if($request->isAjax){
+        /*
+        *   Process for ajax request
+        */
+        $title=Yii::t('app', 'Update Cafe: {nameAttribute}', [
+            'nameAttribute' => '' . $model->name,
+        ]);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if($request->isGet){
+          return [
+            'title'=> $title,
+            'content'=>$this->renderAjax('update', [
+              'model' => $model,
+              'isAjax' => true,
+            ]),
+            'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+              Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
+          ];
+        } else if($model->load($request->post()))
+        {
+
+          $model->image = UploadedFile::getInstance($model, 'image');
+
+          if ($model->save()) {
             return [
               'forceReload'=>'#crud-datatable-pjax',
               'title'=> $title,
@@ -285,30 +291,31 @@ class AdminController extends Controller
               'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                 Html::a(Yii::t('app','Edit'),['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
             ];
-          }else{
-            return [
-              'title'=> $title,
-              'model' => $model,
-              'content'=>$this->renderAjax('update', [
-                'model' => $model,
-                'isAjax' => true,
-              ]),
-              'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
-            ];
           }
         }else{
-          /*
-          *   Process for non-ajax request
-          */
-          if ($model->load($request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-          } else {
-            return $this->render('update', [
+          return [
+            'title'=> $title,
+            'model' => $model,
+            'content'=>$this->renderAjax('update', [
               'model' => $model,
-            ]);
-          }
+              'isAjax' => true,
+            ]),
+            'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+              Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
+          ];
         }
+      }else{
+        /*
+        *   Process for non-ajax request
+        */
+        if ($model->load($request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+        } else {
+          return $this->render('update', [
+            'model' => $model,
+          ]);
+        }
+      }
     }
 
     /**
