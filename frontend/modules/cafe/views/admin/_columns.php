@@ -3,6 +3,7 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use common\components\widget\NumberRangerWidget;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 return [
     [
@@ -48,6 +49,17 @@ return [
         $param= Yii::$app->params['currency'];
         return isset($param[$model->currency])?$param[$model->currency]:"-";
       },
+    ],
+    [
+      'attribute' => 'logo',
+      'content' => function ($model, $key, $index, $widget) {
+        $image = $model->logo ? 'logos/' . $model->logo : 'logo_black_login.png';
+        // return Html::decode("<div class='img-wrap><img class='img-wrap__img src='/img/{$image}' alt='{$model->name}'></div>");
+        return Html::img(
+          '/img/' . $image,
+          ['class' => 'img_wrap__img frame__img', 'alt' => $model->name]
+        );
+      }
     ],
     [
       'class' => 'kartik\grid\ActionColumn',

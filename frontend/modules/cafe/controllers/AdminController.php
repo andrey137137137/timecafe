@@ -28,7 +28,8 @@ class AdminController extends Controller
           'last_task',
           'tps_value',
           'tvq_value',
-          'currency'
+          'currency',
+          'logo'
       ];
     /**
      * @inheritdoc

@@ -156,17 +156,6 @@ class Cafe extends \yii\db\ActiveRecord
   //   }
   // }
 
-  private function getImageExt(string $name)
-  {
-    if (is_null($name))
-    {
-      return false;
-    }
-
-    $pos = strrpos($name, '.');
-    return substr($name, $pos);
-  }
-
   private function updateImage($insert)
   {
     $this->setGalleryPath();

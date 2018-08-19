@@ -2,8 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-  use kartik\color\ColorInput;
-  use kartik\file\FileInput;
+use kartik\color\ColorInput;
+use kartik\file\FileInput;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\cafe\models\Cafe */
